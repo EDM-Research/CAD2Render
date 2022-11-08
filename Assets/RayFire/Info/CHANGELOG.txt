@@ -1,0 +1,748 @@
+
+ [1.51]
+  
+ - Connectivity. RigidBody Mass fix for clusters created by Clusterize property.
+ - Connectivity. Activation Dust emitting fix for Clusterized shards.
+ - Connectivity. Local MeshRoot Activation event fix for clusterized shards.
+ - Connectivity. Joint support. WIP
+ - Shatter. Custom Point cloud preview points out of object bound with red color.
+ - Shatter. Dll Fix for clustering with Radial fragmentation type.
+ - Rigid. Fix for Mesh Runtime demolition with Shatter component.
+ - Rigid. Fix for fragments parenting in case of Awake Prefragment demolition type.
+ - Rigid. Fix for Connected Cluster collider type property.
+ - Rigid. Fix for sliced mesh with enabled Add Children property.
+ - Bomb. Tutorial scenes.
+
+ [1.50]
+ 
+ - Shatter. Size limitation.
+ - Shatter. Triangle limitation.
+ - Shatter. All fragments created by limitation properties get one parent.
+ - Rigid. Demolition By Collision and By Damage with collision collection now work independently.
+ - Rigid. Nested & Connected Cluster allows to use Rigid and Shatter Components with custom properties on demolished shards.
+ - Rigid. Debris and Dust emitting for fragments clusterized by Connectivity.
+ - Rigid. New Add Children property for Mesh Demolition. Allows to add mesh children to fragments. 
+ - RigidRoot. Debris and Dust emitting for shards clusterized by Connectivity.
+ 
+ [1.49]
+
+ - RigidRoot. Local and Global Activation event returns activated Shard as well, in addition to RigidRoot parent.
+ - RigidRoot. Change Layer for activated shards with reset support.
+ - RigidRoot. Documentation and Tutorial scene.
+ - Activator. Velocity force apply in activator local space coordinates. 
+ - Connectivity. Activation event returns list of activated shards and clusters in addition to Connectivity component.
+ - Bomb. New By Curve Impulse Fade type. Allows to define explosion strength fade by curve.
+ - Rigid. Connected Cluster mass by material fix.
+ - Rigid. Connected Cluster mass after demolition fix.
+ - Rigid. Connected Cluster demolition fade life time fix. 
+ - Rigid. Connected Cluster shooting with damage apply fix.
+ - Rigid. Connected Cluster shooting with 0 impact radius fix.
+ - Rigid. Connected Cluster demolition Minimum and Maximum lower cap set to 1.
+ - Rigid. Connected Cluster per shard damage apply support by Gun and by collision.
+ - Rigid. Cluster Demolition properties can be edited with Mesh Root object type.
+ - Rigid. Local Activation event for MeshRoot Rigid. Returns Activated Rigid and its MeshRoot parent.
+ - Rigid. Inherit Tag and Custom Tag properties for demolition fragments.
+ - Rigid. Inherit Layer and Custom Layer properties for demolition fragments.
+   IMPORTANT: Rigid.meshDemolition.properties.layer field was changed from String type to Int type. 
+   Disable Inherit Layer in Mesh Demolition / Advanced Properties and define Custom Layer which was 
+   defined by string in older builds in case you defined different layer for demolition fragments.
+ - Rigid. Change Layer and Custom Layer properties for activated objects.
+   IMPORTANT: Rigid.activation.layer field was changed from String type to Int type. 
+   Enable Change Layer in Activation Properties and define Layer which was 
+   defined by string in older builds in case you defined different layer for activated objects.  
+ - Rigid. Changed layer reset for activated objects with changed Layer.
+ - UI. Opened foldouts don't close in Play Mode.
+ 
+ [1.48]
+
+ - Rigid. New UI.
+ - Rigid. Limitations Tag changed to TagField.
+ - Rigid. Children with Shatter component get Use Shatter enabled when get Rigid component at parent demolition.
+ - Rigid. Connected cluster By Mesh connectivity type renamed to By Triangles.
+ - Rigid. New By Polygons and ByBoundingBoxAndPolygons connectivity types.
+ - RigidRoot. New UI.
+ - RigidRoot. Limitations Tag changed to TagField.
+ - RigidRoot. Fading fix for shards which were clusterized and then demolished. 
+ - Activator. Activation by Collider collision.
+ - Activator. Activation by Particle System collision.
+ - Connectivity. Connectivity activation event, tutorial script and scene.
+ - Connectivity. By Mesh connectivity type renamed to By Triangles.
+ - Connectivity. New By Polygons and ByBoundingBoxAndPolygons connectivity types.
+ - Blade. Fix for not removed empty roots.
+ - Blade. Removed "_fr_" name appendix for slices to avoid very long names.
+ - Wind. UI fix.
+ - Wind. Noise Scale preview fix.
+ - Linux build fix.
+ 
+ [1.47]
+
+ - Rigid. Activation By Local Offset relative to parent.
+ - Rigid. Demolished fragments do not copy Outer Material from original object.
+ - Rigid. Mesh Demolition Clusterize property now demolishes clusterized fragments at collision.
+ - Rigid. Mesh Demolition Seed property can be set to 0. Allows to generate random seed for every demolition.
+ - Rigid. Use Shatter consider Amount Variation property for Voronoi, Slabs and Splinters fragmentation types.
+ - Rigid. After Mesh demolition all children with mesh get Rigid component and continue simulation as fragment.
+ - Rigid. Contact Bias property for Awake Precache and Awake Prefragment always 0.
+ - Rigid. Center Bias fix for Awake Precache and Awake Prefragment when used with Shatter component.
+ - RigidRoot. Activation By Local Offset relative to parent.
+ - RigidRoot. Editor Setup and Reset Setup fix for applied and destroyed colliders.
+ - RigidRoot. Editor Setup and Reset Setup fix for shards with Rigid component.
+ - RigidRoot. Warning and fix for destroyed shards/components after Editor Setup.
+ - Connectivity. Fracture group of properties. Allows to activate or clusterize group of shards by trigger collider. 
+ - Connectivity. Public method Fracture (Collider collider, int debris). Collider should be set to trigger.
+ - Connectivity. RayFireMan Parent property fix for clusterized groups of activated shards. 
+ - Shatter. Low poly elements fix for Slice frag type. 
+ - Shatter. Input Precap property now works for Runtime mode as well. 
+ - Sound. Play Once property for sound events.
+ - Gun. Default Damage value changed from 1 to 100. 
+ 
+ [1.46]
+
+ - Rigid. MeshRoot object Reset properties copy to fragments fix.
+ - Rigid. Reference Demolition support for reference without Rigid component.
+ - Rigid. Nested Cluster Demolition depth fix.
+ - Debris and Dust. Demolition emit support for sliced Rigid Mesh object.
+ - Debris and Dust. Demolition emit support for sliced by method Rigid Connected Cluster object.  
+ - Sound. Demolition sound support for sliced Rigid Mesh object. 
+ - Sound. Demolition sound support for sliced by method Rigid Connected Cluster object.
+ - RigidRoot. Activation Event support for RigidRoot shard activation.
+ - RigidRoot. Use Gravity fix for activated shards.
+ - RigidRoot. Mass By property fix.
+ - Blade. New Skin property. Add RigidBody component in order to detect collision with Skinned Mesh objects.
+ - Blade. Slice plane data stored in "slicePlanes" array after slice: [plane position, plane direction].
+ - Assembly name fix.
+
+ [1.45]
+ 
+ - Bomb. RigidRoot support.
+ - Bomb. Activate Inactive property. Allows to activate Inactive objects and Explode them.
+ - Bomb. Inactive objects not affected by explosion if inactive Activation is disabled.
+ - Shatter. Split Rotation property for Bricks fragmentation type.
+ - Shatter. Clustering Seed 0 provides random seed each time.
+ - Rigid. Already initialized Rigid for Reference Demolition fix.
+ - Rigid. Unyielding support for sliced Mesh object type.
+ - Rigid. Unyielding support for demolished Mesh object type.
+ - Activator. UI fixes.
+ - Fragmentation multithreading fix.
+ - IL2CPP. Demolition with clustering fix.
+ - Updated documentation.
+
+ [1.44]
+
+ - Shatter. New Bricks fragmentation type.
+ - Shatter. New Voxels fragmentation type.
+ - Shatter. New user interface.
+ - Shatter. Custom frag type .transforms and .vector3 fields changed from array to list.
+ - Shatter. Removed outer material property field.
+ - Shatter. Fix for Skinned Mesh fragmentation with scaled parents.
+ - Activator. New user interface.
+ - Activator. New Force group of properties. Allows to add initial velocity and spin to activated fragments.
+ - Activator. New public method SetGizmoType () to change gizmo type and collider at runtime.
+ - Rigid. Ignore Near property support for Awake Prefragment and Runtime Mesh demolition fragments.
+ - Rigid. Collision demolition optimizations.
+ - Rigid. Transformation offset fix for Demolition() method.
+ - Rigid. Fix for Skinned Mesh demolition with scaled parents.
+ - RigidRoot. Not connected fragments activation fix. 
+ - RigidRoot. Fix for activated shards without RigidBody component. 
+ - Manager. New button and public method DestroyAll () to destroy all fragments.
+ - Manager. New user interface.
+ - Blade. New user interface.
+ - Blade. Target field removed.
+   IMPORTANT: Add object which was in Target field to Target List to get previous behaviour.
+ - Connectivity. New user interface.
+ - Bomb. New user interface.
+ - Gun. New user interface.
+ - Sound. New user interface.
+ - Recorder. New user interface.
+ - Unyielding. New user interface. 
+ - Combine. New user interface. 
+ - Snapshot. New user interface.
+ - Restriction. New user interface.
+ - Vortex. New user interface.
+ - Wind. New user interface.
+ - Debris. New user interface.
+ - Dust. New user interface.
+   IMPORTANT: Dust's ".dustMaterials" field wad changed from Array to List.
+   
+ [1.43]
+ 
+ - RigidRoot. Support for children with Rigid component with MeshRoot object type.
+   Allows to have multiple prefabs with fragments as RigidRoot children for custom Physics properties and particle generation.
+   With Connectivity component all prefab fragments will be connected at RigidRoot Initialization into single connected structure.
+ - RigidRoot. Support for empty root children without component with mesh fragments as children.
+ - RigidRoot. Editor Setup method and button. Performs most resourceful operations in Editor.
+   Add RigidBody and Collider components to all shards, calculate connections info for Connectivity component.
+   Instantiation of RigidRoot prefab with 1400 connected fragments ready for demolition takes 44 Ms instead of 13 SECONDS without Editor Setup.
+ - RigidRoot. Optimized connectivity data storage for prefabs.
+ - Rigid. Skinned Mesh demolition By Collision.
+ - Rigid. Connected Cluster demolition one frame freeze fix.
+ - Rigid. Editor Setup support for MeshRoot object type. Performs most resourceful operations in Editor.
+   Add RayFire Rigid and Collider components to children, calculate connections info for Connectivity component.
+ - Connectivity. Can be used only with MeshRoot Rigid or with RigidRoot components. 
+ - Connectivity. Removed Connectivity setup buttons.
+ - Connectivity. Removed automatic runtime initialisation. 
+   IMPORTANT. Use public void Initialize() method in case of runtime component add.
+ - Connectivity. New Expand property. Expands shards bounding box for better connectivity between shards. 
+ - Bomb. New Deletion property, measures in percentage relative to Range property, allows to destroy objects in Deletion range.
+ - Bomb. Explosion position calculation fix for Height Offset property.
+ - Bomb. Explosion gizmo now consider Height Offset property.
+ - Bomb. Restore fix for exploded and deleted objects with Rigid component.
+ - Gun. New Impact Type property. Allows to choose between AddExplosionForce or AddForceAtPosition impact type.
+   IMPORTANT: It was used AddForceAtPosition in previous builds. Now default type is AddExplosionForce. Change your setup accordingly.
+ - Unyielding. Can be used with MeshRoot setup for setting custom simulation type without Connectivity component.
+ - Manager. Self initialization at Reset().
+   
+ [1.42]
+
+ - Mac and iOS library fix.
+ - RigidRoot. Support for children with Rigid component with Mesh Object Type for custom properties.
+ - Rigid and RigidRoot. Duplicate coroutines fix.
+ - Rigid. Connected Cluster demolition fix for secondary Connected Clusters (Min and Max properties). 
+
+ [1.41]
+
+ - Lib. Fragmentation freezing fix.
+ - Debris and Dust components public method Emit() returns created particle system.
+ - Debris and Dust components new public method Clean() to destroy all created particle systems.
+ - Rigid. New Sim Type property in Mesh Demolition properties. Set custom simulation type for fragments.
+   IMPORTANT. This affects Kinematic object demolition because the default value is Inherit. 
+   Fragments won't be simulated as dynamic after demolition and will stay Kinematic.
+   Set Sim Type property to Dynamic to get original simulation behaviour.
+ - Rigid. New Shard Amount property in Fading. 
+   Prevent fading of clusters with the amount of shards bigger than a defined value.
+ - Rigid. Connected Cluster Demolition fade fix. 
+   IMPORTANT. Now partially demolished main Connected Cluster also initiate Fading.
+   Use Shard Amount property to prevent its fading if it is too big to fade.
+ - Rigid. Integrity fix for Connected Clusters created in runtime.
+ - RigidRoot. Fade By Offset fix for Connected Clusters created by Connectivity.
+
+ [1.40]
+
+ - Shatter. New Combine Children property in Advanced properties.
+   Allows to combine all children meshes into one mesh and shatter this combined mesh. 
+ - Debris & Dust. Collides With property changed to Layer Mask and allows to select layers instead of Everything or Nothing choice.
+   IMPORTANT: Make proper adjustments in your prefabs and setups to get the same collision behaviour.
+ - RigidRoot. Cached RigidRoot with Connectivity fix.
+ - Rigid. Instant (after initialisation) demolition fix.
+ - Rigid. Demolished fragments velocity fix.
+ - Blade. Public variable "rigid" to get sliced object at local or global slicing event.
+ - Combine. Maximum amount of combined mesh vertices (65535) warning and fix.
+ - Updated Documentation and new How-Tos.
+
+ [1.39]
+  
+ - RayfireAssembly and RayfireEditorAssembly assembly definition assets.
+ - RigidRoot. Reset support. Fading Reset support.
+ - RigidRoot. New By Offset fading initiation.
+ - Rigid & RigidRoot. Move Down fade type renamed to Fall Down. New Move Down fade type which actually move object down.
+ - Rigid & RigidRoot. New Set Static fade type.
+ - Rigid & RigidRoot. New Set Kinematic fade type.
+ - Rigid. New By Offset fading initiation.
+ - Rigid. Clusterize property fix for Awake Precache and Awake Prefragment demolition types.
+ - Rigid. Mesh Root transform reset fix.
+ - Rigid. Mesh Root Unyielding components reset fix.
+ - Rigid. Reference Demolition with particles fix.
+
+ [1.38]
+ 
+ - Runtime demolition and Editor fragmentation for Linux platform.
+ - Shatter. Automatic UV generation for objects without UV coordinates.
+ - Rigid. New Clusterize property for demolished mesh. Allows to clusterize fragments created during runtime demolition.
+ - Rigid. New By Collision property in Limitations. Allows to enable/disable demolition by collision.
+ - Rigid. Mesh Root reset support. 
+ - Rigid. New Connectivity property in Rigid Reset properties. 
+ - Rigid. Mesh, Nested Cluster and Connected Cluster Reset fixes.
+ - Rigid. New Layer property in Activation properties. Allows to set custom layer for activated objects.
+ - Rigid. Public SaveInitTransform () method to overwrite initialize position for fragments and shards.
+ - Rigid. Parenting for demolished Connected Cluster shards fix. 
+ - Rigid. Awake Prefragment demolition depth fix.
+ - Rigid. Limitation Tag copy to fragments fix.
+ - Connectivity. Reset support via Rigid with Mesh Root type on the same object. 
+ - Fixed help links.
+
+ [1.37]
+ 
+ - Rigid. Physics. Ignore Near property. Allows to disable collision between near fragment to avoid unstable simulation.
+   Works only for Mesh Root and Connected Cluster object types. 
+ - Rigid. Reference Demolition Velocity fix for referenced Connected Cluster. 
+ - Rigid. Tag string in Limitations properties. Allows to demolish object by collision only with objects with specific Tag. 
+ - Rigid Root. Ignore Near property in Physics properties.
+ - Rigid Root. Setup Cluster fix for shards with changed simulation type.  
+ - Rigid Root. Fix for Box and Sphere collider Types.  
+ - Connectivity. Fade support for clusterized shards.
+ - Shatter. Smooth property in Advanced properties. 
+   Allows to smooth fragments inner surface and avoid face splitting with vertex displacement shader.
+ - Shatter. Fragments inherit original object tag and layer.
+ - Shatter. Fragmentation fix for objects with 180 degree rotation over any axis.
+ - Shatter. Planar object fragmentation fix.
+ - Blade. Demolition Action Type fix.
+ - Bomb. At Start detonation property.  
+ - Manager. Deactivate & Activate support. 
+ - Manager. Fragments storage root. Contains all fragments and destroy all empty roots when fragments destroyed.
+ - How-to fixes.
+ 
+ [1.36]
+ 
+ - Unyielding. Simulation Type property. Allows to set Inactive or kinematic simulation type for overlapped objects.
+ - Unyielding. Overlap scale fix for scaled parents. 
+ - Connectivity. Activation of last activatable unyielding shard fix.
+ - Rigid. Dampening property fix for Connected Cluster Demolition.
+ - Tutorials. Several new simple HowTo tutorials in RayFire/Info/HowTo folder.
+
+ [1.35]
+ 
+ - Rigid Root. Physics properties support.
+ - Rigid Root. Debris and Dust support.
+ - Rigid Root. Sound support.
+ - Rigid Root. Demolition properties. 
+   Allows to set Rigid properties for Connected Clusters created during Connectivity simulation.
+ - Rigid Root. Deactivate & Activate support. 
+ - Rigid Root. Setup Root method. 
+   Perform all the most time consuming operations in Editor to avoid them in Awake.
+ - Rigid Root. Fade By Size property fix. 
+ - Physics properties. New Solver Iterations count property.
+ - Connectivity. Demolishable Cluster created by Activation fix.
+ - Activator. Check Rigid and Check Rigid Root checkboxes.
+ - Rigid. Mass By Mass property fix for new fragments.
+ - Rigid. Object simulation fix on platforms with unsupported runtime demolition.
+ - Slicing fix for Mac platform.
+ - Tutorials. Several new simple HowTo tutorials with scenes in RayFire/Info/HowTo folder.
+ 
+ [1.34]
+ 
+ - Connectivity. New Stress feature. Allows to erode connections among Shards and demolish connected structures 
+   based on their size, connection angle and gravity. Can be Initiated By Method, At Start or By Integrity.
+ - Connectivity. Start Collapse property. Allows to initiate collapse By Method, At Start or By Integrity.
+ - Connectivity. Stop Collapse button and Method.
+ - Rigid. New Inherit Materials property for Reference Demolition.
+ - RigidRoot. Fading support.
+ - RigidRoot. Gun shooting support.
+ - Gun. AffectRigidBodies property renamed to RigidBody. New Affect Rigid and RigidRoot checkboxes properties.
+  
+ [1.33]
+
+ - Manager. Collision Detection property renamed to Mesh and works only for Mesh objects. 
+ - Manager. New Collision Detection property Cluster for Clusters objects.
+ - Manager. Activation Parent property. Allows to define gameobject which will be a parent for all activated objects.
+ - Unyielding. Public method Activate() and Button for Connectivity and Connected Cluster. 
+   Activates overlapped Unyielding fragments/shards if they are activatable.
+ - Unyielding. Removed Initialization property. Component should be added only to the root of simulated objects.
+   Now Unyielding component initialized only by Connectivity component and Rigid with Connected Cluster object type.
+ - Unyielding. Unyielding property. Set Unyielding property for overlapped children Shards/Rigid components.
+ - Unyielding. Activatable property. Set Activatable property for overlapped children Shards/Rigid components. 
+ - Unyielding. Multiple layer support for children objects. Overlap optimization.
+ - Shatter. Disabled Decompose support for Slice fragmentation type.
+ - Shatter. Size filtering fix for Skinned Mesh fragmentation.
+ - Rigid. MeshRoot Reset support.
+ - Rigid and Connectivity. Magenta preview color for activatable unyielding Shards/Rigids. 
+ - Debris and Dust. Light Probes property.
+ - Blade. Force apply fix for small and big fragments.
+
+ [1.32]
+
+ - Manager. Default collision detection type changed to Discrete. Other types cause unstable simulation for clusters.
+ - Rigid. Planar Check property in Physics. Do not add Mesh Collider to objects with planar low poly mesh.
+ - Rigid. Skinned Mesh demolition by Damage Apply. 
+ - Shatter. Absolute and Relative Size filtering properties in Advanced Properties. Exclude small fragments.
+ - Shatter. Planar filtering property in Advanced Properties. Allows to exclude fragments with planar meshes.
+   Small and Planar fragments cause unstable simulation and in some cases PhysX unable to cook mesh collider convex hull for them. 
+ - Shatter. Add and Remove Mesh Colliders to Last Fragments. 
+   Allows to quickly test if generated fragments have any kind of topology problems with PhysX convex hull cooking engine.
+ - Shatter. Fix for parts of fragments meshes being inside another fragment mesh with decompose Off.
+ - Shatter. Missing inner faces fix with Slice on Mac platform.
+ - Manager. Collider Size property. Do not add Colliders to small objects with size less then this value.
+ - Blade. Slice with damage fix.
+ - Sound. Mesh Root copy fix.
+
+ [1.31]
+
+ - Dll. Slice Crash fix for Mac platform. 
+ - Blade. Damage property. Allows to apply damage to sliced object and slice it only after maximum damage reached. 
+ - Connectivity. Connections fix after exiting Play Mode. 
+ - Shatter. Remove Inner Fragments fix.
+ - New static bool variable "silentMode" in static RFFragment class. True by default. Prevent warning messages in console.
+ - RigidRoot WIP. Activator and Connectivity components support. 
+ 
+ [1.29]
+ 
+ - Dll. Slice Crash fix. 
+ - Rigid. Reference Demolition fix for reference fragments with Rigid component and Add Rigid property On. 
+ - Rigid. Activate and Fade methods support for Mesh Root Rigid. Initiates Activation and Fading for it's children fragments. 
+ - Rigid. Gameobject Disabling/Enabling support. 
+ - Rigid. Connected Cluster fix and warning for connection preview with deleted shard.
+ - Connectivity. Gameobject Disabling/Enabling support. 
+ - Shatter. Default Seed value set to 0. Seed 0 allows to generate random point cloud everytime. 
+ - Activator. Local Position List animation type.
+ - Activator. Tutorial scenes.
+ - Updated documentation and tooltips.
+ - New RayfireRigidRoot component. Work in Progress. Not finished.
+
+ [1.28]
+ 
+ - Updated documentation and tooltips.
+ - Rigid. Kinematic objects get mass.
+ - Rigid. New Mass By Rigid Body Component property. Allows to use mass of applied Rigid Body component.
+ - Rigid. Mesh Root doesn't overwrite child Rigid Properties if child already has Rigid component.
+ - Rigid. New Action dropdown property for Reference Demolition. Allows to Instantiate defined reference or use reference itself.
+ - Rigid. SetActive (bool state) method. 
+ - Bomb. New Destroy property. Allows to automatically destroy game object with bomb after explosion.
+ - Unyielding. Initialization Fix.
+ 
+ [1.27]
+   
+ - Updated documentation and tooltips.
+ - Manager. Interpolation property for simulated objects RigidBody component.
+ - Bomb. Connected Cluster explosion with demolition by Damage fix.
+ - Rigid. Amount Integrity info. Show current/initial amount of shards and cluster integrity in percentage. New Read Only AmountIntegrity property.
+ - Connectivity. Amount Integrity info. Show current/initial amount of shards and cluster damage in percentage. New Read Only AmountIntegrity property.
+ - Connectivity. Reset Shards button and method. Reset transform and Rigid components for Connectivity Shards. Does Not support clustered shards yet.
+ - Blade. Cooldown filter property. Allows to temporarily disable Blade component for defined time to prevent constant slicing.
+ - Blade. Slice of Inactive and Kinematic objects with Unyielding component to activate only one half.
+ - Blade. Force property. Allows to add to sliced fragments additional velocity impulse to separate them.
+ - Blade. Affect Inactive property for Force. Allows to apply force only to Activated half of sliced Inactive object.
+ - Unyielding. Collider overlap fix for scaled objects.
+ 
+ [1.26]
+  
+ - Updated documentation and tooltips.
+ - Sound. Volume fix.
+ - Sound. Audio Mixer output group support for each sound event.
+ - Shatter Editor fix for custom point cloud on Linux platform.
+  
+ [1.25]
+ 
+ - Rigid. Fix for demolition of objects with scaled parents.
+ - Rigid. Mesh root object type copies RayFire Shatter component to children.
+ - Rigid. Reference demolition scale fix.
+ - Rigid. Non Static simulation type and Static object warning.
+ - Rigid. Dust and Debris fix for duplicated Clusters.
+ - Rigid. Cluster demolition sound fix.
+ - Rigid. Empty Reference Demolition emits Debris and Dust particles.
+ - Rigid. Collision Detection Mode fix for demolished fragments.
+ - Shatter. Fix for fragmentation of objects with scaled parents.
+ - Shatter. Fix with inner and outer material.
+ - Connectivity. Missing shards check and warning.
+ - Recorder. Fix for key reducing.
+ - Bomb. Explosion with demolition fix.
+ - Bomb. Kinematic object Activation by Explosion fix.
+ - Gun. Demolition fix.
+ - Manager. Fragments parenting fix.
+ - Linux script compilation fix.
+ - FAQ.txt help file.
+
+[1.24]
+
+ - New Rayfire Sound component. 
+   Allows to play audio clips on Initialization, Activation, and Demolition.
+ - Shatter. Vertex Limitation in Advanced Properties. 
+   Automatically shatter again fragments with the amount of vertices higher than defined value.
+ - Shatter. Export Meshes remember the last saved folder.
+ - Connectivity. Can be added in runtime. The default connectivity type changed to Bounding Box.
+ - Connected Cluster created in runtime inherits Layer and Tag from the original object.
+ - Rigid. Demolished Kinematic object fragments turn to Dynamic objects.
+
+[1.23]
+
+ - Rigid. Removed Obsolete Manual Precache, Manual Prefab Precache and Manual Prefragment demolition types. 
+   Replaced by Reference Demolition: Prefragment with Shatter -> Mesh Export -> Prefab -> Reference Demolition.
+ - Rigid. Static objects can be demolished by Method and by Demolish button.
+ - Rigid. New Inherit Scale property in Reference Demolition. 
+ - Rigid. Fixed bug with Runtime Caching.
+ - Rigid. Fixed bug with Demolished source and generated Impact particles.
+ - Rigid. Fixed bug with Demolished object Reset and unstable simulation.
+ - Rigid. Fixed bug with Demolished object Reset and generated particles. 
+ - Rigid. Fixed bug with Reset/Reused fragments and Maximum fragments amount. 
+ - Rigid. Fixed Reference demolition bug.
+ - Shatter. Default Center position changed from Pivot point to Bounding center.
+ - Shatter. Fragment to Last button. Delete only last fragments and Keep root. 
+   Then creates new fragments under this root.
+ - Connectivity. Fixed bug with deleting children in runtime.
+
+[1.22]
+
+ - Rigid. Setup Cluster button. Allows to do all heavy calculations in Editor and store all cluster data in prefab.
+   Instantiated prefab will be ready for demolition without any additional calculations.
+ - Rigid. Significant Connected and Nested Cluster demolition speed increase. 
+   Demolished disconnected clusters do not recalculate all cluster data from scratch, but use and update existing data.
+ - Rigid. Connectivity check with unyielding fragments for demolished Kinematic Connected Cluster.
+ - Rigid. Connected Cluster Collapse.
+ - Rigid. Connected Cluster Filtering properties.
+ - Blade. Connected Cluster Slicing support. 
+ - Gun. Connected Cluster shooting and demolishing support.
+ - Gun. Support for Impact of simulated objects without Rigid component.
+ - Activator. Connected cluster activation support.
+ - Connectivity. Clustering of not connected inactive groups
+ - Shatter. Fragmentation of objects with overlapped Double faces fix.
+ - Unyielding. Movable gizmo center.
+ - Dust. Rotation over Lifetime property.
+ - Connectivity. Collapse support. Manual and by method.
+ - Manager. Collision detection property.
+ - Rigid. Connected and Nested cluster reset support.
+ - New Restriction component. Removed from Rigid component.
+ - Unyielding. Manual and by method initialization.
+
+[1.21]
+
+ - Rigid. Improved Runtime Demolition. Objects with curved open edges should be demolished now.
+ - Rigid. Visibility check limitation. Object will be demolished only if it is visible to any camera including scene camera.
+ - Rigid. Cluster Colliders setup optimization. Allows to Set up Mesh Colliders in Editor, reference them to object meshes and save in Prefab.
+ - Manager. Particle system (Debris and Dust) pooling.
+ - Dust. Support for multiple Dust materials.
+ - Combine. Size and Vertex threshold filters.
+ - Combine. Particle System mesh combining. Starting from Unity 2018.2
+ - Combine. Export to Mesh asset button.
+
+[1.20]
+
+ - Android support. Runtime Demolition support for Android platform.
+ - Debris and Dust. New UI.
+ - Debris and Dust. Multiple Debris and Dust components support.
+ - Rigid. Mesh Root type copies Debris and Dust components to it's children.
+ 
+[1.19]
+
+ - IOS support. Runtime Demolition support for iOS platform. 
+ - Rigid. Mesh Input property. Allows to Input Mesh for demolition At Start or At Initialization 
+ instead of at fragments caching like before and significantly decrease runtime fragmentation time for mid/hi poly objects.
+ - Rigid. Connected Cluster Demolition bug fix.  
+ - Rigid. Demolished object's Mesh Read/Write Enabled property check and warning. 
+ - Shatter. Mesh export to Unity asset. Allows to export fragments meshes to Unity asset and reference to them. 
+ - Gun. Impact properties. Affect Inactive objects checkbox property.
+
+[1.18]
+
+ - Shatter. Debris feature in Cluster group. Prevents fragments fragments from getting inside cluster.
+ - Shatter. Gluing feature renamed to Clusters.
+ - Shatter. Decompose property fix for Editor mode.
+ - Shatter. Splinters and Slabs fix for objects with multiple elements.
+ - Shatter. Advanced. Editor mode Input Precap property. Create extra triangles to connect open edges and close mesh volume.
+ - Shatter. Advanced. Editor mode Output Precap property. Keep or Delete fragment's faces created by Input Precap.
+ - Shatter. Advanced. Editor mode Remove Double Faces property. Delete faces which overlap with each other.
+ - Shatter. Advanced. Editor mode Element Size Threshold property. Do not fragment elements of mesh with size less than this value.
+  
+[1.17]
+
+ - Mac OS X support. Editor Fragmentation and Runtime Demolition support for Mac OS X platform. 
+ - Rigid. Runtime demolition freeze fix with positive Contact Bias and Remover Collinear On.
+
+[1.16]
+
+ - Blade. Action type property. Allows to Slice or Demolish collided objects. 
+ - Shatter. Custom fragmentation type. Allows to use Custom Point Cloud for fragmentation.
+ - Shatter. Auto rescale fix for very small objects. 
+ - Shatter. Center move and rotation manipulation fix. 
+ - Shatter. Fragments without material fix. 
+ - Shatter. Decompose fragmentation type fix. 
+ - Manager. Removed Infinite Fall check feature. Replaced by Restriction feature in Rigid component.
+ - Rigid. Restriction group. Restricts object's simulation area By Distance and/or By Trigger.
+ Allows to Destroy/Deactivate/Fade/Reset object if it left this area.
+ - Rigid. Local and Global Restriction event subscription support.
+ - Rigid. Public method .Fade() and "Fade" button in inspector - allows to initiate fading.
+ - Rigid. Initiate fading "On Activation" and/or "On Demolition" checkboxes.
+ - Rigid. New Fading Life Type "By Simulation And Life Time" property. 
+ Allows to start fading after object stops simulation movement.
+ - Rigid. "Object about to fade..." and "Fading in progress..." info notifications in inspector.
+ - Rigid. Reset/reuse support for fading or faded object/fragments.
+ - Rigid. Reset of activated Inactive object fix.  
+ - Rigid. Total fragment amount with Destroy fading type fix. 
+  
+[1.15]
+
+ - Discord channel: https://discord.gg/8G98JKj
+ - Windows x86 build support.
+ - Shatter. Support for geometry with multiple UV maps.
+ - Rigid. Reset. Allows to reset object to it's original position and reset all properties.
+ - Rigid. Reuse. Allows to demolish Mesh Object again after Reset using cached meshes or fragments from first demolition.
+ - Rigid. Physics. Use Gravity checkbox.
+ - Rigid. Physics. Fragments Dampening property. Allows to adjust initial velocity of demolished fragments.
+ - Rigid. Damage. Collision Multiplier property.
+ - Rigid. Damage. Collect Collision property renamed to Collect.
+ - Rigid. Fading. Move Down Fading fix for Inactive fragments.
+ - Rigid. Connected Cluster demolition fix.
+ - Rigid. Create automatic collider if object already has collider but it is trigger.
+ - Rigid. Static objects do not get automatic Rigid Body component and can not be demolished.
+ - Rigid. Start operations moved in Awake.
+ - Manager. Removed global Post Demolition group of properties. 
+ Now every Rigid component has it's own Post Demolition properties in Reset group.
+
+[1.14]
+
+ - Shatter. "Get FBX Exporter" button. Open Free FBX Exporter package page at Asset Store.
+ - Rigid. Initialization property. By Method and At Start Initialization types. Default type set to By Method.
+ - Rigid. New Reference Demolition type. Allows to demolish Mesh or Cluster to referenced object: prefab, fbx asset, other scene object.
+ - Rigid. Mesh Demolition property in Cluster demolition group.
+ - Rigid. Prefab Precache demolition type renamed to Manual Prefab Precache.
+ - Rigid. MeshRoot object activation fix.Keep
+ - Rigid. Move Down fading fix for sleeping objects.
+ - Rigid. Rotation fix for copied objects with Manual Precache and Manual Prefab Precache demolition types.
+ - Rigid. Fix for cluster colliders scale and rotation.
+ - Rigid. Fix for cluster colliders physic material.
+ - Rigid. Removed By Collision activation type.
+ - Rigid. Activation By Damage fix.
+ - Debris and Dust fix.
+ - Common. All RayFire public components and classes were isolated in "RayFire" namespace. 
+  
+[1.13]
+
+ - IMPORTANT! There are significant UI changes in Rigid component in build 1.13, some properties were relocated, some renamed.
+ Read following changelog carefully. You will need to fix your Rigid components in case you are going to upgrade from older builds.
+ Sorry for inconvenience but plugin is growing and this should have been done sooner or later.
+ - Full Windows 10 support. No need to copy tbb.dll into build folder.
+ - Unity 2018.1, 2018.2, 2018.3 support.
+ - Removed Tutorial scenes because of incompatibility with Unity 2018.1, 2018.2 and 2018.3 builds. 
+ They will be recreated and returned in next build.
+ - Shatter. Unsafe mode checkbox removed. Replaced with dropdown with Runtime and Editor fragmentation modes.
+ Unsafe mode renamed to Editor mode. Safe mode renamed to Runtime mode.
+ - Shatter. Editor fragmentation mode. Fixed bug for Splinters and Slabs with low fragments amount.
+ - Shatter. Editor fragmentation mode. Exclude Inner fragments property. 
+ Allows to remove all inner fragments and keep only fragments on the surface.
+ - Rigid. Physics. Collider type property. Provides Mesh, Box and Sphere colliders.
+ - Rigid. New Activation group. All activation properties were moved from Physics group to Activation group.
+ - Rigid. New Limitations group. All limitation properties were moved from Demolition group to Limitations group.
+ - Rigid. New Cluster Demolition group. All Cluster properties were moved from Demolition group to Cluster Demolition group.
+ - Rigid. Demolition group renamed to Mesh Demolition group.
+ - Rigid. New Advanced Properties group in Mesh Demolition properties.
+ - Rigid. Advanced Properties. Custom Layer string field. Allows to set custom Layer for fragments.
+By default fragments get Layer from demolished object.
+ - Rigid. Advanced Properties. Collider Type property. Provides Mesh, Box and Sphere colliders.
+ - Rigid. Advanced Properties. Collider Size Filter type property.
+ Fragments will not get Collider if their size less than Size Filter value.
+ - Rigid. Interior group renamed to Materials.
+ - Rigid. Materials. Outer Material property. Allows to apply new material to fragments.
+ - Rigid. Remove Collinear property moved to Advanced Properties group.
+ - Rigid. Decompose property moved to Advanced Properties group.
+ - Rigid. Slice by Blade property moved to Limitation group.
+ - New RayFire Debris component. Debris Particle group moved to own component.
+ - New RayFire Dust component. Dust Particle group moved to own component.
+ 
+[1.12]
+
+ - Connectivity. New Rayfire Connectivity component for Inactive & Kinematik objects activation.
+Activates objects if they are not connected with Unyielding objects.
+ - Unyielding. New Rayfire Unyielding component. Sets objects as Unyielding by it's gizmo.
+ - Rigid. By Connectivity activation type.
+ - Rigid. By Damage activation type.
+ - Rigid. Unyielding property. 
+ - Rigid. Mass By property. Allows to choose between two methods: By Material Density and By Mass property.
+ - Rigid. Mass property. Allows to set exact mass for object in case Mass By set to By Mass property.
+ - Manager. Minimum Mass property. Defines minimum mass for simulated rigid bodies.
+ - Manager. Maximum Mass property. Defines maximum mass for simulated rigid bodies.
+ - Shatter. Unsafe fragmentation mode fixes for objects with open edges.
+ 
+[1.11]
+
+ - Rigid. Fixed bug with Demolition of Connected cluster.
+
+[1.10]
+
+ - Fixed bugs for iOS and Android builds.
+
+[1.09]
+
+ - Shatter. Unsafe mode fix for small objects.
+ - Shatter. Unsafe mode fix for Splinters and Slab fragmentation types.
+
+[1.08]
+
+ - Shatter. Unsafe mode for complex multi element hi poly objects fragmenting. Use it if Safe mode shows "Bad Mesh" errors. 
+ - Shatter. Remove Collinear toggle. Removes collinear vertices and decrease amount of unnecessary triangles. 
+ - Rigid. Remove Collinear toggle.
+ - Bomb. Kinematik object explosion bug fix.
+
+[1.07]
+
+ - Recorder. New Rayfire Recorder component. Record dynamic simulation into animation clip, 
+ Play as animation in Runtime as Kinematik objects with ability to return back to simulation as Dynamic objects.
+ - Snapshot. New Rayfire Snapshot component. Save demolished/simulated objects in Runtime, 
+ Load in Edit mode in scene for environment modeling purposes.
+ - Rigid. Compress Mesh data property for Prefab Precache demolition type. Decrease Prefab size twice.
+ - Fixed bug. Prefab Precache demolition type.
+ - Fixed bug. Prefab Precache submesh count.
+ 
+[1.06]
+
+ - Combine. New Rayfire Combine component. Combines meshes into single mesh. Supports Multi-Material and SkinnedMesh objects.
+ - Rigid. Runtime caching. Allows to cache fragment's meshes over multiple frames to prevent FPS drop in case of high amount of fragments or hipoly mesh.
+ - Rigid. New SkinnedMesh Object type. Support for runtime demolition and editor slicing of SkinnedMesh objects.
+ - Rigid. Removed Exclude Object type.
+ - Rigid. Demolition type Precached was renamed to Awake Precache. Precache fragment's meshes in awake.
+ - Rigid. New Demolition type Manual Precache. Allows to demolish objects to manually precached fragments.
+ - Rigid. Demolition type Prefragmented was renamed to Awake Prefragment. Prefragment object in awake.
+ - Rigid. New Demolition type Manual Prefragment. Allows to demolish objects to manually prefragmented objects.
+ - Rigid. Helpful console messages. Will notify if you have wrong setup.
+ - Manager. Drag and Angular Drag properties in Material Preset.
+ - Fixed bug. Fragmentation of objects with normal map.
+ - Fixed bug. Fragmentation of objects with several materials and negative scale.
+ - Fixed bug. Manual Prefragment creates Manager (if it is not created) and setup physics accordingly to Material Presets.
+ - Fixed bug. Manager / Advanced demolition properties / Shadow Casting size threshold property now work correctly.
+ 
+ [1.05]
+
+ - Common. DotNET 3.5 support.
+ - Shatter. Multi-material object fragmentation. IMPORTANT: All manually precached objects should be precached manually again.
+ - Shatter. SkinnedMesh fragmentation support.
+ - Manager. Material Presets. Customizable material density, solidity, friction and bounciness.
+ - Rigid. Destructible state check. Demolish only objects with Destructible material. Can be changed in RayfireMan material presets.
+ - Rigid. Tooltips for properties.
+
+[1.04]
+
+ - Rigid. Removed Explode by Bomb property.
+ - Fixed bug. Kinematik object activation.
+ - Fixed bug. Demolition of prefab with Precache demolition type.
+ - Fixed bug. Demolition Destroy fading type.
+ - Activator. Activator can activate Kinematik objects.
+ - Shatter. Repair property.
+
+[1.03]
+
+ - Fixed bug. Platform dependent compilation. Runtime fragmentation will be evaluated now only on Win, OS X, Linux, PS4 and XboxOne platforms,
+for other platforms you need to precache fragment's meshes or prefragment objects manually in Editor.
+ - Manager. Time Quota property. Maximum time in milliseconds per frame allowed to be used for demolitions.
+ - Shatter. Decompose fragmentation type.
+
+[1.02]
+
+ - Updated documentation.
+ - Tutorial scenes.
+ - Rigid. Demolition Decompose property
+ - Rigid. Demolition event support, local and global.
+ - Rigid. Activation event support, local and global.
+ - Blade. Slice event support, local and global.
+ - Bomb. Explosion event support, local and global.
+ - Gun. Shot event support, local and global.
+ - Manager. Post demolition. Destroy/Deactivate property.
+ - Manager. Post demolition. Destroy delay property.
+
+[1.01]
+
+ - Updated documentation.
+ - Shatter. Slices fragmentation type.
+ - Shatter. Decompose property.
+ - Shatter. Gluing properties.
+
+[0.92]
+
+ - Updated documentation.
+ - Online Help references. Every component has link (Book icon on top) to online help page.
+ - RayFire category with all components in Add Component Menu.
+ - Manager. New MonoBehaviour script.
+ - Manager. Object pooling for fragments.
+ - Manager. Optional gravity multiplier.
+ - Manager. Global Infinite Fall check.
+ - Manager. Global Maximum Fragments Amount limitation.
+ - Manager. Global Solidity property.
+ - Rigid. UI change.
+ - Rigid. Removed local Infinite Fall check.
+ - Rigid. Removed local Maximum Fragments Amount limitation.
+ - Rigid. New object type - Mesh Root. 
+ - Rigid. New object type - Connected Cluster.
+ - Rigid. Cluster object type renamed to Nested Cluster.
+ - Rigid. Safe seconds variation, hardcoded, in random range from 0 to 2 seconds.
+ - Bomb. Audio support.
+
+
+
+
+
+

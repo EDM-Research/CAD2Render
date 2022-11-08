@@ -1,0 +1,14 @@
+{
+    "name": "RayFireAssembly",
+    "references": [],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "RFLib_DotNet_2018.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

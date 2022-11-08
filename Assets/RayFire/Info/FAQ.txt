@@ -1,0 +1,73 @@
+RayFire for Unity FAQ.
+
+-------------------------------------------------------------
+
+1. 
+Q.  Why I can't demolish objects which I have as FBX asset.
+A.  Turn On Read/Write Enabled property in Import Settings.
+
+-------------------------------------------------------------
+
+2. 
+Q.  How to apply different material for inner fragments surface?
+A.  Both Shatter and Rigid components have Material group of properties.
+    You can set your custom material for fragment's inner surface in Inner Material field.
+
+-------------------------------------------------------------
+
+3. 
+Q.  Why copy/pasted in Edit Mode component doesn't work as it should in Play mode?
+A.  Do not copy/paste initialized components or components which allows to Setup them and cache some specific data. 
+    Also do not copy Rigid component if it is Connected Cluster with cached connections. 
+    Instead use Copy Component, Add new component and then use Paste Components Values.  
+
+-------------------------------------------------------------
+
+4. 
+Q.  Why my Connectivity setup collapses immediately at Start?
+A.  Connectivity setup works only with Inactive and Kinematic fragments and need at least one Unyielding fragment.
+    With Mesh object type Unyielding fragment can be defined in Rigid/Activation properties. 
+    With Mesh Root object type you need to use Unyielding component on the same root object, 
+    it's gizmo should overlap some fragments usually at the bottom of structure. 
+    All fragments will check for connection with Unyielding fragments through other fragments.
+
+-------------------------------------------------------------
+
+5. 
+Q.  Why my fragments explodes immediately at Start?
+A.  This happens when fragments colliders overlap with each other. 
+    At Start they start pushing each other and cause explosive simulation.
+    Make sure that fragmented object doesn't have interpenetrated elements.
+    Also, in some cases mesh has no interpenetration, 
+    but fragments collider may have because dynamic colliders are always convex.
+    
+-------------------------------------------------------------
+
+6. 
+Q.  Why I can't demolish Rigid object right after it was initialised?
+A.  Decrease Time property value in Limitations properties. 
+    It prevents object from being demolished after initialisation. 
+    
+-------------------------------------------------------------
+  
+7.  
+Q.  I am on Mac and I am getting "libRF_CNative.bundle can't be opened 
+    because Apple cannot check it for malicious software" waning. 
+    How can I fix this?
+A.  Check out this page for more info about how to solve this problem.  
+    https://support.apple.com/en-us/HT202491
+    
+-------------------------------------------------------------
+  
+8.  
+Q.  Why I get less fragments then I set in Shatter Amount property?
+A.  Amount property defines amount of points in Point Cloud generated in objects bounding box.
+    Some points could be outside of mesh volume and may not generate fragment.
+    
+-------------------------------------------------------------
+  
+9.  
+Q.  Why I can't demolish objects and get more than 1000 fragments?
+A.  This is default maximum amount of fragments you can get by demolition.
+    In order to change this value you should create empty game object, add RayFire Man
+    and define bigger Maximum Amount property value.

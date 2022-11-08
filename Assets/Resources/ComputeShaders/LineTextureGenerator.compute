@@ -1,0 +1,82 @@
+#pragma kernel CSMain
+
+#include "RandomGPU.compute"
+
+
+RWTexture2D<float4> Result;
+Texture2D<float4> parameterTexture;
+float lineSpacing;
+
+
+float2 findCurvepoint(float2 referencePoint)
+{
+    while (referencePoint.x > 0)
+    {
+        --referencePoint.x;
+        float top = (parameterTexture[referencePoint + float2(-0.5, 1.0)].r);
+        float mid = (parameterTexture[referencePoint + float2(-0.5, 0)].r);
+        float bot = (parameterTexture[referencePoint + float2(-0.5, -1.0)].r);
+        
+        float sum = top + mid + bot;
+        if (sum <= 1.5)
+        {
+            referencePoint.x += sum / 1.5f - 1;
+            referencePoint.y += (top - bot) / 2;
+            break;
+        }
+    }
+    return referencePoint;
+}
+
+float2 findParameterPoint(uint2 startCo)
+{
+    //todo fix edges
+    float2 curvepoint0 = findCurvepoint(startCo + float2(0.0, 5.0));
+    float2 curvepoint1 = findCurvepoint(startCo);
+    float2 curvepoint2 = findCurvepoint(startCo + float2(0.0, -5.0));
+    if(length(curvepoint1 - curvepoint0) > 20)
+        curvepoint0 = curvepoint1;
+    if (length(curvepoint2 - curvepoint0) > 20)
+        curvepoint2 = curvepoint1;
+    
+    
+    return (curvepoint0 + curvepoint1 + curvepoint2)/3;
+}
+
+float3 calculateColor(float2 id)
+{
+    float3 originalColor = Result[id].rgb;
+    float ColorDistribution = parameterTexture[id].g;
+    if (parameterTexture[id].r < 0.5f)
+        return originalColor * ColorDistribution;
+    
+    uint threadRandSeed = randSeed + id.x*4517 + id.y * 123185;
+    float colorParameter = length(float2(id.xy) - findParameterPoint(id.xy)) ;
+    float calculatedNoise = 0.0f;
+    for (int i = 0; i < 2; ++i)
+    {
+        calculatedNoise += FractalBrownianMotion(4, lineSpacing + 0.0081625726, randSeed, float2(colorParameter + nextRand(threadRandSeed) * 0.0f, 0)); //sNoise(float2(nextRand(randSeed), colorParameter * 0.00254f)) * 0.5 + 0.5;
+    }
+    calculatedNoise = calculatedNoise / 2;
+    return lerp(originalColor * ColorDistribution, originalColor, calculatedNoise);
+    
+    }
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    //float3 lineColor = calculateColor(float2(id.xy) + float2(nextRand(randSeed) * 2 - 1, nextRand(randSeed) * 2 - 1));
+    //for (int i = 1; i < AASamples; ++i)
+    //{
+    //    lineColor += calculateColor(float2(id.xy) + float2(nextRand(randSeed) * 4 - 2, nextRand(randSeed)*4-2));
+    //
+    //}
+    //lineColor = lineColor / AASamples;
+        
+    float3 lineColor = calculateColor(id.xy);// + calculateColor(id.xy + int2(0, 1)) + calculateColor(id.xy - int2(0, 1)); // + calculateColor(id.xy + int2(1, 0)) + calculateColor(id.xy - int2(1, 0));
+    //lineColor =  lineColor/3;
+    Result[id.xy] = float4(lineColor, 1.0f);
+    
+    
+}
+

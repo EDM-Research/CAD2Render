@@ -1,0 +1,358 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Randomize
+#pragma kernel BruteForce
+#pragma kernel NeighbourSugestion
+#pragma kernel ApplyResampleLocations
+
+#include "RandomGPU.compute"
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Resampled;
+Texture2D<float4> Input;
+SamplerState samplerInput;
+RWTexture2D<float4> InputLocation;
+
+
+int searchRadius;
+int nrSamples;
+
+float sum(float3 vec)
+{
+    return vec.x + vec.y + vec.z;
+}
+float sum(float2 vec)
+{
+    return vec.x + vec.y;
+}
+float sum(int2 vec)
+{
+    return vec.x + vec.y;
+}
+
+float maxComp(float3 vec)
+{
+    return max(vec.x, max(vec.y, vec.z));
+}
+
+float squareWrappedDistance(float2 point1, float2 point2)
+{
+    float2 difference = abs(point1 - point2);
+    float2 minDifference = min(difference, 1 - difference);
+    return sum(minDifference * minDifference);
+}
+int2 getWrapedCoordinate(int2 coordinate, uint2 resolution)
+{
+    return (coordinate + resolution) % resolution;
+}
+int2 getMirrorOverflowCoordinate(int2 coordinate, int2 resolution)
+{
+    return abs(-abs(coordinate - resolution) + resolution);
+}
+
+float calcDifference(uint2 inputCo, uint2 outputCo)
+{
+    int2 resolutionOutput;
+    Resampled.GetDimensions(resolutionOutput.x, resolutionOutput.y);
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+        
+    float difference = 0;
+    float sigma = 0.5f;
+    for (int i = -searchRadius; i <= searchRadius; ++i)
+    {
+        for (int j = -searchRadius; j <= searchRadius; ++j)
+        {
+            float3 pixelDifference = (Input[getMirrorOverflowCoordinate(inputCo + int2(i, j), resolutionInput)]
+                                   - Resampled[getWrapedCoordinate(outputCo + int2(i, j), resolutionOutput)]
+                                   ).rgb;
+            //difference += length(pixelDifference);
+            difference += sum(log(1 + pow(pixelDifference / sigma, 2))) - Input[getWrapedCoordinate(inputCo + int2(i, j), resolutionInput)].a + 1;
+            //difference += log(1 + ( saturate(sum(abs(pixelDifference))) * saturate(sum(abs(pixelDifference))) ) / (sigma * sigma));
+        }
+    }
+    return difference / pow(searchRadius * 2 + 1, 2);
+}
+
+float calcStochasticDifference(uint2 inputCo, uint2 outputCo, uint seed, uint sampleNr = 50)
+{
+    int2 resolutionOutput;
+    Resampled.GetDimensions(resolutionOutput.x, resolutionOutput.y);
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+        
+    float difference = 0;
+    float sigma = 1.0;
+    for (uint i = 0; i < sampleNr; ++i)
+    {
+        int2 coOffset = searchRadius * (float2(nextRand(seed), nextRand(seed)) * 2 - 1);
+        //difference += sum(Input[getWrapedCoordinate(inputCo + coOffset, resolutionInput)].rgb) - sum(Resampled[getWrapedCoordinate(outputCo + coOffset, resolutionOutput)].rgb); //todo closer samples more important?
+        //float3 pixelDifference = (Input.SampleLevel(samplerInput, float2(inputCo + coOffset) / resolutionInput, log(searchRadius))
+        //                       - Resampled[getWrapedCoordinate(outputCo + coOffset, resolutionOutput)]
+        //                       ).rgb; // * ( 1 - length(coOffset) / pow(searchRadius, 2));
+        //;
+        float3 pixelDifference = (Input[getMirrorOverflowCoordinate(inputCo + coOffset, resolutionInput)]
+                               - Resampled[getWrapedCoordinate(outputCo + coOffset, resolutionOutput)]
+                               ).rgb; // * ( 1 - length(coOffset) / pow(searchRadius, 2));
+        difference += sum(log(1 + pow(pixelDifference / sigma, 2))) / length(coOffset) - Input[getWrapedCoordinate(inputCo + coOffset, resolutionInput)].a + 1;
+    }
+    return difference / sampleNr;
+    
+
+}
+
+
+/***
+* required inputs:
+    RWTexture2D<float4> Resampled;
+    Texture2D<float4> Input;
+    RWTexture2D<float4> InputLocation;
+    int searchRadius;
+    int2 resolution;
+    uint randSeed
+*/
+[numthreads(8, 8, 1)]
+void NeighbourSugestion(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionOutput;
+    Resampled.GetDimensions(resolutionOutput.x, resolutionOutput.y);
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+        
+    uint threadRandomSeed = createThreadRandomSeed(id.xy, randSeed);
+    uint selectSampleSeed = createThreadRandomSeed(id.xy, threadRandomSeed);
+    
+    float minDifference = calcStochasticDifference(InputLocation[id.xy].xy * resolutionInput, id.xy, selectSampleSeed); //calcDifference(InputLocation[id.xy].xy * resolutionInput, id.xy);
+    float4 currentChosenColor = Resampled[id.xy];
+    float2 currentInputLocation = InputLocation[id.xy].xy;
+    if (currentChosenColor.a < 0.5)
+        minDifference += 1;
+    
+    for (int i = 0; i < nrSamples; ++i)
+    {
+        int2 randomLocation = round(searchRadius * (float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed)) * 2 - 1));
+        int2 neighbour = round(float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed)) * 3 - 1.5f);
+        int2 checklocation = getWrapedCoordinate(InputLocation[getWrapedCoordinate(id.xy + randomLocation, resolutionOutput)].xy * resolutionInput - randomLocation, resolutionInput);
+        
+        if (length(float2(checklocation) / resolutionInput - currentInputLocation) < length(float2(1.0f,1.0f) / resolutionInput / 2))
+            continue;
+        
+        float currentDifference;
+        if (pow(searchRadius * 2 + 1, 2) >= nrSamples)
+            currentDifference = calcStochasticDifference(checklocation, id.xy, selectSampleSeed, nrSamples);
+        else 
+            currentDifference = calcDifference(checklocation, id.xy);
+        
+        if (Input[checklocation].a < 0.5)
+            currentDifference += 1;
+        if (minDifference > currentDifference)
+        {
+            minDifference = currentDifference;
+            currentChosenColor = Input[checklocation];
+            currentInputLocation = float2(checklocation) / resolutionInput;
+        }
+    }
+    //for (int j = 0; j < 80; ++j)
+    //{
+    //    int2 checklocation = round(resolutionInput * float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed)));
+    //    
+    //    float currentDifference;
+    //    if (searchRadius >= 3)
+    //        currentDifference = calcStochasticDifference(checklocation, id.xy, threadRandomSeed);
+    //    else
+    //        currentDifference = calcDifference(checklocation, id.xy);
+    //    if (minDifference > currentDifference || minDifference < 0)
+    //    {
+    //        minDifference = currentDifference;
+    //        currentChosenColor = Input[checklocation];
+    //        currentInputLocation = float2(checklocation) / resolutionInput;
+    //
+    //    }
+    //}
+    
+    Resampled[id.xy] = currentChosenColor; // Input.SampleLevel(samplerInput, currentInputLocation, log(searchRadius)); //
+    InputLocation[id.xy] = float4(currentInputLocation, minDifference * 100, 1);
+}
+
+
+/***
+* required inputs:
+    RWTexture2D<float4> Resampled;
+    RWTexture2D<float4> InputLocation;
+    Texture2D<float4> Input;
+*/
+[numthreads(8, 8, 1)]
+void ApplyResampleLocations(uint3 id : SV_DispatchThreadID)
+{
+    float2 sampleLocation = InputLocation[id.xy].xy;
+    float4 sampleColor = Input.SampleLevel(samplerInput, sampleLocation, 0);
+    Resampled[id.xy] = sampleColor;
+}
+
+/***
+* required inputs:
+    RWTexture2D<float4> Resampled;
+    Texture2D<float4> Input;
+    int searchRadius;
+    int2 resolution;
+*/
+[numthreads(8, 8, 1)]
+void BruteForce(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+    
+    float minDifference = -1;
+    float4 currentChosenColor = Resampled[id.xy];
+    
+    for (int i = 1; i < resolutionInput.x - 1; ++i)
+    {
+        for (int j = 1; j < resolutionInput.y - 1; ++j)
+        {
+            float currentDifference = calcDifference(int2(i, j), id.xy);
+            if (minDifference > currentDifference || minDifference < 0)
+            {
+                minDifference = currentDifference;
+                currentChosenColor = Input[int2(i, j)];
+            }
+        }
+    }
+    Resampled[id.xy] = currentChosenColor;
+}
+
+
+
+//[numthreads(8,8,1)]
+void RandomizePerlinPatches (uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+    
+    uint threadRandomSeed = round(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy) * 10);
+    float2 scaledInputLocation = float2(id.xy) / resolutionInput;
+    float2 randomStartLocation = float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed));
+    float2 location = scaledInputLocation + randomStartLocation;
+    location += step(0.1f, location) * 0.5f - step(location, 0.90f) * 0.5f;
+    location -= floor(location);
+    location = location * 0.8 + 0.1;
+    
+    Resampled[id.xy] = Input[int2(location * resolutionInput)];
+    InputLocation[id.xy] = float4(location, 0, 1);
+}
+//[numthreads(8, 8, 1)]
+void RandomizePerlinInfill(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+    
+    uint threadRandomSeed = createThreadRandomSeed(id.xy, randSeed);
+    float2 location = float2(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy), FractalBrownianMotion(3, 0.0023456, randSeed, id.xy));
+    
+    Resampled[id.xy] = Input[int2(location * resolutionInput)];
+    InputLocation[id.xy] = float4(location, 0, 1);
+}
+
+//[numthreads(8, 8, 1)]
+void RandomizeGridPatchesPerlinInfill(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+    
+    uint threadRandomSeed = createThreadRandomSeed(id.xy - id.xy % uint2(55, 55), randSeed);
+    float2 locationPatch = float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed)) + float2(id.xy) % float2(55, 55) / resolutionInput;
+    float2 locationRandom = float2(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy), FractalBrownianMotion(3, 0.0023456, randSeed, id.xy));
+    
+    float2 location = all(step(id.xy % 55, 25)) * locationPatch + (1 - all(step(id.xy % 55, 25))) * locationRandom;
+    location -= floor(location);
+    
+    Resampled[id.xy] = Input[int2(location * resolutionInput)];
+    InputLocation[id.xy] = float4(location, 0, 1);
+}
+
+
+//[numthreads(8, 8, 1)]
+void RandomizeCellPatches(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionOutput;
+    Resampled.GetDimensions(resolutionOutput.x, resolutionOutput.y);
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+    
+    int nrPatches = max(1, (resolutionOutput / resolutionInput).x * (resolutionOutput / resolutionInput).y) * 5 + 5;
+    float2 closestLocation = float2(nextRand(randSeed), nextRand(randSeed));
+    float2 normalizedLocation = float2(id.xy) / float2(resolutionOutput);
+    float closestDistance = squareWrappedDistance(closestLocation, normalizedLocation);
+    float secondClosestDistance = 1000.0f;
+    for (int i = 1; i < nrPatches; ++i)
+    {
+        float2 newLocation = float2(nextRand(randSeed), nextRand(randSeed));
+        float newDistance = squareWrappedDistance(newLocation, normalizedLocation);
+        if (closestDistance > newDistance)
+        {
+            secondClosestDistance = closestDistance;
+            closestDistance = newDistance;
+            closestLocation = newLocation;
+        }
+    }
+    
+    //if (secondClosestDistance - closestDistance > 10)
+    closestLocation = round(closestLocation * resolutionOutput);
+    //else
+    //    closestLocation = float2(id.xy);
+    
+    uint patchRandomSeed = createThreadRandomSeed(closestLocation, randSeed);
+    float2 randomStartLocation = float2(nextRand(patchRandomSeed), nextRand(patchRandomSeed)) * 0.7f + 0.15f;
+    
+    float2 locationDifference = closestLocation - normalizedLocation;
+    locationDifference = locationDifference - sign(locationDifference) * step(abs(locationDifference), 0.5); // if locationDifference < 0 => locationDifference += 1;
+    float2 location = frac(randomStartLocation - locationDifference * resolutionOutput / resolutionInput);
+    Resampled[id.xy] = Input[getWrapedCoordinate(int2(location * resolutionInput), resolutionInput)];
+    InputLocation[id.xy] = float4(location, 0, 1);
+}
+
+
+//[numthreads(8, 8, 1)]
+void RandomizeAll(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionInput;
+    Input.GetDimensions(resolutionInput.x, resolutionInput.y);
+        
+    uint threadRandomSeed = createThreadRandomSeed(id.xy, randSeed);
+    float2 location = float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed));
+    
+    Resampled[id.xy] =  Input[int2(location * resolutionInput)]; // Input.SampleLevel(samplerInput, location, log(64)); //
+    InputLocation[id.xy] = float4(location, 0, 1);
+}
+
+void FixPatches(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolutionOutput;
+    Resampled.GetDimensions(resolutionOutput.x, resolutionOutput.y);
+        
+    uint threadRandomSeed = createThreadRandomSeed(id.xy, randSeed);
+    if(Input[id.xy].a < 0.5)
+        return;
+    
+    Resampled[id.xy] = Input[id.xy];
+    InputLocation[id.xy] = float4(float2(id.xy) / resolutionOutput, 0, 1);
+}
+
+/***
+* required inputs:
+    RWTexture2D<float4> Resampled;
+    Texture2D<float4> Input;
+    RWTexture2D<float4> InputLocation;
+    int2 resolutionOutput;
+    int2 resolutionInput;
+*/
+[numthreads(8, 8, 1)]
+void Randomize(uint3 id : SV_DispatchThreadID)
+{
+    //RandomizePerlinPatches(id);
+    //RandomizePerlinInfill(id);
+    //RandomizeGridPatchesPerlinInfill(id);
+    RandomizeCellPatches(id);
+    //RandomizeAll(id);
+    //FixPatches(id);
+
+}

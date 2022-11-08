@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 113b900e26f764e46805b911d4566be7, type: 3}
+  m_Name: importPose_13
+  m_EditorClassIdentifier: 
+  outputPath: ../renderings/RobojobPaper/
+  annotationisFile: annotations.txt
+  BOPInputPath: Assets/Resources/publicResources/RobojobPaper/BOPImportFiles
+  mmToUnityDistanceScale: 0.01
+  resolution: {x: 2560, y: 2048}
+  renderProfile: {fileID: 11400000, guid: 5ceb2a5a1eae9f4459ff628173172d06, type: 2}
+  rayTracingProfile: {fileID: 11400000, guid: ff2369a8a1c82244f8b2622651312608, type: 2}
+  postProcesingProfile: {fileID: 11400000, guid: 8e2035fb7b1ff22429413db21a7b0beb,
+    type: 2}
+  applyGammaCorrection: 1
+  autoCameraExposure: 1
+  stopSimulationTimeCompletly: 1
+  numRenderFrames: 600
+  numPhysicsFrames: 0
+  startFileCounter: 0
+  numberOfSamples: 13
+  seed: 0
+  separateUpdates: 1
+  updateIntervals:
+  - randomizerType: 0
+    interval: 13
+  - randomizerType: 1
+    interval: 1
+  exportModelsByTag: 0
+  exportToBOP: 1
+  BOPSceneId: 0
+  exportDepthTexture: 1
+  maxDepthDistance: 1300
+  exportNormalTexture: 0
+  exportAlbedoTexture: 0
+  exportToFMFormat: 0
+  outputExt: 0
+  exportSubModels: 0
+  exportImagePosition: 0
+  exportToMitsuba: 0
+  mitsubaSampleCount: 128

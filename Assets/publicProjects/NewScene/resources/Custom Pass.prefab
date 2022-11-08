@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5606210975567303086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5606210975567302736}
+  - component: {fileID: 5606210975567302737}
+  m_Layer: 0
+  m_Name: Custom Pass
+  m_TagString: CustomPass
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5606210975567302736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5606210975567303086}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.3670273, y: 0.24047732, z: 0.32387188}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5606210975567302737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5606210975567303086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d6499a6bd256e47b859377446493a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 1
+  fadeRadius: 0
+  priority: 0
+  customPasses:
+  - rid: 2
+  - rid: 3516925780000768143
+  - rid: 3516925780000768144
+  injectionPoint: 3
+  references:
+    version: 2
+    RefIds:
+    - rid: 2
+      type: {class: DrawSegmentationObjectsCustomPass, ns: UnityEngine.Rendering.HighDefinition,
+        asm: Assembly-CSharp}
+      data:
+        m_Name: Segmentation Mask
+        enabled: 0
+        targetColorBuffer: 0
+        targetDepthBuffer: 0
+        clearFlags: 0
+        passFoldout: 0
+        m_Version: 0
+        overrideMaterial: {fileID: 2100000, guid: 0d9dc8294edee76499e5fa44cd2c293f,
+          type: 2}
+        bakingCamera: {fileID: 0}
+        targetTexture: {fileID: 0}
+        targetTextureArray: {fileID: 0}
+    - rid: 3516925780000768143
+      type: {class: CustomShaderRenderToTexturePass, ns: UnityEngine.Rendering.HighDefinition,
+        asm: Assembly-CSharp}
+      data:
+        m_Name: NormalsPass
+        enabled: 0
+        targetColorBuffer: 0
+        targetDepthBuffer: 0
+        clearFlags: 0
+        passFoldout: 0
+        m_Version: 0
+        overrideMaterial: {fileID: 2100000, guid: 56891ec9b5198a14fa61ae46f8253bc0,
+          type: 2}
+        bakingCamera: {fileID: 0}
+        targetTexture: {fileID: 0}
+        backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+    - rid: 3516925780000768144
+      type: {class: CustomShaderRenderToTexturePass, ns: UnityEngine.Rendering.HighDefinition,
+        asm: Assembly-CSharp}
+      data:
+        m_Name: DepthPass
+        enabled: 0
+        targetColorBuffer: 0
+        targetDepthBuffer: 0
+        clearFlags: 0
+        passFoldout: 0
+        m_Version: 0
+        overrideMaterial: {fileID: 2100000, guid: 867dd0e14f6dc4c44b4cbb5ceb85fdd3,
+          type: 2}
+        bakingCamera: {fileID: 0}
+        targetTexture: {fileID: 0}
+        backgroundColor: {r: 1, g: 1, b: 1, a: 1}

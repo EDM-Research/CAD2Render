@@ -1,0 +1,129 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fswiss\fcharset0 Calibri;}{\f1\fnil\fcharset2 Symbol;}{\f2\fmodern\fprq1\fcharset204 Consolas;}{\f3\fmodern\fprq1\fcharset0 Consolas;}}
+{\colortbl ;\red0\green0\blue255;\red120\green157\blue235;\red189\green189\blue189;\red0\green176\blue80;\red240\green240\blue240;\red208\green208\blue208;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\nowidctlpar\sl276\slmult1\qc\ul\b\f0\fs52\lang9 RayFire Connectivity\ulnone\b0\fs24\lang1033\par
+
+\pard\nowidctlpar\sl276\slmult1\par
+\fs22\lang9 RayFire Connectivity manages connection among separate objects with Rigid component and activates them. Connectivity component also suupports RigidRoot component.  Using Connectivity you can break complex structures at their bottom and top will be activated and fall down automatically.\fs24\lang1033  \fs22\lang9 Also Connectivity can clusterize top group of objects so they will be simulated as one Connected Cluster.\fs24\lang1033\par
+\par
+\b\fs22\lang9 Rigid component requirements\b0 : \lang1033 Connectivity will consider child object with Rigid component as it's Shard only if Rigid component fits it's requirements.\fs24\par
+\f1\'b7 \tab\b\f0\fs22 Inactive or Kinematic simulation type\b0 : \lang9 Objects with Rigid component should have simulation type set to Inactive or Kinematik, only these simulation types possible to Activate which means turn to Dynamic objects affected by Gravity. \fs24\lang1033\par
+\f1\'b7\tab\b\f0\fs22 Mesh object type\b0 : Connectivity needs Rigid component to be single object with Mesh.\fs24\par
+\f1\'b7\tab\b\f0\fs22 By Connectivity activation\b0 : By Connectivity property in Activation properties should be Enabled.\fs24\par
+\f1\'b7\tab\b\f0\fs22 Unyielding Shard:  \b0\fs24 At lease one child Rigid should have Enabled \b Unyielding \b0 property in Activation properties. Every shard in Connectivity structure will check for connection with at least one Unyielding shard and will be activated if there is no such connection. You can add Unyielding component on the same root with Connectivity component to define one or several groups of Unyielding Shards by it's gizmo. It will enable Unyielding property in Activation properties.\par
+\par
+{\b\fs32\lang9{\field{\*\fldinst{HYPERLINK https://youtu.be/WeKrhsZyXsE }}{\fldrslt{https://youtu.be/WeKrhsZyXsE\ul0\cf0}}}}\f0\fs24\tab\par
+\b\fs48\lang9\tab\b0\fs24\lang1033\par
+\b\fs48\lang9\tab Cluster\b0\fs24\lang1033\par
+\par
+\b\fs22 Show Gizmo toggle\b0 : Toggle preview of bounding box gizmo which cover all Shards in Connectivity cluster.\fs24\par
+\par
+\b\fs22 Show Connections toggle\b0 : Toggle preview of all connections among Shards. Every shard will show a line from it's center to center of connected Shard.\fs24\par
+\par
+\b\fs22 Show Nodes toggle\b0 : Toggle preview of all Shards. Every shard will show a sphere at it's center.\fs24\par
+\b\fs48\lang9\tab\b0\fs24\lang1033\par
+\b\fs48\lang9\tab Connectivity\b0\fs24\lang1033\par
+\par
+\b\fs22\lang9 Type\b0 : \lang1033 Define the the way connections among Shards will be calculated. \fs24\par
+\f1\'b7\tab\b\f0\fs22 By Bounding Box\b0 : Shards will be considered as connected if their bound boxes interpenetrates with each other. This is the fastest way to establish connectivity and can be used in Runtime, but calculated shared are value will not be precise and will be based on shard's size.\fs24\par
+\f1\'b7\tab\b\f0\fs22 By Mesh\b0 : Shards will be considered as connected if triangle of one Shard fits triangle of neighbor shard. This is the slowest way to establish connectivity and should be used only in Editor with Setup Cluster button, but it precisely calculates shared area value which provides realistic Collapse By Area.\fs24\par
+\f1\'b7\tab\b\f0\fs22 By Bounding Box and Mesh\b0 : Shards will be considered as connected if their bound boxes interpenetrates with each other. If Shards also share triangles then Shared area will be calculated using By Mesh method, if shards do not share triangles then By Bounding Box method will be used.\fs24\par
+\b\fs22\lang9\par
+Expand\b0 : \lang1033 Allows to add extra size for objects bounding box in case their bounding boxes too small to establish connection between each other.\fs24\par
+\b\fs48\lang9\tab\b0\fs24\lang1033\par
+\b\fs48\lang9\tab Filters\b0\fs24\lang1033\par
+\fs22 Filters allows you to decrease amount of connections. There are three filters and they are turned off by default.\fs24\par
+\par
+\b\fs22 Minimum Area\b0 : Two shards will have connection if their shared area is bigger than this value.\fs24\par
+\par
+\b\fs22 Minimum Size\b0 : Two shards will have connection if their size is bigger than this value.\fs24\par
+\par
+\b\fs22 Percentage\b0 : Random percentage of connections will be discarded.\fs24\par
+\par
+\b\fs22 Seed\b0 : Seed for random percentage filter and for Random Collapse.\fs24\par
+\par
+\b\fs28\lang9\tab\b0\fs24\lang1033\par
+\b\fs48\lang9\tab Cluster Properties\b0\fs24\lang1033\par
+\par
+\b\fs22 Clusterize\b0 : All activated group of Shards which are not connected through other shards with any Unyielding Shard but connected with each other will be moved under one empty root parent which will get Connected Cluster Rigid component and whole group will be simulated as one object. Rigid component will inherit Connected Cluster properties from first Shard's Connected Cluster properties except Demolition Type property which depends on \b Demolishable \b0 property.\fs24\par
+\par
+\b\fs22 Demolishable\b0 : If Clusterize is On, Set Demolition type to Runtime for Connected Clusters created during activation. Otherwise it will be set to None.\fs24\par
+\par
+\b\fs28\lang9\tab\b0\fs24\lang1033\par
+\b\fs48\lang9\tab Collapse\b0\fs24\lang1033\par
+\fs22 Collapse allows you start break connections among shards and activate single Shards or Group of Shards if they are not connected with any of Unyielding Shard. \lang9 It is a good idea to use Collapse with other activation types like By Offset, in this case shards which were activated by Collpase will fall down and move still Inactive shards and activate them as well and at some point whole collapse will start look like a chain reaction.\fs24\lang1033\par
+\par
+{\b\fs32\lang9{\field{\*\fldinst{HYPERLINK https://youtu.be/_-L_INZ_QZg }}{\fldrslt{https://youtu.be/_-L_INZ_QZg\ul0\cf0}}}}\f0\fs24\par
+\par
+\fs22 There are two ways to initiate collapse: \fs24\par
+\f1\'b7\tab\b\f0\fs22 Set Collapse threshold values manually or using public methods\b0 : \par
+\tab You can break connections by manually setting \b By Area\b0 , \b By Size\b0  and \b Random \b0 threshold values. You can set these thresholds using \b Collapse Sliders \b0 on top of component UI or using public static Methods. You can set all three of them together depends on which one works better for you. For instance, if you set By Size value to 0.5, all shards with size less than 0.5 units will loose their connections. \par
+\fs24\par
+\f1\'b7\tab\b\f0\fs22 Start Collapse using Collapse properties\b0 : \par
+\tab If you don't want to directly set exact threshold values you can automate this process using Collapse group of properties which allows you to define collapse type and speed. There are three ways to Start Collapse, you can choose one using Start Collapse dropdown property:\par
+
+\pard 
+{\pntext\f0 1.\tab}{\*\pn\pnlvlbody\pnf0\pnindent0\pnstart1\pndec{\pntxta.}}
+\nowidctlpar\fi-360\li720\sl276\slmult1\b\fs24 At Start\b0 : Collapse will be initiated at Connectivity's component Start.\par
+{\pntext\f0 2.\tab}\b\fs22 By Method\b0 : You can start Collapse using \b Start Collapse \b0 button on top of components UI or using public static method (more info at the bottom).\fs24\par
+{\pntext\f0 3.\tab}\b By Integrity\b0 : Collapse will be started when Connectivity structure Integrity will be lower than \b Collapse By Integrity \b0 property value.\par
+
+\pard\nowidctlpar\sl276\slmult1\par
+\par
+\b\fs48\lang9\tab User Interface\b0\fs24\lang1033\par
+In \b Connectivity \b0 component you may see Collapse UI on top of the component and at the bottom. \par
+\tab At the top you can manually set collapse threshold values in Runtime to initiate collapse. \b By Area\b0  and \b By Size \b0 values represented as float units and \b Random \b0 values represented as integer. When you setup cluster all three sliders will be set to value 0 so you will be able to increase them and break connections. \b By Area\b0  and \b By Size \b0 sliders will be capped by biggest shared area and biggest shard size accordingly, \b Random \b0 slider will be capped by value 100 since it is measured in percentage.\par
+\tab\par
+\tab At the bottom you can setup collapse properties for \b Start Collapse \b0 button/method. \par
+\b\fs22\lang9 Type\b0 : \lang1033 There are three ways to break connections among Shards. You should try in Editor all of them to find the one which looks better for your structure and your goal.  \fs24\par
+\f1\'b7\tab\b\f0\fs22 By Area\b0 : Shard will loose it's connections if it's shared area surface is less then defined value.\fs24\par
+\f1\'b7\tab\b\f0\fs22 By Size\b0 : Shard will loose it's connections if it's Size is less then defined value.\fs24\par
+\f1\'b7\tab\b\f0\fs22 Random\b0 : Shard will loose it's connections if it's random value in range from 0 to 100 is less then defined value.\fs24\par
+\par
+\b\fs22 Start\b0 : Defines start value in percentage relative to whole range of picked type. For instance, Type set to By Size, you have 200 shards with the smallest shard size equal to 0.1 unit and biggest shard size equal to 50 units. If you set \b Start \b0 value to 50% it will start collapse by setting By Size threshold value to 25 units and all shards with size less than 25 units will loose their connections. Increase this value if you want to Start Collapse quickly so a lot of shards will loose connections and will be activated right from the beginning. Set it to 0 if you want to start collapse slowly activating shards one by one.\fs24\par
+\par
+\b\fs22 End\b0 : Defines end value in percentage relative to whole range of picked type. Set tp 100 if you want to break all connections or set it lower if you want to keep some connections.\fs24\par
+\par
+\b\fs22 Steps\b0 : Amount of times when defined threshold value will be set during \b Duration \b0 period. \fs24\par
+\par
+\b\fs22 Duration\b0 : Time which it will take \b Start \b0 value to be increased to \b End \b0 value\b\lang9 .\b0\fs24\lang1033\par
+\par
+\par
+\b\fs48\lang9\tab Methods\b0\fs24\lang1033\par
+\fs22 You can initiate collapse using several public static methods implemented in RFCollapse class. \fs24\par
+\par
+\fs22 By Area collapse methods:\fs24\par
+
+\pard\box\brdrs\brdrw0 \nowidctlpar\sl276\slmult1\cf2\b\f2\fs18\lang1049 public static void \cf0 AreaCollapse \cf3\b0 (\cf0 RayfireConnectivity \cf4\f3\lang1033 scr\cf3\f2\lang1049 , \cf2\b int \cf4\b0 areaPercentage\cf3 )\f3\lang1033 ;\cf0\f0\fs24\par
+\cf2\b\f2\fs18\lang1049 public static void \cf0 AreaCollapse \cf3\b0 (\cf0 RayfireConnectivity \cf4\f3\lang1033 scr\cf3\f2\lang1049 , \cf2\b float \cf4\b0 areaValue\cf3 )\f3\lang1033 ;\cf0\f0\fs24\par
+\par
+
+\pard\nowidctlpar\sl276\slmult1\fs22 By Size collapse methods:\fs24\par
+
+\pard\box\brdrs\brdrw0 \nowidctlpar\sl276\slmult1\cf2\b\f2\fs18\lang1049 public static void \cf0 SizeCollapse \cf5\b0 (\cf0 RayfireConnectivity \cf4\b\f3\lang1033 scr\cf3\b0\f2\lang1049 , \cf2\b int \cf4 sizePercentage\cf5\b0 )\f3\lang1033 ;\cf0\f0\fs24\par
+\cf2\b\f2\fs18\lang1049 public static void \cf0 SizeCollapse \cf3\b0 (\cf0 RayfireConnectivity \cf4\f3\lang1033 scr\cf3\f2\lang1049 , \cf2\b float \cf4\b0 sizeValue\cf3 )\f3\lang1033 ;\cf0\f0\fs24\par
+\par
+\fs22 Random  collapse method:\fs24\par
+\cf2\b\f2\fs18\lang1049 public static void \cf0 RandomCollapse \cf3\b0 (\cf0 RayfireConnectivity \cf4\f3\lang1033 scr\cf3\f2\lang1049 , \cf2\b int \cf4\b0\f3\lang1033 p\f2\lang1049 ercentage\cf3 , \cf2\b int \cf4\b0 seed\cf3 )\f3\lang1033 ;\cf0\f0\fs24\par
+\par
+\fs22 Start Collapse method:\fs24\par
+\cf2\b\f2\fs18\lang1049 public static void \cf0 StartCollapse\cf3\b0 (\cf0\b RayfireConnectivity \cf4\b0 scr\cf3 )\f3\lang1033 ;\cf0\f0\fs24\par
+
+\pard\nowidctlpar\sl276\slmult1\par
+Example:\par
+
+\pard\box\brdrs\brdrw0 \nowidctlpar\sl276\slmult1\cf6\fs18\line\cf0\b\f2\lang1049 GameObject obj = GameObject.Find ("ConnectivityObject");\line RayfireConnectivity scr = obj.GetComponent<RayfireConnectivity>();\line\b0\f0\fs24\lang1033\par
+\b\f2\fs18\lang1049 RFCollapse.AreaCollapse (scr, 0.5f);\b0\f0\fs24\lang1033\par
+\b\f3\fs18 or\b0\f0\fs24\par
+
+\pard\nowidctlpar\sl276\slmult1\b\f2\fs18\lang1049 RFCollapse.StartCollapse(scr);\b0\f0\fs24\lang1033\par
+\par
+\par
+\par
+\b\fs48\lang9 Shooting tutorial\b0\fs24\lang1033\par
+{\b\fs48\lang9{\field{\*\fldinst{HYPERLINK https://youtu.be/1DjkINDRL9I }}{\fldrslt{https://youtu.be/1DjkINDRL9I\ul0\cf0}}}}\f0\fs24\par
+\par
+\b\fs48\lang9 Activator tutorial\b0\fs24\lang1033\par
+{\b\fs48\lang9{\field{\*\fldinst{HYPERLINK https://youtu.be/MeIQpwY6glc }}{\fldrslt{https://youtu.be/MeIQpwY6glc\ul0\cf0}}}}\f0\fs24\par
+}
+ 

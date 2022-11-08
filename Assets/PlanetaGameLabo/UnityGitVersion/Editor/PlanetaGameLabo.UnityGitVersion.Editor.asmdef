@@ -1,0 +1,17 @@
+{
+    "name": "PlanetaGameLabo.UnityGitVersion.Editor",
+    "references": [
+        "GUID:ba6f8a23b8f9f0540b82c74375b3520b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

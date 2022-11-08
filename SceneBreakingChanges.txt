@@ -1,0 +1,21 @@
+Old scene
+"Envrionment" gameObject is renamed to "Environment"
+"Enviroment" gameObject needs the tag "EnvironmentSettings"
+Resources are split in private and public resources. private are not pushed on github.
+	change in the dataset information file all resources paths to the new paths (businessCard/Materials -> publicResources/businessCard/Materials)
+	change: models path, environments path, material path, table materials path
+
+
+these might give warnings, but should not break the program:
+render texture en segmentation texture are dynamicly assigned. Set references to none in:
+	CustomPass.segmentationMask.targetTexture
+	GUI->Image.rawImage.texture
+	GUI->Segmentation.rawImage.texture
+	
+togle recording function changed location to exportHandler and is linked in script
+	remove the on click function call in GUI->Capturing.button
+	
+save mitsuba button is linked to saveObjectColors instead of SaveMitsuba
+
+New Scene:
+The custompass object changed. make sure the custompass prefab in publicProjects/newScene/resources is used

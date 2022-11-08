@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c75813375f5e92846b1d90632a48bb66, type: 3}
+  m_Name: MinorLightVariations
+  m_EditorClassIdentifier: 
+  environmentsPath: 
+  lightSourcePrefab: {fileID: 0}
+  environmentVariatons: 1
+  pickRandomEnvironment: 1
+  randomEnvironmentRotations: 1
+  minEnvironmentAngle: 0
+  maxEnvironmentAngle: 360
+  randomExposuresEnvironment: 1
+  minExposure: 6.17
+  maxExposure: 10.1
+  lightsourceVariatons: 0
+  numLightsources: 2
+  minIntensityModifier: 0
+  maxIntensityModifier: 0
+  minThetaLight: 10
+  maxThetaLight: 89
+  minPhiLight: -45
+  maxPhiLight: 45
+  minRadiusLight: 1
+  maxRadiusLight: 1
+  applyProjectorVariations: 0
+  projectorTexturePath: 

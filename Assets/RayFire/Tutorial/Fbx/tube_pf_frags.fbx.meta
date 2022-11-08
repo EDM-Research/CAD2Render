@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: 5b1490dcb7382c746b7576ff0cccfc15
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Tube_pf_sh_1
+    100004: Tube_pf_sh_10
+    100006: Tube_pf_sh_11
+    100008: Tube_pf_sh_12
+    100010: Tube_pf_sh_13
+    100012: Tube_pf_sh_14
+    100014: Tube_pf_sh_15
+    100016: Tube_pf_sh_16
+    100018: Tube_pf_sh_17
+    100020: Tube_pf_sh_18
+    100022: Tube_pf_sh_19
+    100024: Tube_pf_sh_2
+    100026: Tube_pf_sh_20
+    100028: Tube_pf_sh_21
+    100030: Tube_pf_sh_22
+    100032: Tube_pf_sh_23
+    100034: Tube_pf_sh_3
+    100036: Tube_pf_sh_4
+    100038: Tube_pf_sh_5
+    100040: Tube_pf_sh_6
+    100042: Tube_pf_sh_7
+    100044: Tube_pf_sh_8
+    100046: Tube_pf_sh_9
+    400000: //RootNode
+    400002: Tube_pf_sh_1
+    400004: Tube_pf_sh_10
+    400006: Tube_pf_sh_11
+    400008: Tube_pf_sh_12
+    400010: Tube_pf_sh_13
+    400012: Tube_pf_sh_14
+    400014: Tube_pf_sh_15
+    400016: Tube_pf_sh_16
+    400018: Tube_pf_sh_17
+    400020: Tube_pf_sh_18
+    400022: Tube_pf_sh_19
+    400024: Tube_pf_sh_2
+    400026: Tube_pf_sh_20
+    400028: Tube_pf_sh_21
+    400030: Tube_pf_sh_22
+    400032: Tube_pf_sh_23
+    400034: Tube_pf_sh_3
+    400036: Tube_pf_sh_4
+    400038: Tube_pf_sh_5
+    400040: Tube_pf_sh_6
+    400042: Tube_pf_sh_7
+    400044: Tube_pf_sh_8
+    400046: Tube_pf_sh_9
+    2100000: concrete_exterior
+    2300000: Tube_pf_sh_1
+    2300002: Tube_pf_sh_10
+    2300004: Tube_pf_sh_11
+    2300006: Tube_pf_sh_12
+    2300008: Tube_pf_sh_13
+    2300010: Tube_pf_sh_14
+    2300012: Tube_pf_sh_15
+    2300014: Tube_pf_sh_16
+    2300016: Tube_pf_sh_17
+    2300018: Tube_pf_sh_18
+    2300020: Tube_pf_sh_19
+    2300022: Tube_pf_sh_2
+    2300024: Tube_pf_sh_20
+    2300026: Tube_pf_sh_21
+    2300028: Tube_pf_sh_22
+    2300030: Tube_pf_sh_23
+    2300032: Tube_pf_sh_3
+    2300034: Tube_pf_sh_4
+    2300036: Tube_pf_sh_5
+    2300038: Tube_pf_sh_6
+    2300040: Tube_pf_sh_7
+    2300042: Tube_pf_sh_8
+    2300044: Tube_pf_sh_9
+    3300000: Tube_pf_sh_1
+    3300002: Tube_pf_sh_10
+    3300004: Tube_pf_sh_11
+    3300006: Tube_pf_sh_12
+    3300008: Tube_pf_sh_13
+    3300010: Tube_pf_sh_14
+    3300012: Tube_pf_sh_15
+    3300014: Tube_pf_sh_16
+    3300016: Tube_pf_sh_17
+    3300018: Tube_pf_sh_18
+    3300020: Tube_pf_sh_19
+    3300022: Tube_pf_sh_2
+    3300024: Tube_pf_sh_20
+    3300026: Tube_pf_sh_21
+    3300028: Tube_pf_sh_22
+    3300030: Tube_pf_sh_23
+    3300032: Tube_pf_sh_3
+    3300034: Tube_pf_sh_4
+    3300036: Tube_pf_sh_5
+    3300038: Tube_pf_sh_6
+    3300040: Tube_pf_sh_7
+    3300042: Tube_pf_sh_8
+    3300044: Tube_pf_sh_9
+    4300000: Tube_pf_sh_1
+    4300002: Tube_pf_sh_2
+    4300004: Tube_pf_sh_3
+    4300006: Tube_pf_sh_4
+    4300008: Tube_pf_sh_5
+    4300010: Tube_pf_sh_6
+    4300012: Tube_pf_sh_7
+    4300014: Tube_pf_sh_8
+    4300016: Tube_pf_sh_9
+    4300018: Tube_pf_sh_10
+    4300020: Tube_pf_sh_11
+    4300022: Tube_pf_sh_12
+    4300024: Tube_pf_sh_13
+    4300026: Tube_pf_sh_14
+    4300028: Tube_pf_sh_15
+    4300030: Tube_pf_sh_16
+    4300032: Tube_pf_sh_17
+    4300034: Tube_pf_sh_18
+    4300036: Tube_pf_sh_19
+    4300038: Tube_pf_sh_20
+    4300040: Tube_pf_sh_21
+    4300042: Tube_pf_sh_22
+    4300044: Tube_pf_sh_23
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

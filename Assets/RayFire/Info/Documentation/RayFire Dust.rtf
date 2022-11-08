@@ -1,0 +1,141 @@
+{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fswiss\fcharset0 Calibri;}{\f1\fnil\fcharset2 Symbol;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\nowidctlpar\sl276\slmult1\qc\lang9\ul\b\f0\fs52 RayFire Dust\lang1033\ulnone\b0\fs24\par
+\pard\nowidctlpar\sl276\slmult1\par
+\lang9\fs22 RayFire Dust component creates dust using native Unity particle system and predefined dust material reference.  You can create dust on object \b Demolition\b0 , \b Activation \b0 and on gun shooting \b Impact. \b0 Dust component should be used only as addition to Rigid component. If Rigid component Object type set to Mesh Root it will copy Dust component to every child as well.\par
+Dust componenet has a lot of similarities with Debris component and has no much video overviews, so you can check Debris video overviews to see how all preoperties affect to Dust behaviour.\lang1033\fs24\par
+\lang9\fs28\tab\lang1033\fs24\par
+\lang9\b\fs48\tab Emit Dust\lang1033\b0\fs24\par
+\lang9\b\fs32{\field{\*\fldinst{HYPERLINK "https://youtu.be/vD3a9hhIMJE"}}{\fldrslt{\ul\cf1 https://youtu.be/vD3a9hhIMJE}}}\lang1033\b0\f0\fs24\par
+\par
+\lang9\b\fs22 On Demolition\lang1033\b0 : Demolished object fragments will emit dust.\fs24\par
+\par
+\lang9\b\fs22 On Activation\lang1033\b0 : Activated object will emit dust.\fs24\par
+\par
+\lang9\b\fs22 On Impact\lang1033\b0 : Object will emit dustat the psotion when it was shot by RayFire Gun component.\fs24\par
+\par
+\par
+\lang9\b\fs48\tab Main\lang1033\b0\fs24\par
+\lang9\b\fs48\tab\lang1033\b0\fs24\par
+\lang9\b\fs22 Opacity\lang1033\b0 : Dust opacity.\fs24\par
+\par
+\lang9\b\fs22 Dust  Material\lang1033\b0 : Material with texture which will be used for dust.\par
+\par
+\lang9\b Dust  Materials list\lang1033\b0 : List with Materials, every particle system will pick random material from this list..\fs24\par
+\par
+\lang9\b\fs22 Emission Material\lang1033\b0 : By default particle system will emit dust over whole object surface. You can define specific surface to emit dust using this Emission material field.\fs24\par
+\par
+\lang9\b\fs48\tab Properties\lang1033\b0\fs24\par
+\par
+\lang9\fs44\tab Emission\lang1033\fs24\par
+\par
+\lang9\b\fs28\tab Burst\lang1033\b0\fs24\par
+\par
+\b\fs22 Burst Type\b0 : Defines how total amount of burst particles for every particle system will be calculated. \fs24\par
+\pard\nowidctlpar\li720\sl276\slmult1\tx720\f1\'b7\tab\lang9\b\f0\fs22 None\b0 : \lang1033 Object won't produce Burst particles, only Distance particles will be emitted.\fs24\par
+\f1\'b7\tab\lang9\b\f0\fs22 Total Amount\b0 : \lang1033\b Burst Amount \b0 property value will be shared among all fragments. For instance, if \b Burst Amount \b0 value set to 100 and object was demolished to 5 fragments every fragment will emit 20 particles.\fs24\par
+\f1\'b7\tab\b\f0\fs22 Per One Unity Size\b0 : Every fragment will emit burst particles accordingly to it's size measured by distance between Bounding Box Min and Max corners. For instance, if \b Burst Amount \b0 value set to 15 and object has size equal to 2 units it will emit 30 particles.\fs24\par
+\f1\'b7\tab\b\f0\fs22 Fragment Amount\b0 : Every fragment will emit particles equal to \b Burst Amount \b0 value.\fs24\par
+\pard\nowidctlpar\li360\sl276\slmult1\par
+\pard\nowidctlpar\sl276\slmult1\b\fs22 Burst Amount\b0 : Value which used by Burst Type to calculate final amount of particles which every object should emit\lang9\b .\lang1033\b0\fs24\par
+\par
+\lang9\b\fs28\tab Distance\lang1033\b0\fs24\par
+\par
+\b\fs22 Distance Rate\b0 : Defines amount of particles which should be emitted over one unit distance if object with particle system moves.\fs24\par
+\par
+\b\fs22 Duration\b0 : Defines duration of particles emitting by distance.\fs24\par
+\par
+\lang9\b\fs28\tab Lifetime\lang1033\b0\fs24\par
+\par
+\b\fs22 Life Min\b0 : Defines minimum time of particle system existence. Final life time will be in range between Min and Max values.\fs24\par
+\par
+\b\fs22 Life Max\b0 : Defines maximum time of particle system existence. \fs24\par
+\par
+\lang9\b\fs28\tab Size\lang1033\b0\fs24\par
+\par
+\b\fs22 Size Min\b0 : Defines minimum size of particle. Final size will be in range between Min and Max values. This value works as scale multiplier for debris reference.\fs24\par
+\par
+\b\fs22 Size Max\b0 : Defines maximum size of particle. \fs24\par
+\par
+\pard\nowidctlpar\li360\sl276\slmult1\par
+\pard\nowidctlpar\sl276\slmult1\lang9\i\fs44\tab\i0 Dynamic\lang1033\fs24\par
+\par
+\lang9\b\fs28\tab Speed\lang1033\b0\fs24\par
+\par
+\b\fs22 Speed Min\b0 : Defines minimum initial speed of particle. Final speed will be in range between Min and Max values.\fs24\par
+\par
+\b\fs22 Speed Max\b0 : Defines maximum initial speed of particle. \fs24\par
+\lang9\b\fs28\tab\par
+\tab Rotation\lang1033\b0\fs24\par
+\par
+\b\fs22 Rotation Speed\b0 : Defines particle rotation speed.\fs24\par
+\lang9\b\fs28\tab\par
+\tab Gravity Modifier\lang1033\b0\fs24\par
+\par
+\b\fs22 Gravity Min\b0 : Defines minimum gravity for particle system. Final gravity will be in range between Min and Max values.\fs24\par
+\par
+\b\fs22 Gravity Max\b0 : Defines maximum gravity for particle system.\fs24\par
+\lang9\b\fs28\tab\lang1033\b0\fs24\par
+\par
+\lang9\i\fs44\tab\i0 Noise\lang1033\fs24\par
+\fs22 Noise allows to add some turbulent move in particle velocity.\fs24\par
+\lang9\b\fs32{\field{\*\fldinst{HYPERLINK "https://youtu.be/jlJ_NrufFGU"}}{\fldrslt{\ul\cf1 https://youtu.be/jlJ_NrufFGU}}}\lang1033\b0\f0\fs24\par
+\par
+\lang9\b\fs28\tab Main\lang1033\b0\fs24\par
+\par
+\b\fs22 Enabled\b0 : Enables Noise.\fs24\par
+\par
+\b\fs22 Quality\b0 : Defines quality for Noise. \fs24\par
+\par
+\lang9\b\fs28\tab Strength\lang1033\b0\fs24\par
+\par
+\b\fs22 Strength Min\b0 : Defines minimum Noise strength for particle. Final Noise strength will be in range between Min and Max values.\fs24\par
+\par
+\b\fs22 Strength Max\b0 : Defines maximum Noise strength for particle. \fs24\par
+\lang9\b\fs28\tab\lang1033\b0\fs24\par
+\lang9\b\fs28\tab Other\lang1033\b0\fs24\par
+\par
+\b\fs22 Frequency\b0 : Defines how frequent will be turbulence.\fs24\par
+\par
+\lang9\fs44\tab Collision\lang1033\fs24\par
+\par
+\lang9\b\fs28\tab Common\lang1033\b0\fs24\par
+\par
+\b\fs22 Collides with\b0 : Defines how total amount of burst particles for every particle system will be calculated. \fs24\par
+\pard\nowidctlpar\li720\sl276\slmult1\tx720\f1\'b7\tab\lang9\b\f0\fs22 Everything\b0 : \lang1033 Object won't produce Burst particles, only Distance particles will be emitted.\fs24\par
+\f1\'b7\tab\lang9\b\f0\fs22 Nothing: \lang1033\b0 property value will be shared among all fragments. For instance, if \fs24\par
+\pard\nowidctlpar\sl276\slmult1\par
+\b\fs22 Quality\b0 : Defines how total amount of burst particles for every particle system will be \fs24\par
+\pard\nowidctlpar\li720\sl276\slmult1\tx720\f1\'b7\tab\lang9\b\f0\fs22 High\b0 : \lang1033 Object won't produce Burst particles, only Distance particles will be emitted.\fs24\par
+\f1\'b7\tab\lang9\b\f0\fs22 Medium: \lang1033\b0 property value will be shared among all fragments. For instance, if \fs24\par
+\f1\'b7\tab\lang9\b\f0\fs22 Low: \lang1033\b0 property value will be shared among all fragments. For instance, if \fs24\par
+\pard\nowidctlpar\sl276\slmult1\par
+\b\fs22 Radius Scale\b0 : Collision sphere radius multiplier.\fs24\par
+\lang9\b\fs28\tab\lang1033\b0\fs24\par
+\lang9\fs44\tab\lang1033\fs24\par
+\lang9\fs44\tab Limitations\lang1033\fs24\par
+\par
+\lang9\b\fs28\tab Particle system\lang1033\b0\fs24\par
+\par
+\b\fs22 Min Particles\b0 : Defines minimum amount of particles for particle system. If final amount of particles will be less than this value then particle system will not be created.\fs24\par
+\par
+\b\fs22 Max Particles\b0 : Defines maximum amount of particles for particle system. If final amount of particles will be higher than this values then particle system will be created but won't show more particles than \b Max Particles \b0 value.\fs24\par
+\par
+\lang9\b\fs28\tab Fragments\lang1033\b0\fs24\par
+\par
+\b\fs22 Percentage\b0 : Defines amount of fragments in percentage which will generate particle system.\fs24\par
+\par
+\b\fs22 Size Threshold\b0 : Defines minimum size in units for object to create particle system. If object size is less than this values then it won't create particle system. Using this property you can exclude very small objects from particle generation. \fs24\par
+\lang9\b\fs28\tab\lang1033\b0\fs24\par
+\lang9\b\fs28\tab\b0\fs44 Rendering\lang1033\fs24\par
+\lang9\b\fs28\tab\lang1033\b0\fs24\par
+\lang9\b\fs28\tab Shadows\lang1033\b0\fs24\par
+\par
+\b\fs22 Cast Shadow\b0 : Enables shadow casting for particles.\fs24\par
+\par
+\b\fs22 Receive Shadow\b0 : Enables shadow receiving for particles.\fs24\par
+\par
+\par
+\par
+}
+ 

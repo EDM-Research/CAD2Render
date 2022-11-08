@@ -1,0 +1,153 @@
+.unity-button {
+    background-color: rgb(52, 152, 219);
+    border-radius: 3px;
+    border-color: rgb(11, 14, 7);
+    border-width: 1px;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    padding: 9px 23px;
+    text-shadow: 0 1px 0 rgb(38, 54, 102);
+    min-width: auto;
+    min-height: auto;
+}
+
+.unity-button:hover {
+    background-color: rgb(41, 128, 185);
+}
+
+.unity-button:active {
+    background-color: rgb(34, 106, 150);
+}
+
+.RecordButton_NotRecording {
+    background-color: rgb(46, 204, 113);
+}
+
+.RecordButton_NotRecording:hover {
+    background-color: rgb(39, 174, 96);
+}
+
+.RecordButton_NotRecording:active {
+    background-color: rgb(32, 142, 78);
+}
+
+.RecordButton_Recording {
+    background-color: rgb(231, 76, 60);
+}
+
+.RecordButton_Recording:hover {
+    background-color: rgb(191, 61, 49);
+}
+
+.RecordButton_Recording:active {
+    background-color: rgb(153, 49, 39);
+}
+
+.ExportButton {
+    background-color: rgb(26, 188, 156);
+}
+
+.ExportButton:hover {
+    background-color: rgb(22, 160, 133);
+}
+
+.ExportButton:active {
+    background-color: rgb(18, 130, 107);
+}
+
+.RandomizeScrollViews {
+    height: 100%;
+    border-width: 2px;
+    border-color: rgb(0, 0, 0);
+    margin: 2px;
+    background-color: rgba(44, 62, 80, 0.3);
+}
+
+.RandomizeListView {
+    width: 25%;
+    height: 38px;
+    font-size: 22px;
+    color: rgb(236, 240, 241);
+    background-color: rgba(44, 62, 80, 0.38);
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    bottom: 0;
+    -unity-text-align: upper-center;
+    max-height: 100%;
+}
+
+.RandomizeListView:hover {
+    width: 25%;
+    height: auto;
+    max-height: 100%;
+}
+
+#unity-high-button {
+    display: none;
+}
+
+#unity-low-button {
+    display: none;
+}
+
+.unity-scroller--vertical {
+    width: 16px;
+}
+
+#unity-tracker {
+    background-color: rgb(44, 62, 80);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    width: 16px;
+    max-width: 100%;
+    height: 100%;
+}
+
+#unity-dragger {
+    background-color: rgb(52, 152, 219);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 10px;
+    border-left-color: rgba(255, 255, 255, 0.16);
+    border-right-color: rgba(255, 255, 255, 0.16);
+    border-top-color: rgba(255, 255, 255, 0.16);
+    border-bottom-color: rgba(255, 255, 255, 0.16);
+    scale: 1 0.95;
+}
+
+#unity-slider {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.CustomPassTexture {
+    border-left-color: rgba(255, 255, 255, 255);
+    border-right-color: rgba(255, 255, 255, 255);
+    border-top-color: rgba(255, 255, 255, 255);
+    border-bottom-color: rgba(255, 255, 255, 255);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    margin-top: 15px;
+}

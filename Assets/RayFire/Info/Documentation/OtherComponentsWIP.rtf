@@ -1,0 +1,213 @@
+{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil Consolas;}{\f2\fnil\fcharset2 Symbol;}}
+{\colortbl ;\red0\green0\blue255;\red0\green0\blue0;}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sl276\slmult1\qc\lang9\ul\b\f0\fs56 RayFire for Unity 1.15\par
+Documentation \fs48\par
+\pard\ri-22\sl276\slmult1\tx8662\tx8946\ulnone\b0\fs28\par
+\pard\sl276\slmult1\ul\b\fs36\par
+RayFire Cluster component\par
+\lang1033\ulnone\b0\fs22\par
+Clusters component can be used to create parent/child hierarchy in Editor mode which can be used for demolition in Play mode. Also clusters allows to simulate dynamic concave objects which is impossible to do for now (2018.3) in Unity with regular rigid bodies.\par
+\par
+\fs28\tab Properties group\lang9\b\fs22\par
+\lang1033\b0\par
+\lang9\b Type\lang1033\b0 : Defines clustering algorithm.\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent0{\pntxtb\'B7}}\fi-360\li720\sl276\slmult1 By Point Cloud: Creates random Vector3 point cloud inside bounding box of all children meshes, and then create clusters based on this point cloud, every child sticks to closest point. This type allows to gather into one cluster objects with meshes which are not connected with each other.\par
+{\pntext\f2\'B7\tab}By Shared Area: Creates clusters starting from biggest, not clustered yet mesh and then start add neighbour mesh with biggest shared area, then do it again. This type is good for objects just fragmented using Shatter component. In this way clusters looks more natural.\par
+\pard\sl276\slmult1\par
+\b Depth\b0 : Defines how deep will go clustering. \par
+\b Seed\b0 : Random seed for all random values. \par
+\b Smooth Pass\b0 : Higher value smooth clusters and let them switch some fragments among each other to make border between clusters smoother.\par
+\par
+\fs28\tab By Point Cloud group\lang9\b\fs22\par
+\lang1033\b0\par
+\b Base Amount\b0 : Maximum amount child clusters. \par
+\b Depth Amount\b0 : Amount of shards in child clusters. \par
+\par
+\lang9\b Connectivity\b0 : \lang1033 Defines Connectivity algorithm for shards. \par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent0{\pntxtb\'B7}}\fi-360\li720\sl276\slmult1\b By Bounding Box\b0 : Fast but not accurate. Check for connectivity using shard's bound boxes. Can be used with any kind of objects.\par
+\b{\pntext\f2\'B7\tab}By Mesh\b0 : Slow but accurate. Check for connectivity using shard's mesh. Can be used only with fragments which shares same triangles (Voronoi, Slabs, Splinters and Radial fragmentation types).\par
+\pard\sl276\slmult1\par
+\fs28\tab By Shared Area group\lang9\b\fs22\par
+\lang1033\b0\par
+\b Minimum Amount\b0 : Minimum amount of shards in cluster. \par
+\b Maximum Amount\b0 : Maximum amount of shards in cluster. \par
+\par
+\lang9\fs28\par
+\ul\b\fs36\par
+RayFire Gun component\par
+\lang1033\ulnone\b0\fs22\par
+\lang9\b\fs32{\field{\*\fldinst{HYPERLINK "https://www.youtube.com/watch?v=UstoNAaVav4"}}{\fldrslt{\ul\cf1 https://www.youtube.com/watch?v=UstoNAaVav4}}}\lang1033\b0\f0\fs22\par
+\par
+Using Gun component you can shoot objects, demolish them at Impact point, create Impact Flash, Particle Debris and Dust, dynamically push them and activate.\par
+\par
+Single shot can be initiated by public method:\par
+\cf1\f1\fs19 public\cf2  \cf1 void\cf2  Shoot()\cf0\f0\fs22\par
+\par
+\lang9\fs28\tab Properties group\b\fs32\par
+\fs22\par
+Axis\lang1033\b0 : Defines local shooting axis of object with Gun component, in case Target is not defined.\par
+\par
+\lang9\b Max Distance\lang1033\b0 : Maximum distance to shoot.\par
+\par
+\lang9\b Target\lang1033\b0 : Transform component which will be used as target.\par
+\par
+\lang9\fs28\tab Burst group\b\fs32\par
+\fs22\par
+Rounds\lang1033\b0 : Amount of shots during single burst.\par
+\par
+\lang9\b Rate\lang1033\b0 : Defines delay in seconds until next shot.\par
+\par
+\lang9\fs28\tab Impact group\b\fs32\par
+\fs22\par
+Strength\lang1033\b0 : Defines strength of physical push which will get Impact target.\par
+\par
+\lang9\b Radius\lang1033\b0 : Defines radius in units around Impact point. Turned off when 0, in this case only Impact target will be pushed.\par
+\par
+\lang9\fs28\tab Damage group\b\fs32\par
+\fs22\par
+Damage\lang1033\b0 : Defines damage value which will be applied to object with Rigid component.\par
+\par
+\lang9\fs28\tab Impact particles group\b\fs32\par
+\fs22\par
+Debris\lang1033\b0 : Create particle debris in case of shot in object with Rigid component. Rigid component has to have Debris\\On Impact property enabled.\par
+\par
+\lang9\b Dust\lang1033\b0 : Create particle dust in case of shot in object with Rigid component. Rigid component has to have Dust\\On Impact property enabled.\par
+\par
+\lang9\fs28\tab Impact flash group\b\fs32\par
+\fs22\par
+Enable Impact Flash\lang1033\b0 : Create object with Light component for a moment at Impact point.\par
+\par
+\lang9\b Flash Strength\lang1033\b0 : Defines Light's intensity.\par
+\par
+\lang9\b Flash Range\lang1033\b0 : Defines Light's range.\par
+\par
+\lang9\b Flash Distance\lang1033\b0 : Defines offset in units from Impact point.\par
+\par
+\lang9\b Flash Color\lang1033\b0 : Defines Light's color.\par
+\par
+\lang9\fs28\tab Filters group\b\fs32\par
+\fs22\par
+Tag\lang1033\b0 : Gun will shoot only objects with picked Tag. You can pick only one Tag.\par
+\b\par
+Layer\b0 : Gun will shoot only objects with defined layer. You can define several Layers.\par
+\par
+\par
+\lang9\fs28 ===========================================================\par
+\par
+\ul\b\fs36 RayFire Wind component\par
+\ulnone\fs32\par
+\tab\b0\fs28 Gizmo group\lang1033\fs22\par
+\b\par
+Gizmo Size\b0 : Defines size of Wind Gizmo. Wind force can be applied to dynamic objects only inside gizmo.\par
+\par
+\lang9\b\fs32\tab\b0\fs28 Noise group\lang1033\fs22\par
+\lang9\b\par
+Global Scale\lang1033\b0 : Defines Global Noise scale. The higher Global Scale make wind more chaotic and dense.\par
+\b\par
+Length Scale\b0 : Defines Noise scale over Z (Wind direction) axis.\par
+\b\par
+Width Scale\b0 : Defines Noise scale over X axis.\par
+\b\par
+Speed\b0 : Defines speed of noise offset over Z (Wind direction) axis.\par
+\par
+\lang9\b\fs32\tab\b0\fs28 Strength group\b\fs32\par
+\fs22\par
+Minimum\lang1033\b0 : Minimum strength applied to dynamic object at position where noise strength is 0.\par
+\b\par
+Maximum\b0 : Maximum strength applied to dynamic object at position where noise strength 1.\par
+\b\par
+Torque\b0 : Defines rolling torque strength for dynamic objects.\par
+\b\par
+Force By Mass\b0 : Applies Wind strength to object by their mass.\par
+\par
+\lang9\b\fs32\tab\b0\fs28 Direction group\b\fs32\par
+\fs22\par
+Divirgency\lang1033\b0 : Defines angle spread for wind direction\par
+\b\par
+Turbulence\b0 : Defines how quickly \b Divergency \b0 is changing.\par
+\par
+\lang9\b\fs32\tab\b0\fs28 Preview group\lang1033\fs22\par
+\b\par
+Preview Density\b0 : Defines amount of Strength and Direction preview helpers.\par
+\b\par
+Preview Size\b0 : Defines size of Strength and Direction preview helpers.\par
+\par
+\par
+\lang9\fs28\tab Filters group\b\fs32\par
+\fs22\par
+Tag\lang1033\b0 : Wind will affect only objects with picked Tag. You can pick only one Tag.\par
+\b\par
+Layer\b0 : Wind will affect only objects with defined layer. You can define several Layers.\par
+\lang9\b\fs32\tab\lang1033\b0\fs22\par
+\lang9\fs28\par
+===========================================================\par
+\par
+\ul\b\fs36 RayFire Vortex component\par
+\ulnone\fs32\par
+\tab\b0\fs28 Anchor points group\lang1033\fs22\par
+\b\par
+Top Anchor\b0 : Position of Top anchor point.\par
+\b Bottom Anchor\b0 : Position of Bottom anchor point.\par
+\lang9\b\fs32\par
+\tab\b0\fs28 Gizmo group\par
+\lang1033\fs22\par
+\b Top Radius\b0 : Radius in Units for Top anchor.\par
+\b Bottom Radius\b0 : Radius in Units for Bottom anchor.\par
+\par
+\lang9\fs28\tab Eye group\lang1033\b\par
+\fs22\par
+Eye\b0 : Size of inner eye hole in percents to radius.\par
+\lang9\fs28\par
+\b\fs32\tab\b0\fs28 Strength group\par
+\lang1033\fs22\par
+\b Force By Mass\b0 : Applies Swirl strength by object's mass.\par
+\b Stiffness\b0 : Defines how hard object will try to reach it's local position inside Vortex.\par
+\b Swirl Strength\b0 : Defines swirl animation speed.\par
+\par
+\lang9\b\fs32\tab\b0\fs28 Torque group\lang1033\par
+\b\fs22\par
+Enable Torque\b0 : Enables object spinning around it's center of mass. \par
+\b Torque Strength\b0 : Defines spinning speed.\par
+\b Torque Variation\b0 : Defines \b Torque Strength \b0 variation.\par
+\par
+\lang9\b\fs32\tab\b0\fs28 Height bias group\lang1033\par
+\b\fs22\par
+Enable height Bias\b0  Enables object height animation inside Vortex.\par
+\b Bias Speed\b0 : Defines height animation speed.\par
+\b Bias Spread\b0 : Defines how far object will be animated from it's default position.\par
+\lang9\fs28\par
+\b\fs32\tab\b0\fs28 Seed group\lang1033\par
+\b\fs22\par
+Seed\b0 : Random seed for all random values. Affects on object's position in vortex, Swirl and Torque strength, etc.\lang9\fs28\par
+\par
+\b\fs32\tab\b0\fs28 Preview group\lang1033\fs22\par
+\par
+\b Circles\b0 : Defines amount of gizmo preview circles for Vortex\par
+\par
+\lang9\fs28\tab Filters group\b\fs32\par
+\fs22\par
+Tag\lang1033\b0 : Vortex will affect only objects with picked Tag. You can pick only one Tag.\par
+\b\par
+Layer\b0 : Vortex will affect only objects with defined layer. You can define several Layers.\par
+\lang9\fs28\par
+===========================================================\par
+\ul\b\fs36\par
+RayFire Snapshot component\par
+\par
+\ulnone\fs32{\field{\*\fldinst{HYPERLINK "https://www.youtube.com/watch?v=MDMwzzLndXQ"}}{\fldrslt{\ul\cf1 https://www.youtube.com/watch?v=MDMwzzLndXQ}}}\ul\f0\fs36\par
+\ulnone\fs32\par
+\tab\b0\fs28 Save properties group\lang1033\fs22\par
+\b\par
+Asset name\b0 : Asset file name.\par
+\par
+\b Compress\b0 : Reduce asset size twice when On.\par
+\par
+\lang9\fs28\tab Load properties group\lang1033\fs22\par
+\b\par
+Snapshot Asset\b0 : Asset file which will be loaded.\par
+\par
+\b Size filter\b0 : Size filter to exclude loaded objects by size.\par
+\par
+\lang9\b\fs52\par
+}
+ 

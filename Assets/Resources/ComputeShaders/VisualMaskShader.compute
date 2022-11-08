@@ -1,0 +1,16 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+Texture2D<float4> segmentationTexture;
+RWTexture2DArray<float> Results;
+StructuredBuffer<float3> FalseColors;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    Results[id.xyz] = step(length(abs(segmentationTexture[id.xy].rgb - FalseColors[id.z].rgb)), 0.005f);
+    //Results[id.xyz] = segmentationTexture[id.xy].r;
+
+}

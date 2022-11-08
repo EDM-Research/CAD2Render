@@ -1,0 +1,14 @@
+    Where to start learn RayFire For Unity Plugin.
+
+
+1. Read and repeat all how-tos in 
+   Info/HowTo folder.
+
+2. All the most important components documentation can be found in 
+   Info/Documentation folder.
+
+3. All video tutorials and components overview can be found on YouTube channel:
+   https://youtube.com/playlist?list=PLcjScvftXufKA-dLmqvokYnU7zFfKYWk0
+   
+4. You can get help from developer at
+   https://discord.gg/8G98JKj or via email:unity@rayfirestudios.com
