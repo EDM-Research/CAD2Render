@@ -6,7 +6,7 @@
 **HDRP Synthetic Data Generator** is a highly customizable framework for generating high quality synthetic data for deep learning purposes. It is build upon the high definition rendering pipeline of unity for high quality raytracing with full global illumination. The framework supports variations in model types, number of models, environments, viewpoints, exposure, supporting structures, materials,  material colors, etc.
 
 ## Installation
-Clone the latest stable release from this repository: [v2.0](https://github.com/nmichiels/HDRP_SyntheticDataGenerator/tree/v2.0).
+Clone the latest stable release from this repository: [v3.0](https://github.com/EDM-Research/CAD2Render/releases/tag/v3.0).
 
 This release includes four example scenes and a couple of basis models, environment maps and materials:
 - Assets/publicProjects/newScene/template.unity
