@@ -209,16 +209,16 @@ namespace Assets.Scripts.newScene
             writer.Close();
 
             if (dataset.renderProfile)
-                System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset.renderProfile), dataset.outputPath + "metaData/" + dataset.renderProfile.name + ".asset", true);
+                System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset.renderProfile), dataset.outputPath + metadataPath + dataset.renderProfile.name + ".asset", true);
             if (dataset.rayTracingProfile)
-                System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset.rayTracingProfile), dataset.outputPath + "metaData/" + dataset.rayTracingProfile.name + ".asset", true);
+                System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset.rayTracingProfile), dataset.outputPath + metadataPath + dataset.rayTracingProfile.name + ".asset", true);
             if (dataset.postProcesingProfile)
-                System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset.postProcesingProfile), dataset.outputPath + "metaData/" + dataset.postProcesingProfile.name + ".asset", true);
-            System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset), dataset.outputPath + "metaData/" + dataset.name + ".asset", true);
+                System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset.postProcesingProfile), dataset.outputPath + metadataPath + dataset.postProcesingProfile.name + ".asset", true);
+            System.IO.File.Copy(AssetDatabase.GetAssetPath(dataset), dataset.outputPath + metadataPath + dataset.name + ".asset", true);
 
             foreach(RandomizerInterface randomizer in generator.GetComponentsInChildren<RandomizerInterface>())
                 if(randomizer.getDataset() != null)
-                    System.IO.File.Copy(AssetDatabase.GetAssetPath(randomizer.getDataset()), dataset.outputPath + "metaData/" + randomizer.getDataset().name + ".asset", true);
+                    System.IO.File.Copy(AssetDatabase.GetAssetPath(randomizer.getDataset()), dataset.outputPath + metadataPath + randomizer.getDataset().name + ".asset", true);
         }
 
         private bool checkKeypointVisibility(Mesh keypoint, Transform child)
