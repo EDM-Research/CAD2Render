@@ -1,4 +1,4 @@
-# CAD2Render
+# CAD2Render - A Modular Toolkit for GPU-accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry
 <p align="center">
   <img src="./img/example.png" alt="HDRP_SyntheticDataGenerator" height="380">
   <img src="./img/CAD2Render_exampleDatasets.jpg" alt="CAD2Render_exampleDatasets" height="380">
