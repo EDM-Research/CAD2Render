@@ -1,9 +1,12 @@
 # CAD2Render
 <p align="center">
-  <img src="./img/example.png" alt="HDRP_SyntheticDataGenerator" width="738">
+  <img src="./img/example.png" alt="HDRP_SyntheticDataGenerator" height="380">
+  <img src="./img/CAD2Render_exampleDatasets.jpg" alt="CAD2Render_SyntheticDataGenerator" height="380">
 </p>
 
-**HDRP Synthetic Data Generator** is a highly customizable framework for generating high quality synthetic data for deep learning purposes. It is build upon the high definition rendering pipeline of unity for high quality raytracing with full global illumination. The framework supports variations in model types, number of models, environments, viewpoints, exposure, supporting structures, materials,  material colors, etc.
+**CAD2Render** is a highly customizable framework for generating high quality synthetic data for deep learning purposes. It is build upon the high definition rendering pipeline of unity for high quality raytracing with full global illumination. The framework supports variations in model types, number of models, environments, viewpoints, exposure, supporting structures, materials,  material colors, etc.
+
+**CAD2Render** will be presented at the Workshop on **Photorealistic Image and Environment Synthesis for Computer Vision (PIES-CV)** in conjunction with **IEEE/CVF WACV 2023**.
 
 ## Installation
 Clone the latest stable release from this repository: [v3.0](https://github.com/EDM-Research/CAD2Render/releases/tag/v3.0).
@@ -63,5 +66,13 @@ There are multiple randomizer types that can be added to the generator
 - **Material**: This object manages the settings that control the material properties of an object. Every static object in the scene can have its own material randomizer.</br>See [here](README_materialRandomizer.md) for a detailed explanation of the possible settings.
 - **Object**: This object manages the settings that control the spawning of new objects. A material randomizer must be linked that will be added to every object spawned with this object randomizer. Multiple object randomizers are supported.</br>See [here](README_objectRandomizer.md) for a detailed explanation of the possible settings.
 
-## Copyright
-Copyright (c) 2020 Nick Michiels <nick.michiels@uhasselt.be>, Hasselt University, Belgium, All rights reserved.
+## Citation
+To appear in the WACV 2023 workshop proceedings.
+```
+@misc{cad2render_2023,
+	title={CAD2Render: A Modular Toolkit for GPU-accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry},
+	author={Moonen Steven, de Hoog Joris, Bourgana Taoufik, Vanherle Bram, Michiels Nick},
+	year={2023},
+	howpublished = {\url{https://github.com/EDM-Research/CAD2Render}}
+}
+```
