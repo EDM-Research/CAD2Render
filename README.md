@@ -1,12 +1,16 @@
 # CAD2Render
 <p align="center">
   <img src="./img/example.png" alt="HDRP_SyntheticDataGenerator" height="380">
-  <img src="./img/CAD2Render_exampleDatasets.jpg" alt="CAD2Render_SyntheticDataGenerator" height="380">
+  <img src="./img/CAD2Render_exampleDatasets.jpg" alt="CAD2Render_exampleDatasets" height="380">
 </p>
 
 **CAD2Render** is a highly customizable framework for generating high quality synthetic data for deep learning purposes. It is build upon the high definition rendering pipeline of unity for high quality raytracing with full global illumination. The framework supports variations in model types, number of models, environments, viewpoints, exposure, supporting structures, materials,  material colors, etc.
 
 **CAD2Render** will be presented at the Workshop on **Photorealistic Image and Environment Synthesis for Computer Vision (PIES-CV)** in conjunction with **IEEE/CVF WACV 2023**.
+
+<p align="center">
+  <img src="./img/CAD2Render_overview.jpg" alt="overview" width="1200">
+</p>
 
 ## Installation
 Clone the latest stable release from this repository: [v3.0](https://github.com/EDM-Research/CAD2Render/releases/tag/v3.0).
