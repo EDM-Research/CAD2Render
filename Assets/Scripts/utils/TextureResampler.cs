@@ -26,11 +26,8 @@ public class TextureResampler
     /**
      * deprecated use TextureResampler(MaterialRandomizeData dataset) instead
      */
-    public TextureResampler(DatasetInformation data)
-    {
-        this.dataset = new MaterialRandomizeData(data);
-        TextureSynthesizer = ResourceManager.loadShader("TextureSynthesizer");
-    }
+    [Obsolete]
+    public TextureResampler(DatasetInformation data) : this(new MaterialRandomizeData(data)){}
 
     public void ResampleTexture(MaterialTextures textures, Texture sampleTexture, MaterialTextures.MapTypes type, ref RandomNumberGenerator rng)
     {

@@ -408,19 +408,19 @@ public class BOPDatasetExporter
     }
 
     static private void exportRenderTexture(RenderTexture renderTexture, int fileID, string outputPath, ImageSaver imageSaver) {
-        imageSaver.Save(renderTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/rgb/", sceneId)  + fileID.ToString("D6"), DatasetInformation.Extension.jpg, true);
+        imageSaver.Save(renderTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/rgb/", sceneId)  + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
     }
     static public void exportDepthTexture(RenderTexture depthTexture, int fileID, string outputPath, ImageSaver imageSaver)
     {
-        imageSaver.Save(depthTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/depth/", sceneId) + fileID.ToString("D6"), DatasetInformation.Extension.jpg, true);
+        imageSaver.Save(depthTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/depth/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
     }
     static public void exportAlbedoTexture(RenderTexture albedoTexture, int fileID, string outputPath, ImageSaver imageSaver)
     {
-        imageSaver.Save(albedoTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/albedo/", sceneId) + fileID.ToString("D6"), DatasetInformation.Extension.jpg, true);
+        imageSaver.Save(albedoTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/albedo/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
     }
     static public void exportNormalTexture(RenderTexture normalTexture, int fileID, string outputPath, ImageSaver imageSaver)
     {
-        imageSaver.Save(normalTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/normal/", sceneId) + fileID.ToString("D6"), DatasetInformation.Extension.jpg, true);
+        imageSaver.Save(normalTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/normal/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
     }
 
     static RenderTexture splitSegmentationTextures;
@@ -475,8 +475,8 @@ public class BOPDatasetExporter
         SegmentationShader.Dispatch(kernelHandle, segmentationTexture.width / 8, segmentationTexture.height / 8, instantiated_models.Count);
         ColorBuffer.Dispose();//clean disposel of the collor buffer (might want to edit this so the buffer is reused)
 
-        imageSaver.SaveArray(splitSegmentationTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib/", sceneId) + fileID.ToString("D6"), DatasetInformation.Extension.jpg, false, true);
-        imageSaver.SaveArray(segmentationTextureArray, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask/", sceneId) + fileID.ToString("D6"), DatasetInformation.Extension.jpg, false, true);
+        imageSaver.SaveArray(splitSegmentationTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
+        imageSaver.SaveArray(segmentationTextureArray, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
     }
 
 

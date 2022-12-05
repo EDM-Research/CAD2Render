@@ -11,6 +11,7 @@ public class ImageSaver
     private RenderTexture arraySlice;
     private Texture2D saveTexture;
     private Texture2D BlackWhiteSaveTexture;
+    public enum Extension { png, jpg };
 
     public ImageSaver(int width, int height)
     {
@@ -26,7 +27,7 @@ public class ImageSaver
         BlackWhiteSaveTexture = new Texture2D(width, height, TextureFormat.R16, false);
     }
 
-    public void SaveArray(RenderTexture renderTex, int depth, string filename, DatasetInformation.Extension outputExt, bool gammaCorrection, bool blackWhite = false)
+    public void SaveArray(RenderTexture renderTex, int depth, string filename, Extension outputExt, bool gammaCorrection, bool blackWhite = false)
     {
         for(int i = 0; i < depth; ++i)
         {
@@ -35,7 +36,7 @@ public class ImageSaver
         }
     }
 
-    public void Save(RenderTexture renderTex, string filename, DatasetInformation.Extension outputExt, bool gammaCorrection, bool blackWhite = false)
+    public void Save(RenderTexture renderTex, string filename, Extension outputExt, bool gammaCorrection, bool blackWhite = false)
     {
         var oldRT = RenderTexture.active;
 
@@ -60,9 +61,9 @@ public class ImageSaver
         RenderTexture.active = oldRT;
 
         byte[] bytes = null;
-        if (outputExt == DatasetInformation.Extension.png)
+        if (outputExt == Extension.png)
             bytes = ActiveTexture.EncodeToPNG();
-        else if (outputExt == DatasetInformation.Extension.jpg)
+        else if (outputExt == Extension.jpg)
             bytes = ImageConversion.EncodeToJPG(ActiveTexture, 100);
            
         

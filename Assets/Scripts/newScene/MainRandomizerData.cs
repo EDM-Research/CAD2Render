@@ -100,7 +100,7 @@ public class MainRandomizerData : ScriptableObject {
     [Tooltip("Export fm_format files (deprecated)")]
     public bool exportToFMFormat = false;
     [Tooltip("Extension of generated images. Segmentation masks are always exported as png.")]
-    public DatasetInformation.Extension outputExt = DatasetInformation.Extension.png;
+    public ImageSaver.Extension outputExt = ImageSaver.Extension.png;
     [Tooltip("Enable exporting sub-models.")]
     public bool exportSubModels = false;
     [Tooltip("Enable to export 2d image positions of sub models. Used for keypoints.")]
@@ -111,7 +111,7 @@ public class MainRandomizerData : ScriptableObject {
     [Tooltip("Number of Mitsuba samples")]
     public int mitsubaSampleCount = 128;
 
-
+    [Obsolete]
     public MainRandomizerData(DatasetInformation data)
     {
         resolution = new Vector2Int(data.resolutionWidth, data.resolutionHeight);

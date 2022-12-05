@@ -33,9 +33,8 @@ public class DatasetInformation : ScriptableObject {
     public int resolutionWidth = 1024;
     [Tooltip("Height of generated images. Make sure you altered all render textures.")]
     public int resolutionHeight = 1024;
-    public enum Extension { png, jpg };
     [Tooltip("Extension of generated images. Segmentation masks are always exported as png.")]
-    public Extension outputExt = Extension.png;
+    public ImageSaver.Extension outputExt = ImageSaver.Extension.png;
     [Tooltip("Start id of first generated image.")]
     public int startFileCounter = 0;
     [Tooltip("Number of samples to generate (-1 for indefinite).")]

@@ -122,6 +122,7 @@ public class MaterialRandomizeData : ScriptableObject {
     [Tooltip("Max color range of random color.")]
     public Color maxColor;
 
+    [Obsolete]
     public MaterialRandomizeData(DatasetInformation data)
     {
         materialsPath = data.materialsPath;
