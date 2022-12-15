@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e96d3ec3c863cb4a92ef7a511757879, type: 3}
-  m_Name: TopView
+  m_Name: ViewImporter
   m_EditorClassIdentifier: 
   viewpointVariatons: 1
-  importFromBOP: 0
+  importFromBOP: 1
   randomYUp: 0
-  minTheta: 75
+  minTheta: 10
   maxTheta: 89
-  minPhi: -180
-  maxPhi: 180
-  minRadius: 860
-  maxRadius: 1129
+  minPhi: -45
+  maxPhi: 45
+  minRadius: 1
+  maxRadius: 100
   useCameraMatrix: 0
   cameraMatrix:
     e00: 0

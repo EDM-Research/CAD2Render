@@ -37,7 +37,7 @@ MonoBehaviour:
   exportToBOP: 1
   BOPSceneId: 1
   exportDepthTexture: 1
-  maxDepthDistance: 1722
+  maxDepthDistance: 1300
   exportNormalTexture: 0
   exportAlbedoTexture: 0
   exportToFMFormat: 1
