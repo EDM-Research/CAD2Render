@@ -6,6 +6,22 @@
 
 **CAD2Render** is a highly customizable framework for generating high quality synthetic data for deep learning purposes. It is build upon the high definition rendering pipeline of unity for high quality raytracing with full global illumination. The framework supports variations in model types, number of models, environments, viewpoints, exposure, supporting structures, materials,  material colors, etc.
 
+If you publish a scientific paper that is based on (or makes use of) CAD2Render, you must cite the following conference publication:
+
+```
+@InProceedings{Moonen_2023_WACV,
+    author    = {Moonen, Steven and Vanherle, Bram and de Hoog, Joris and Bourgana, Taoufik and Bey-Temsamani, Abdellatif and Michiels, Nick},
+    title     = {CAD2Render: A Modular Toolkit for GPU-Accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry},
+    booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) Workshops},
+    month     = {January},
+    year      = {2023},
+    pages     = {583-592}
+}
+```
+
+Be sure to [check out this publication](https://openaccess.thecvf.com/content/WACV2023W/PIES-CV/html/Moonen_CAD2Render_A_Modular_Toolkit_for_GPU-Accelerated_Photorealistic_Synthetic_Data_Generation_WACVW_2023_paper.html) if you want to know more about e.g. the CAD2Render implementation.
+
+
 **CAD2Render** will be presented at the Workshop on **Photorealistic Image and Environment Synthesis for Computer Vision (PIES-CV)** in conjunction with **IEEE/CVF WACV 2023**.
 
 <p align="center">
