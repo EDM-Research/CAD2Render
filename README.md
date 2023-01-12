@@ -8,16 +8,7 @@
 
 If you publish a scientific paper that is based on (or makes use of) CAD2Render, you must cite the following conference publication:
 
-```
-@InProceedings{Moonen_2023_WACV,
-    author    = {Moonen, Steven and Vanherle, Bram and de Hoog, Joris and Bourgana, Taoufik and Bey-Temsamani, Abdellatif and Michiels, Nick},
-    title     = {CAD2Render: A Modular Toolkit for GPU-Accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry},
-    booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) Workshops},
-    month     = {January},
-    year      = {2023},
-    pages     = {583-592}
-}
-```
+> Steven Moonen, Bram Vanherle, Joris de Hoog, Taoufik Bourgana, Abdellatif Bey-Temsamani and Nick Michiels. AD2Render: A Modular Toolkit for GPU-Accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry. Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) Workshops. Pages 583-592. January, 2023.
 
 Be sure to [check out this publication](https://openaccess.thecvf.com/content/WACV2023W/PIES-CV/html/Moonen_CAD2Render_A_Modular_Toolkit_for_GPU-Accelerated_Photorealistic_Synthetic_Data_Generation_WACVW_2023_paper.html) if you want to know more about e.g. the CAD2Render implementation.
 
