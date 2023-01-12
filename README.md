@@ -71,12 +71,13 @@ There are multiple randomizer types that can be added to the generator
 - **Object**: This object manages the settings that control the spawning of new objects. A material randomizer must be linked that will be added to every object spawned with this object randomizer. Multiple object randomizers are supported.</br>See [here](README_objectRandomizer.md) for a detailed explanation of the possible settings.
 
 ## Citation
-To appear in the WACV 2023 workshop proceedings.
 ```
-@misc{cad2render_2023,
-	title={CAD2Render: A Modular Toolkit for GPU-accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry},
-	author={Moonen Steven, de Hoog Joris, Bourgana Taoufik, Vanherle Bram, Michiels Nick},
-	year={2023},
-	howpublished = {\url{https://github.com/EDM-Research/CAD2Render}}
+@InProceedings{Moonen_2023_WACV,
+    author    = {Moonen, Steven and Vanherle, Bram and de Hoog, Joris and Bourgana, Taoufik and Bey-Temsamani, Abdellatif and Michiels, Nick},
+    title     = {CAD2Render: A Modular Toolkit for GPU-Accelerated Photorealistic Synthetic Data Generation for the Manufacturing Industry},
+    booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) Workshops},
+    month     = {January},
+    year      = {2023},
+    pages     = {583-592}
 }
 ```
