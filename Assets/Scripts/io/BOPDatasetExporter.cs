@@ -589,7 +589,7 @@ public class BOPDatasetExporter
                 //TODO fix bug for complex meshes: exportModel(model, outputPath + String.Format("bop/models/{0:000000}.ply", idExportData.id));
                 idExportData.exported = true;
                 obj_name_to_id[model.name] = idExportData;
-                exportModelId(model.name, idExportData.id, fileID, outputPath);
+                exportModelId(model.name, idExportData.id, outputPath);
             }
             poses.Add(pose);
         }
@@ -600,11 +600,10 @@ public class BOPDatasetExporter
     }
 
     static private bool first = true;
-    private static void exportModelId(string modelName, int id, int fileID, string outputPath)
+    private static void exportModelId(string modelName, int id, string outputPath)
     {
         var n = new JSONObject();
-        n["Model_name"] = modelName;
-        n["Model_id"] = id;
+        n[id] = modelName;
         appendToJSON(outputPath + String.Format("bop/train_PBR/{0:000000}/", sceneId) + "model_id.json", n.ToString(), first);
         first = false;
     }
