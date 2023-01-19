@@ -10,6 +10,13 @@ using ResourceManager = Assets.Scripts.io.ResourceManager;
 public class MatRandomizeHandler: RandomizerInterface
 {
     public MaterialRandomizeData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
+
     private RandomNumberGenerator rng;
 
     private TextureResampler texResampler;

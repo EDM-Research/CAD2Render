@@ -9,6 +9,12 @@ using UnityEngine.Rendering.HighDefinition;
 public class ImageBackgroundRandomizeHandler : RandomizerInterface
 {
     public ImageBackgroundRandomizeData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     private Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
     private Camera _camera;

@@ -8,7 +8,21 @@ using System.Linq;
 public class ObjectRandomizeHandler: RandomizerInterface
 {
     public ObjectRandomizeData objectData;
+    [InspectorButton("TriggerCloneClicked1")]
+    public bool cloneObjectDataset;
+    private void TriggerCloneClicked1()
+    {
+        RandomizerInterface.CloneDataset(ref objectData);
+    }
+
     public MaterialRandomizeData materialData;
+    [InspectorButton("TriggerCloneClicked2")]
+    public bool cloneMaterialDataset;
+    private void TriggerCloneClicked2()
+    {
+        RandomizerInterface.CloneDataset(ref materialData);
+    }
+
     private RandomNumberGenerator rng;
 
     private GameObject[] models = new GameObject[0];

@@ -8,6 +8,12 @@ using UnityEngine.Rendering.HighDefinition;
 public class LightRandomizeHandler : RandomizerInterface
 {
     public LightRandomizeData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     private UnityEngine.Object[] cubeMaps;
     private UnityEngine.Object[] projectorMaps;

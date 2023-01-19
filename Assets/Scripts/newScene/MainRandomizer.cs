@@ -13,6 +13,7 @@ using UnityEditor;
 using Assets.Scripts.newScene;
 using UnityEngine.UIElements;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 //using UnityEngine.Profiling;
 
@@ -21,6 +22,12 @@ public class MainRandomizer : MonoBehaviour
     [Header("Dataset")]
     [Tooltip("DatasetInformation containing settings for data generation.")]
     public MainRandomizerData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     //public RenderTexture depthTexture;
     private RenderTexture renderTexture = null;

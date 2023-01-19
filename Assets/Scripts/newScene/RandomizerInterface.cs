@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public abstract class RandomizerInterface : MonoBehaviour
@@ -65,5 +69,20 @@ public abstract class RandomizerInterface : MonoBehaviour
         button.RegisterCallback<ClickEvent>(ev => Randomize(ref rng));
 
         buttonList.Add(button);
+    }
+
+    public static void CloneDataset<T>(ref T dataset) where T : UnityEngine.Object
+    {
+        var newDataset = Instantiate(dataset);
+        var result = Regex.Match(dataset.name, @"\d+$", RegexOptions.RightToLeft);
+        if (result.Length == 0)
+            newDataset.name = dataset.name + "_1";
+        else
+            newDataset.name = dataset.name.Substring(0, dataset.name.Length - result.Value.Length) + (Int32.Parse(result.Value) + 1);
+
+        string newDatasetFile = Path.GetDirectoryName(SceneManager.GetActiveScene().path) + "/" + newDataset.name + ".asset";
+        AssetDatabase.CreateAsset(newDataset, newDatasetFile);
+        AssetDatabase.SaveAssets();
+        dataset = newDataset;
     }
 }
