@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ac0380b15acc64bb099e5cd3bc9089, type: 3}
   m_Name: ModelOnly_robojobObjects
   m_EditorClassIdentifier: 
-  modelsPath: publicResources/RobojobPaper/Prefabs/
+  modelsPath: publicResources/DIMO/Prefabs/
   importFromBOP: 2
   uniqueObjects: 0
   numRandomObjects: 10
@@ -21,6 +21,7 @@ MonoBehaviour:
   randomRotationOffset: 0
   randomRotationOffsetValue: 0
   randomRotationAxis: {x: 0, y: 0, z: 1}
+  seperateSubmodels: 0
   randomSubModelTranslation: 0
   avoidCollisions: 0
   subModelName: 

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113b900e26f764e46805b911d4566be7, type: 3}
   m_Name: importPose_13
   m_EditorClassIdentifier: 
-  outputPath: ../renderings/RobojobPaper/
+  outputPath: ../renderings/DIMO/
   annotationisFile: annotations.txt
-  BOPInputPath: Assets/Resources/publicResources/RobojobPaper/BOPImportFiles
+  BOPInputPath: Assets/Resources/publicResources/DIMO/BOPImportFiles
   mmToUnityDistanceScale: 0.01
   resolution: {x: 2560, y: 2048}
   renderProfile: {fileID: 11400000, guid: 5ceb2a5a1eae9f4459ff628173172d06, type: 2}
