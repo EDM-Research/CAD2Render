@@ -426,6 +426,11 @@ public class BOPDatasetExporter
     static RenderTexture splitSegmentationTextures;
     static private void exportSegmentationTexture(List<UnityEngine.GameObject> instantiated_models, RenderTexture segmentationTexture, RenderTexture segmentationTextureArray, int fileID, string outputPath, ImageSaver imageSaver)
     {
+        if (instantiated_models.Count == 0)
+        {
+            Debug.LogWarning("No objects are exported. Check the export settings of the main generator and the object spawners");
+            return;
+        }
 
         //create a texture array to generate the segmenation image for each object
         if (splitSegmentationTextures == null || splitSegmentationTextures.volumeDepth < instantiated_models.Count)
@@ -442,11 +447,6 @@ public class BOPDatasetExporter
         //save the false collors of each object in an array
         Vector3[] colorData = new Vector3[instantiated_models.Count];
         int i = 0;
-        if(instantiated_models.Count == 0)
-        {
-            Debug.LogWarning("No objects are exported. Check the export settings of the main generator and the object spawners");
-            return;
-        }
         foreach (GameObject instance in instantiated_models)
         {
             var temp = instance.GetComponent<FalseColor>();
