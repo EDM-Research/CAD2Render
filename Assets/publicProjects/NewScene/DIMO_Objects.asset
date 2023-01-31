@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30ac0380b15acc64bb099e5cd3bc9089, type: 3}
-  m_Name: RobojobPaperObjects
+  m_Name: DIMO_Objects
   m_EditorClassIdentifier: 
-  modelsPath: publicResources/RobojobPaper/Prefabs/
+  modelsPath: publicResources/DIMO/Prefabs/
   importFromBOP: 0
   uniqueObjects: 0
   numRandomObjects: 8
