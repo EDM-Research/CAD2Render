@@ -153,6 +153,8 @@ public class MainRandomizer : MonoBehaviour
             Debug.LogError("Output path for generated data not specified");
             return false;
         }
+        if (dataset.outputPath[dataset.outputPath.Length-1] != '/' && dataset.outputPath[dataset.outputPath.Length-1] != '\\')
+            dataset.outputPath += "/";
 
         if (!Directory.Exists(dataset.outputPath))
         {
