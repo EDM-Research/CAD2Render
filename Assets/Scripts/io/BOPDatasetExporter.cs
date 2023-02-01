@@ -603,7 +603,7 @@ public class BOPDatasetExporter
     private static void exportModelId(string modelName, int id, string outputPath)
     {
         var n = new JSONObject();
-        n[id] = modelName;
+        n[id.ToString()] = modelName;
         appendToJSON(outputPath + String.Format("bop/train_PBR/{0:000000}/", sceneId) + "model_id.json", n.ToString(), first);
         first = false;
     }
