@@ -285,7 +285,12 @@ public class MainRandomizer : MonoBehaviour
 
     private void setupFalseColorStack()
     {
-        int count = getExportObjects().Count;
+        var exportObjects = getExportObjects();
+        if (dataset.exportModelsByTag) { 
+            MatRandomizeHandler.AssignFalseColors(exportObjects, MaterialRandomizeData.FalseColorAssignmentType.globalIndex);
+            BOPDatasetExporter.addPrefabIds(exportObjects.ToArray());
+        }
+        int count = exportObjects.Count;
 
         if (count <= 0)
             return;

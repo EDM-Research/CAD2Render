@@ -515,7 +515,7 @@ public class randomize : MonoBehaviour
                         //writer.Write(name + "," + writeColor.r+ "," + writeColor.g+ "," + writeColor.b+ "\n");// + "," + eachChild.position.x + "," + eachChild.position.y + "," + eachChild.position.z + "\n");
 
                         //Color color = ColorEncoding.EncodeLayerAsColor(layer, false);
-                        falseColor.falseColor = color;
+                        falseColor.SetColor(color);
                         falseColor.objectId = index;
                     }
                     else
@@ -529,7 +529,7 @@ public class randomize : MonoBehaviour
                         if (falseColor)
                         {
                             falseColor.objectId = index;
-                            falseColor.falseColor = new Color(0.0f, 0.0f, 0.0f, 1f);
+                            falseColor.SetColor(Color.black);
                         }
                         else
                             Debug.Log("Could not attach false color to gameobject" + child.gameObject);

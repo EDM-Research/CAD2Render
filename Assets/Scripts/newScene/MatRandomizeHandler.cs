@@ -527,14 +527,14 @@ public class MatRandomizeHandler: RandomizerInterface
         return base.updateCheck(currentUpdate, updateIntervals);
     }
 
-    public void UpdateFalseColors()
+    public static void AssignFalseColors(List<GameObject> gameObjects, MaterialRandomizeData.FalseColorAssignmentType assignmentType)
     {
         int index = 0;
-        foreach (GameObject subject in subjectInstances)
+        foreach (GameObject subject in gameObjects)
         {
             Color chosenColor = Color.white;
             int objectID = 0;
-            switch (dataset.FalseColorType)
+            switch (assignmentType)
             {
                 case MaterialRandomizeData.FalseColorAssignmentType.globalIndex:
                     objectID = ColorEncoding.globalColorIndex;
@@ -549,33 +549,35 @@ public class MatRandomizeHandler: RandomizerInterface
                 case MaterialRandomizeData.FalseColorAssignmentType.none:
                     break;
             }
-            // add false color script to all children
-            //Note however, that results from GetComponentsInChildren will also include that component from the object itself.So the name is slightly misleading - it should be thought of as "Get Components from Self And Children"!
+
+            // add false color script to the object and all its children
             Transform[] allChildren = subject.GetComponentsInChildren<Transform>();
             foreach (Transform child in allChildren)
             {
-                //if (child.gameObject.GetComponent<MeshRenderer>())
-                //{
-                    FalseColor falseColor;
-                    child.TryGetComponent<FalseColor>(out falseColor);
-                    if(falseColor == null)
-                        falseColor = child.gameObject.AddComponent<FalseColor>();
-                    falseColor.objectId = objectID;
-                    switch (dataset.FalseColorType)
-                    {
-                        case MaterialRandomizeData.FalseColorAssignmentType.globalIndex:
-                        case MaterialRandomizeData.FalseColorAssignmentType.localIndex:
-                            falseColor.falseColor = chosenColor;
-                            break;
-                        case MaterialRandomizeData.FalseColorAssignmentType.predefined:
-                            return;
-                        case MaterialRandomizeData.FalseColorAssignmentType.none:
-                            falseColor.falseColor = Color.black;//the component is only destroyed in the next frame
-                            GameObject.DestroyImmediate(falseColor);
-                            break;
-                    }
-                //}
+                FalseColor falseColor;
+                child.TryGetComponent<FalseColor>(out falseColor);
+                if (falseColor == null)
+                    falseColor = child.gameObject.AddComponent<FalseColor>();
+                falseColor.objectId = objectID;
+                switch (assignmentType)
+                {
+                    case MaterialRandomizeData.FalseColorAssignmentType.globalIndex:
+                    case MaterialRandomizeData.FalseColorAssignmentType.localIndex:
+                        falseColor.SetColor(chosenColor);
+                        break;
+                    case MaterialRandomizeData.FalseColorAssignmentType.predefined:
+                        return;
+                    case MaterialRandomizeData.FalseColorAssignmentType.none:
+                        falseColor.SetColor(Color.black);//the component is only destroyed in the next frame
+                        GameObject.DestroyImmediate(falseColor);
+                        break;
+                }
             }
         }
+    }
+
+    public void UpdateFalseColors()
+    {
+        AssignFalseColors(subjectInstances, dataset.FalseColorType);
     }
 }

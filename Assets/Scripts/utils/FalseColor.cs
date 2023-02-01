@@ -12,30 +12,26 @@ public class FalseColor : MonoBehaviour
     public Vector4 scaleOffset { get; set; } = new Vector4(0, 0, 1, 1);
     public int objectId  = -1;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetColor();
-    }
-    
-    void OnValidate()
-    {
-        SetColor();
-    }
-    
-    void SetColor()
-    {
-        Renderer rndr;
-        TryGetComponent<Renderer>(out rndr);
 
-        if (rndr == null)
+    public void SetColor(Color newColor)
+    {
+        falseColor = newColor;
+
+        Renderer rend;
+        TryGetComponent<Renderer>(out rend);
+
+        if (rend == null)
             return;
+
         var propertyBlock = new MaterialPropertyBlock();
-        rndr.GetPropertyBlock(propertyBlock);
-    
-        ApplyFalseColorProperties(propertyBlock);
-    
-        rndr.SetPropertyBlock(propertyBlock);
+        for (int materialIndex = 0; materialIndex < rend.materials.Length; ++materialIndex)
+        {
+            rend.GetPropertyBlock(propertyBlock, materialIndex);
+
+            ApplyFalseColorProperties(propertyBlock);
+
+            rend.SetPropertyBlock(propertyBlock, materialIndex);
+        }
     }
     public void ApplyFalseColorProperties(MaterialPropertyBlock propertyBlock)
     {
