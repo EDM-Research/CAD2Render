@@ -177,6 +177,8 @@ public class ObjectRandomizeHandler: RandomizerInterface
         }
 
         GameObject clone = createInstance(model, spawnPosition, spawnRotation);
+        if (clone == null)
+            return;//spawning failed
         clone.name = model.name;
 
         if (objectData.randomSubModelTranslation)
@@ -216,36 +218,42 @@ public class ObjectRandomizeHandler: RandomizerInterface
     {
         GameObject spawnObject = GameObject.Instantiate(prefab, spawnPosition, spawnRotation);
 
-        if (!objectData.avoidCollisions)
+        if (!objectData.avoidCollisions || objectData.importFromBOP == ObjectRandomizeData.BopImportType.ModelAndPose)
             return spawnObject;
 
-        Collider collider = spawnObject.GetComponent<Collider>();
+        Collider[] colliders = spawnObject.GetComponentsInChildren<Collider>();
         //int layerMask = LayerMask.GetMask("Prefabs");
-        bool intersects = CheckIntersection(collider);
+        bool intersects = CheckIntersection(colliders);
         int fails = 0;
         while (intersects)
         {
-            spawnPosition = prefab.transform.position + RandomPointInSpawnZone();
-            GameObject.DestroyImmediate(spawnObject);
-            spawnObject = GameObject.Instantiate(prefab, spawnPosition, spawnRotation);
-
-            collider = spawnObject.GetComponent<Collider>();
-            intersects = CheckIntersection(collider) && fails < 50;
+            spawnObject.transform.position = prefab.transform.position + RandomPointInSpawnZone();
+            intersects = CheckIntersection(colliders);
             fails++;
+            if (fails >= 10)
+            {
+                DestroyImmediate(spawnObject);
+                return null;
+            }
         }
         return spawnObject;
     }
 
-    private bool CheckIntersection(Collider collider)
+    private bool CheckIntersection(Collider[] colliders)
     {
         bool intersects = false;
-        foreach (GameObject other in instantiatedModels)
+        foreach (var collider in colliders)
         {
-            Collider other_collider = other.GetComponent<Collider>();
-            if (collider.bounds.Intersects(other_collider.bounds))
+            foreach (GameObject other in instantiatedModels)
             {
-                intersects = true;
-                break;
+                foreach (Collider other_collider in other.GetComponentsInChildren<Collider>())
+                {
+                    if (collider.bounds.Intersects(other_collider.bounds))
+                    {
+                        intersects = true;
+                        break;
+                    }
+                }
             }
         }
         return intersects;

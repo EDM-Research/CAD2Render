@@ -43,7 +43,7 @@ public class ViewRandomizeHandler : RandomizerInterface
 
     private void SetCameraProperties()
     {
-        float Fx, Fy, sizeX, sizeY;
+        float Fx, Fy;
         float Cx, Cy, shiftX, shiftY;
         float width, height;
         Fx = cameraMatrix[0, 0];
@@ -51,19 +51,23 @@ public class ViewRandomizeHandler : RandomizerInterface
         Fy = cameraMatrix[1, 1];
         Cy = cameraMatrix[1, 2];
 
+        mainCamera.usePhysicalProperties = true;
         width = (float)mainCamera.pixelWidth;
         height = (float)mainCamera.pixelHeight;
 
-        float f = mainCamera.focalLength;
-        sizeX = f * width / Fx;
-        sizeY = f * height / Fy;
+        //float f = mainCamera.focalLength;
+        Vector2 sensorSize = dataset.sensorSize;
+        if (sensorSize.x <= 0 || sensorSize.y <= 0)
+            sensorSize = mainCamera.sensorSize;
+
+        float f = Fx * sensorSize.x / width;
+        //f = Fy * sensorSize.y / height;
         shiftX = -(Cx - width / 2.0f) / width;
         shiftY = (Cy - height / 2.0f) / height;
 
-        mainCamera.usePhysicalProperties = true;
-        mainCamera.sensorSize = new Vector2(sizeX, sizeY);     // in mm, mx = 1000/x, my = 1000/y
         mainCamera.focalLength = f;                            // in mm, ax = f * mx, ay = f * my
         mainCamera.lensShift = new Vector2(shiftX, shiftY);    // W/2,H/w for (0,0), 1.0 shift in full W/H in image plane
+        mainCamera.sensorSize = sensorSize;
     }
 
     public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)

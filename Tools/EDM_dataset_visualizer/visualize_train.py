@@ -30,7 +30,7 @@ try:
     with open(model_map_file, 'r') as infile:
         model_map = json.load(infile)
 except FileNotFoundError:
-    model_map = {"1":"obj_000001"}
+    model_map = {}
 print("List of all models in the scene: " + str(model_map))
 
 def getModelBB(object_id):
@@ -38,11 +38,11 @@ def getModelBB(object_id):
     ## read model PLY and sample FPS
     try:
         # full name in the model filename
-        mesh_path = os.path.join(data_path, 'models', model_map[str(object_id)]+'.ply')
+        mesh_path = os.path.join(data_path, 'models', model_map[str(object_id)] + '.ply')
         scene = PlyData.read(open(mesh_path, 'rb'))
-    except FileNotFoundError:
+    except (KeyError, FileNotFoundError):
         # Model name type 0000001.ply
-        mesh_path = os.path.join(data_path, 'models', str(model_map[str(object_id)]).zfill(6)+'.ply')
+        mesh_path = os.path.join(data_path, 'models', "obj_" + str(object_id).zfill(6) + '.ply')
         scene = PlyData.read(open(mesh_path, 'rb'))
 
     num_verts = scene['vertex'].count

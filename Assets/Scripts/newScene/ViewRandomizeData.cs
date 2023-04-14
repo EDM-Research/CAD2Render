@@ -48,4 +48,5 @@ public class ViewRandomizeData : ScriptableObject {
 
     public bool useCameraMatrix = false;
     public Matrix4x4 cameraMatrix = new Matrix4x4();
+    public Vector2 sensorSize = new Vector2(0.0f,0.0f);
 }
