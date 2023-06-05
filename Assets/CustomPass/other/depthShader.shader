@@ -36,7 +36,7 @@
             }
 
 
-            fixed4 frag(v2f i) : SV_Target
+            float4 frag(v2f i) : SV_Target
             {
                 float4 c = float4(0,0,0,1);
                 c.rgb = i.screenPos.z / _DepthMaxDistance;
