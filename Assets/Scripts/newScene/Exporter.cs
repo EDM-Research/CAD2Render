@@ -193,7 +193,7 @@ namespace Assets.Scripts.newScene
             if (segmentationTexture)
                 imageSaver.Save(segmentationTexture, dataset.outputPath + "segmentation/" + fileCounter + "_seg", dataset.outputExt, true);
             if (dataset.exportDepthTexture)
-                imageSaver.Save(depthTexture, dataset.outputPath + "depth/" + fileCounter + "_depth", dataset.outputExt, true);
+                imageSaver.Save(depthTexture, dataset.outputPath + "depth/" + fileCounter + "_depth", ImageSaver.Extension.exr, true, true);
         }
         private void ExportDatasetInfo()
         {

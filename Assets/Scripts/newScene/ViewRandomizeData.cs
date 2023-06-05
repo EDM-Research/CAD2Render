@@ -40,10 +40,10 @@ public class ViewRandomizeData : ScriptableObject {
     [Range(-360.0f, 360.0f)]
     public float maxPhi = 45.0f;
     [Tooltip("Min radius in mm")]
-    [Range(10.0f, 2000.0f)]
+    [Range(1.0f, 2000.0f)]
     public float minRadius = 1.0f;
     [Tooltip("Max radius in mm")]
-    [Range(10f, 2000.0f)]
+    [Range(1.0f, 2000.0f)]
     public float maxRadius = 100.0f;
 
     public bool useCameraMatrix = false;

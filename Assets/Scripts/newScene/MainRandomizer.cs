@@ -323,11 +323,11 @@ public class MainRandomizer : MonoBehaviour
 
     private void setupRenderTextures()
     {
-        renderTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
-        segmentationTexture = new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
-        albedoTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
-        normalTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
-        depthTexture =        new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
+        renderTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 32);
+        segmentationTexture = new RenderTexture(dataset.resolution.x, dataset.resolution.y, 32);
+        albedoTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 32);
+        normalTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 32);
+        depthTexture =        new RenderTexture(dataset.resolution.x, dataset.resolution.y, 32, RenderTextureFormat.RFloat);
 
         if (mainCamera != null)
         {

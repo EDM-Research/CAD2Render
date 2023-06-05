@@ -8,23 +8,27 @@ public class ImageSaver
 {
     private RenderTexture renderTexSRGB;
     private RenderTexture renderTexLin;
+    private RenderTexture depthTexture;
     private RenderTexture arraySlice;
     private Texture2D saveTexture;
     private Texture2D BlackWhiteSaveTexture;
-    public enum Extension { png, jpg };
+    public enum Extension { png, jpg, exr };
 
     public ImageSaver(int width, int height)
     {
-        renderTexSRGB = new RenderTexture(width, height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.sRGB);
+        renderTexSRGB = new RenderTexture(width, height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.sRGB);
         renderTexSRGB.Create();
-        renderTexLin = new RenderTexture(width, height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+        renderTexLin = new RenderTexture(width, height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
         renderTexLin.Create();
+        depthTexture = new RenderTexture(width, height, 0, RenderTextureFormat.RFloat);
+        depthTexture.Create();
 
-        arraySlice = new RenderTexture(width, height, 24, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+        arraySlice = new RenderTexture(width, height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
         arraySlice.Create();
 
-        saveTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-        BlackWhiteSaveTexture = new Texture2D(width, height, TextureFormat.R16, false);
+        //saveTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        saveTexture = new Texture2D(width, height, TextureFormat.RGBAFloat, false);
+        BlackWhiteSaveTexture = new Texture2D(width, height, TextureFormat.RFloat, false);
     }
 
     public void SaveArray(RenderTexture renderTex, int depth, string filename, Extension outputExt, bool gammaCorrection, bool blackWhite = false)
@@ -40,17 +44,27 @@ public class ImageSaver
     {
         var oldRT = RenderTexture.active;
 
-        // Use blit to convert linear renderTex to SRGB format
 
         if (gammaCorrection)
         {
+            // Use blit to convert linear renderTex to SRGB format
             Graphics.Blit(renderTex, renderTexSRGB);
             RenderTexture.active = renderTexSRGB;
         }
         else
         {
-            Graphics.Blit(renderTex, renderTexLin);
-            RenderTexture.active = renderTexLin;
+            if (outputExt == Extension.exr)
+            {
+                Graphics.Blit(renderTex, depthTexture);
+                //Graphics.Blit(null, depthTexture, new Material(Shader.Find("Hidden/BlitCopyDepth")));
+                //Graphics.Blit(null, depthTexture, new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture")));
+                RenderTexture.active = depthTexture;
+            }
+            else
+            {
+                Graphics.Blit(renderTex, renderTexLin);
+                RenderTexture.active = renderTexLin;
+            }
         }
 
         Texture2D ActiveTexture = blackWhite ? BlackWhiteSaveTexture : saveTexture;
@@ -65,8 +79,9 @@ public class ImageSaver
             bytes = ActiveTexture.EncodeToPNG();
         else if (outputExt == Extension.jpg)
             bytes = ImageConversion.EncodeToJPG(ActiveTexture, 100);
-           
-        
+        else if (outputExt == Extension.exr)
+            bytes = ImageConversion.EncodeToEXR(ActiveTexture, Texture2D.EXRFlags.OutputAsFloat);
+
         File.WriteAllBytes(filename + "." + outputExt.ToString(), bytes);
     }
 }
