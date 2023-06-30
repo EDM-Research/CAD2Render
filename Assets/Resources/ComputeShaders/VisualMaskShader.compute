@@ -10,7 +10,13 @@ StructuredBuffer<float3> FalseColors;
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    Results[id.xyz] = step(length(abs(segmentationTexture[id.xy].rgb - FalseColors[id.z].rgb)), 0.005f);
+    if (dot(FalseColors[id.z].rgb, float3(1.0f, 1.0f, 1.0f)) < 0.005f)
+    {
+        Results[id.xyz] = 0.0f;
+        return;
+    }
+    float3 colorDif = segmentationTexture[id.xy].rgb - FalseColors[id.z].rgb;
+    Results[id.xyz] = step(dot(colorDif, colorDif), 0.005f);
     //Results[id.xyz] = segmentationTexture[id.xy].r;
 
 }
