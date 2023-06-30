@@ -73,7 +73,7 @@ MonoBehaviour:
       m_Bits: 4294967295
   maximumSamples:
     m_OverrideState: 1
-    m_Value: 49
+    m_Value: 2707
   minimumDepth:
     m_OverrideState: 1
     m_Value: 1

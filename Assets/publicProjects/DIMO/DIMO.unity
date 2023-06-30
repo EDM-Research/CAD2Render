@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 372.9114, g: 343.762, b: 326.5347, a: 1}
+  m_IndirectSpecularColor: {r: 1456.216, g: 1502.8019, b: 1416.4073, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -149,10 +149,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 55382299}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43810938562f3c542bb61eee956acece, type: 3}
+  m_Script: {fileID: 11500000, guid: f812b93fc0bfb5d40ac57855ddd4de10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: 6fd0d98d6005a454e9cb0df2a2913d0d, type: 2}
+  clone: 0
 --- !u!4 &55382301
 Transform:
   m_ObjectHideFlags: 0
@@ -167,7 +168,7 @@ Transform:
   m_Children:
   - {fileID: 368409998}
   - {fileID: 71716107}
-  - {fileID: 716345788}
+  - {fileID: 682957459}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -212,11 +213,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 71716106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267e4e89cc7e1044a7fcd6a572dedfc, type: 3}
+  m_Script: {fileID: 11500000, guid: cec4abce7bf6b0a4dba27d8d75f3cd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 42cb442185d553a41a019ba6065c75d5, type: 2}
+  clone: 0
 --- !u!1 &178315859
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,11 +309,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 198151707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267e4e89cc7e1044a7fcd6a572dedfc, type: 3}
+  m_Script: {fileID: 11500000, guid: cec4abce7bf6b0a4dba27d8d75f3cd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 078651bc11a94f44192ec83ea0a8f597, type: 2}
+  clone: 0
 --- !u!1 &228357826
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +325,10 @@ GameObject:
   m_Component:
   - component: {fileID: 228357827}
   - component: {fileID: 228357829}
-  - component: {fileID: 228357828}
+  - component: {fileID: 228357833}
+  - component: {fileID: 228357832}
+  - component: {fileID: 228357831}
+  - component: {fileID: 228357830}
   m_Layer: 0
   m_Name: Spawned Objects
   m_TagString: Untagged
@@ -345,21 +351,6 @@ Transform:
   m_Father: {fileID: 843989991}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &228357828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228357826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed83da1537571e4db0a8eaea914141e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addRandomizeButton: 1
-  objectData: {fileID: 11400000, guid: f391afd4b7ed57d4581f166d6cf215d1, type: 2}
-  materialData: {fileID: 11400000, guid: a07daef679e3fdd4e95ab05aebc7aaa5, type: 2}
 --- !u!65 &228357829
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -381,6 +372,60 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &228357830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228357826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045b490e608d48246b9cff4a5ab3cc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
+--- !u!114 &228357831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228357826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e2716ccaf927e43b3fcf62e01d4c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &228357832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228357826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26aaa9af788ef874ab084265be4f6723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataset: {fileID: 11400000, guid: 32ea4f6af5128ce4da58e037eb4f495b, type: 2}
+--- !u!114 &228357833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228357826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  objectData: {fileID: 11400000, guid: f391afd4b7ed57d4581f166d6cf215d1, type: 2}
+  cloneObjectDataset: 0
 --- !u!1 &368409997
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,12 +467,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 368409997}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977869f906459f8469d82c28c204e114, type: 3}
+  m_Script: {fileID: 11500000, guid: dcc566f7368e8d04cab2894962a372a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 581af93cf0bd22843a8c0163c0d62a1b, type: 2}
---- !u!1 &405155359
+  clone: 0
+--- !u!1 &385005407
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -435,9 +481,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 405155360}
-  - component: {fileID: 405155362}
-  - component: {fileID: 405155361}
+  - component: {fileID: 385005408}
+  - component: {fileID: 385005413}
+  - component: {fileID: 385005412}
+  - component: {fileID: 385005411}
+  - component: {fileID: 385005410}
+  - component: {fileID: 385005409}
   m_Layer: 0
   m_Name: Spawned Objects
   m_TagString: Untagged
@@ -445,43 +494,82 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &405155360
+--- !u!4 &385005408
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 405155359}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 385005407}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 3.5, z: 0}
   m_LocalScale: {x: 1.25, y: 1, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1039371567}
-  m_RootOrder: 2
+  m_Father: {fileID: 1837405460}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &405155361
+--- !u!114 &385005409
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 405155359}
+  m_GameObject: {fileID: 385005407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed83da1537571e4db0a8eaea914141e, type: 3}
+  m_Script: {fileID: 11500000, guid: 26aaa9af788ef874ab084265be4f6723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataset: {fileID: 11400000, guid: 32ea4f6af5128ce4da58e037eb4f495b, type: 2}
+--- !u!114 &385005410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385005407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e2716ccaf927e43b3fcf62e01d4c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &385005411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385005407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045b490e608d48246b9cff4a5ab3cc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
-  objectData: {fileID: 11400000, guid: f391afd4b7ed57d4581f166d6cf215d1, type: 2}
-  materialData: {fileID: 11400000, guid: a07daef679e3fdd4e95ab05aebc7aaa5, type: 2}
---- !u!65 &405155362
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
+--- !u!114 &385005412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385005407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  objectData: {fileID: 11400000, guid: 3b70364ac48e5624ba6f3e93b0b8e22f, type: 2}
+  cloneObjectDataset: 0
+--- !u!65 &385005413
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 405155359}
+  m_GameObject: {fileID: 385005407}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -537,11 +625,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 447978694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267e4e89cc7e1044a7fcd6a572dedfc, type: 3}
+  m_Script: {fileID: 11500000, guid: cec4abce7bf6b0a4dba27d8d75f3cd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 42cb442185d553a41a019ba6065c75d5, type: 2}
+  clone: 0
 --- !u!1 &479011773
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,7 +641,10 @@ GameObject:
   m_Component:
   - component: {fileID: 479011774}
   - component: {fileID: 479011776}
-  - component: {fileID: 479011775}
+  - component: {fileID: 479011780}
+  - component: {fileID: 479011779}
+  - component: {fileID: 479011778}
+  - component: {fileID: 479011777}
   m_Layer: 0
   m_Name: Spawned Objects
   m_TagString: Untagged
@@ -575,7 +667,28 @@ Transform:
   m_Father: {fileID: 1867474093}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &479011775
+--- !u!65 &479011776
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479011773}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &479011777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -584,19 +697,148 @@ MonoBehaviour:
   m_GameObject: {fileID: 479011773}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed83da1537571e4db0a8eaea914141e, type: 3}
+  m_Script: {fileID: 11500000, guid: 26aaa9af788ef874ab084265be4f6723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addRandomizeButton: 1
-  objectData: {fileID: 11400000, guid: 3b70364ac48e5624ba6f3e93b0b8e22f, type: 2}
-  materialData: {fileID: 11400000, guid: a07daef679e3fdd4e95ab05aebc7aaa5, type: 2}
---- !u!65 &479011776
-BoxCollider:
+  dataset: {fileID: 11400000, guid: 32ea4f6af5128ce4da58e037eb4f495b, type: 2}
+--- !u!114 &479011778
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479011773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e2716ccaf927e43b3fcf62e01d4c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &479011779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479011773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045b490e608d48246b9cff4a5ab3cc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
+--- !u!114 &479011780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479011773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  objectData: {fileID: 11400000, guid: 3b70364ac48e5624ba6f3e93b0b8e22f, type: 2}
+  cloneObjectDataset: 0
+--- !u!1 &566470484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 566470485}
+  - component: {fileID: 566470490}
+  - component: {fileID: 566470489}
+  - component: {fileID: 566470488}
+  - component: {fileID: 566470487}
+  - component: {fileID: 566470486}
+  m_Layer: 0
+  m_Name: Spawned Objects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &566470485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566470484}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.5, z: 0}
+  m_LocalScale: {x: 1.25, y: 1, z: 1.25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1039371567}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &566470486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566470484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26aaa9af788ef874ab084265be4f6723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataset: {fileID: 11400000, guid: 32ea4f6af5128ce4da58e037eb4f495b, type: 2}
+--- !u!114 &566470487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566470484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e2716ccaf927e43b3fcf62e01d4c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &566470488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566470484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045b490e608d48246b9cff4a5ab3cc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
+--- !u!114 &566470489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566470484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  objectData: {fileID: 11400000, guid: f391afd4b7ed57d4581f166d6cf215d1, type: 2}
+  cloneObjectDataset: 0
+--- !u!65 &566470490
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566470484}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -652,11 +894,123 @@ MonoBehaviour:
   m_GameObject: {fileID: 578189981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977869f906459f8469d82c28c204e114, type: 3}
+  m_Script: {fileID: 11500000, guid: dcc566f7368e8d04cab2894962a372a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 581af93cf0bd22843a8c0163c0d62a1b, type: 2}
+  clone: 0
+--- !u!1 &642296395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 642296396}
+  - component: {fileID: 642296401}
+  - component: {fileID: 642296400}
+  - component: {fileID: 642296399}
+  - component: {fileID: 642296398}
+  - component: {fileID: 642296397}
+  m_Layer: 0
+  m_Name: Spawned Objects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &642296396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642296395}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.5, z: 0}
+  m_LocalScale: {x: 1.25, y: 1, z: 1.25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2119922659}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &642296397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642296395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26aaa9af788ef874ab084265be4f6723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataset: {fileID: 11400000, guid: 32ea4f6af5128ce4da58e037eb4f495b, type: 2}
+--- !u!114 &642296398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642296395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e2716ccaf927e43b3fcf62e01d4c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &642296399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642296395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045b490e608d48246b9cff4a5ab3cc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
+--- !u!114 &642296400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642296395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  objectData: {fileID: 11400000, guid: 3b70364ac48e5624ba6f3e93b0b8e22f, type: 2}
+  cloneObjectDataset: 0
+--- !u!65 &642296401
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642296395}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &666973044
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,12 +1052,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 666973044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267e4e89cc7e1044a7fcd6a572dedfc, type: 3}
+  m_Script: {fileID: 11500000, guid: cec4abce7bf6b0a4dba27d8d75f3cd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 3043bce9b85ad454ebfcf27f88709ab0, type: 2}
---- !u!1 &716345787
+  clone: 0
+--- !u!1 &682957458
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -711,9 +1066,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 716345788}
-  - component: {fileID: 716345790}
-  - component: {fileID: 716345789}
+  - component: {fileID: 682957459}
+  - component: {fileID: 682957464}
+  - component: {fileID: 682957463}
+  - component: {fileID: 682957462}
+  - component: {fileID: 682957461}
+  - component: {fileID: 682957460}
   m_Layer: 0
   m_Name: Spawned Objects
   m_TagString: Untagged
@@ -721,43 +1079,82 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &716345788
+--- !u!4 &682957459
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 716345787}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 682957458}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 3.5, z: 0}
   m_LocalScale: {x: 1.25, y: 1, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 55382301}
-  m_RootOrder: 2
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &716345789
+--- !u!114 &682957460
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 716345787}
+  m_GameObject: {fileID: 682957458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed83da1537571e4db0a8eaea914141e, type: 3}
+  m_Script: {fileID: 11500000, guid: 26aaa9af788ef874ab084265be4f6723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataset: {fileID: 11400000, guid: 32ea4f6af5128ce4da58e037eb4f495b, type: 2}
+--- !u!114 &682957461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682957458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e2716ccaf927e43b3fcf62e01d4c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &682957462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682957458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045b490e608d48246b9cff4a5ab3cc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
+--- !u!114 &682957463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682957458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   objectData: {fileID: 11400000, guid: f391afd4b7ed57d4581f166d6cf215d1, type: 2}
-  materialData: {fileID: 11400000, guid: a07daef679e3fdd4e95ab05aebc7aaa5, type: 2}
---- !u!65 &716345790
+  cloneObjectDataset: 0
+--- !u!65 &682957464
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 716345787}
+  m_GameObject: {fileID: 682957458}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -813,11 +1210,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 736646440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977869f906459f8469d82c28c204e114, type: 3}
+  m_Script: {fileID: 11500000, guid: dcc566f7368e8d04cab2894962a372a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 581af93cf0bd22843a8c0163c0d62a1b, type: 2}
+  clone: 0
 --- !u!1 &843989989
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,10 +1242,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 843989989}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43810938562f3c542bb61eee956acece, type: 3}
+  m_Script: {fileID: 11500000, guid: f812b93fc0bfb5d40ac57855ddd4de10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: d86a009591062df4eb0f55b94e8def84, type: 2}
+  clone: 0
 --- !u!4 &843989991
 Transform:
   m_ObjectHideFlags: 0
@@ -907,11 +1306,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 844489236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267e4e89cc7e1044a7fcd6a572dedfc, type: 3}
+  m_Script: {fileID: 11500000, guid: cec4abce7bf6b0a4dba27d8d75f3cd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 078651bc11a94f44192ec83ea0a8f597, type: 2}
+  clone: 0
 --- !u!4 &962544485 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3157460370611930280, guid: 8e03696c0ca41d04c8db0bdca1fff8a3,
@@ -944,10 +1344,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1039371565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43810938562f3c542bb61eee956acece, type: 3}
+  m_Script: {fileID: 11500000, guid: f812b93fc0bfb5d40ac57855ddd4de10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: 6fd0d98d6005a454e9cb0df2a2913d0d, type: 2}
+  clone: 0
 --- !u!4 &1039371567
 Transform:
   m_ObjectHideFlags: 0
@@ -962,7 +1363,7 @@ Transform:
   m_Children:
   - {fileID: 578189982}
   - {fileID: 666973045}
-  - {fileID: 405155360}
+  - {fileID: 566470485}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1007,80 +1408,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1072311415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977869f906459f8469d82c28c204e114, type: 3}
+  m_Script: {fileID: 11500000, guid: dcc566f7368e8d04cab2894962a372a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 581af93cf0bd22843a8c0163c0d62a1b, type: 2}
---- !u!1 &1079642840
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1079642841}
-  - component: {fileID: 1079642843}
-  - component: {fileID: 1079642842}
-  m_Layer: 0
-  m_Name: Spawned Objects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1079642841
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079642840}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: 0}
-  m_LocalScale: {x: 1.25, y: 1, z: 1.25}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2119922659}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1079642842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079642840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed83da1537571e4db0a8eaea914141e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addRandomizeButton: 1
-  objectData: {fileID: 11400000, guid: 3b70364ac48e5624ba6f3e93b0b8e22f, type: 2}
-  materialData: {fileID: 11400000, guid: a07daef679e3fdd4e95ab05aebc7aaa5, type: 2}
---- !u!65 &1079642843
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079642840}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  clone: 0
 --- !u!1 &1090668790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,11 +1560,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1222980500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977869f906459f8469d82c28c204e114, type: 3}
+  m_Script: {fileID: 11500000, guid: dcc566f7368e8d04cab2894962a372a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 581af93cf0bd22843a8c0163c0d62a1b, type: 2}
+  clone: 0
 --- !u!1 &1280555458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,10 +1770,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1837405458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43810938562f3c542bb61eee956acece, type: 3}
+  m_Script: {fileID: 11500000, guid: f812b93fc0bfb5d40ac57855ddd4de10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: cda1f24b1ea7bde41abfb66a0bff293d, type: 2}
+  clone: 0
 --- !u!4 &1837405460
 Transform:
   m_ObjectHideFlags: 0
@@ -1454,7 +1789,7 @@ Transform:
   m_Children:
   - {fileID: 2066441624}
   - {fileID: 447978695}
-  - {fileID: 2098749105}
+  - {fileID: 385005408}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1484,10 +1819,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1867474091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43810938562f3c542bb61eee956acece, type: 3}
+  m_Script: {fileID: 11500000, guid: f812b93fc0bfb5d40ac57855ddd4de10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: 099bf33182215c442b690b113d868c24, type: 2}
+  clone: 0
 --- !u!4 &1867474093
 Transform:
   m_ObjectHideFlags: 0
@@ -1547,11 +1883,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1984049604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267e4e89cc7e1044a7fcd6a572dedfc, type: 3}
+  m_Script: {fileID: 11500000, guid: cec4abce7bf6b0a4dba27d8d75f3cd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 3043bce9b85ad454ebfcf27f88709ab0, type: 2}
+  clone: 0
 --- !u!1001 &1991479684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1941,80 +2278,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2066441623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 977869f906459f8469d82c28c204e114, type: 3}
+  m_Script: {fileID: 11500000, guid: dcc566f7368e8d04cab2894962a372a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
   dataset: {fileID: 11400000, guid: 581af93cf0bd22843a8c0163c0d62a1b, type: 2}
---- !u!1 &2098749104
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2098749105}
-  - component: {fileID: 2098749107}
-  - component: {fileID: 2098749106}
-  m_Layer: 0
-  m_Name: Spawned Objects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2098749105
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098749104}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: 0}
-  m_LocalScale: {x: 1.25, y: 1, z: 1.25}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1837405460}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2098749106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098749104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed83da1537571e4db0a8eaea914141e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addRandomizeButton: 1
-  objectData: {fileID: 11400000, guid: 3b70364ac48e5624ba6f3e93b0b8e22f, type: 2}
-  materialData: {fileID: 11400000, guid: a07daef679e3fdd4e95ab05aebc7aaa5, type: 2}
---- !u!65 &2098749107
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098749104}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  clone: 0
 --- !u!1 &2119922657
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,10 +2310,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2119922657}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43810938562f3c542bb61eee956acece, type: 3}
+  m_Script: {fileID: 11500000, guid: f812b93fc0bfb5d40ac57855ddd4de10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: cda1f24b1ea7bde41abfb66a0bff293d, type: 2}
+  clone: 0
 --- !u!4 &2119922659
 Transform:
   m_ObjectHideFlags: 0
@@ -2059,7 +2329,7 @@ Transform:
   m_Children:
   - {fileID: 1222980501}
   - {fileID: 1984049605}
-  - {fileID: 1079642841}
+  - {fileID: 642296396}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

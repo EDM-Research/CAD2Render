@@ -92,22 +92,22 @@ MonoBehaviour:
   active: 1
   rotation:
     m_OverrideState: 1
-    m_Value: 68.42275
+    m_Value: 347.71042
   skyIntensityMode:
     m_OverrideState: 0
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 12.783674
+    m_Value: 11.77
   multiplier:
     m_OverrideState: 0
     m_Value: 1
   upperHemisphereLuxValue:
     m_OverrideState: 0
-    m_Value: 1.1164542
+    m_Value: 3.0973694
   upperHemisphereLuxColor:
     m_OverrideState: 0
-    m_Value: {x: 0.5, y: 0.45751774, z: 0.42451862}
+    m_Value: {x: 0.4466774, y: 0.5, z: 0.4922215}
   desiredLuxValue:
     m_OverrideState: 0
     m_Value: 20000
@@ -122,7 +122,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: cc5c417edbbc73d42b2559c2940f0d44, type: 3}
+    m_Value: {fileID: 8900000, guid: 7638fde96cdc64a44b213af8399601e0, type: 3}
   distortionMode:
     m_OverrideState: 0
     m_Value: 0
@@ -537,6 +537,12 @@ MonoBehaviour:
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
+  occluderMotionRejection:
+    m_OverrideState: 0
+    m_Value: 1
+  receiverMotionRejection:
+    m_OverrideState: 0
+    m_Value: 1
   m_StepCount:
     m_OverrideState: 0
     m_Value: 6

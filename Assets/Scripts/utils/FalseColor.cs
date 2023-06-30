@@ -1,5 +1,6 @@
 ﻿//Copyright (c) 2020 Nick Michiels <nick.michiels@uhasselt.be>, Hasselt University, Belgium, All rights reserved.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class FalseColor : MonoBehaviour
     public Vector4 scaleOffset { get; set; } = new Vector4(0, 0, 1, 1);
     public int objectId  = -1;
 
-
+    [Obsolete("Use ApplyFalseColorProperties instead")]
     public void SetColor(Color newColor)
     {
         falseColor = newColor;
@@ -33,6 +34,7 @@ public class FalseColor : MonoBehaviour
             rend.SetPropertyBlock(propertyBlock, materialIndex);
         }
     }
+
     public void ApplyFalseColorProperties(MaterialPropertyBlock propertyBlock)
     {
         propertyBlock.SetColor("_FalseColor", falseColor);

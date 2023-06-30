@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2aa231fdbfc6d04090315c974012c3f, type: 3}
+  m_Script: {fileID: 11500000, guid: bb0f676c1f4627d48bc1324234433570, type: 3}
   m_Name: businessCardOutsideVariatons
   m_EditorClassIdentifier: 
-  applyRandomMaterials: 1
+  applyRandomMaterials: 0
   materialsPath: publicResources/BusinessCard/Materials
   texturesPath: 
   FalseColorType: 2
   export: 0
   generatedTextureResolution: {x: 0, y: 0}
   applyRandomHSVOffset: 1
-  H_maxOffset: 19.8
-  S_maxOffset: 5.8
-  V_maxOffset: 5.5
+  H_maxOffset: 146.4
+  S_maxOffset: 40.61
+  V_maxOffset: 40.36
   applyRandomUV: 0
   applyRandomAlbedoTexture: 0
   applyDetailMapVariations: 0

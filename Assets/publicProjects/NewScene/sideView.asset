@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e96d3ec3c863cb4a92ef7a511757879, type: 3}
+  m_Script: {fileID: 11500000, guid: f96de2aa9dc0f6f45be2104d8fec7968, type: 3}
   m_Name: sideView
   m_EditorClassIdentifier: 
   viewpointVariatons: 1

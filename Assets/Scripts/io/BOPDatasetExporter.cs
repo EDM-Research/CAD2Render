@@ -8,6 +8,7 @@ using SimpleJSON;
 using System.Text.RegularExpressions;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using System.Linq;
 
 // https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md
 public class BOPDatasetExporter
@@ -45,6 +46,55 @@ public class BOPDatasetExporter
     }
 
 
+    [Serializable]
+    private struct KeypointObject
+    {
+        public VectorObject loc_t_l2m;
+        public Matrix3x3Object cam_R_m2c;
+        public VectorObject cam_t_m2c;
+        public Vector2Int screen_co;
+        public bool isVisible;
+
+        public JSONNode Serialize()
+        {
+            var n = new JSONObject();
+            n["loc_t_l2m"] = loc_t_l2m.Serialize();
+            n["cam_R_m2c"] = cam_R_m2c.Serialize();
+            n["cam_t_m2c"] = cam_t_m2c.Serialize();
+            JSONObject vec = new JSONObject();
+            vec["x"] = screen_co.x;
+            vec["y"] = screen_co.y;
+            n["screen_co"] = vec;
+            n["isVisible"] = isVisible.ToString();
+            return n;
+        }
+    }
+    [Serializable]
+    private struct KeypointListObject
+    {
+        int fileId;
+        public Dictionary<string, List<List<KeypointObject>>> keypoints_gt;
+
+        public JSONNode Serialize()
+        {
+            var scene = new JSONObject();
+            foreach (var keypointList in keypoints_gt)
+            {
+                var sceneKeypoints = new JSONObject();
+                for (int i = 0; i < keypointList.Value.Count; ++i)
+                {
+                    JSONArray instanceKeypoints = new JSONArray();
+                    foreach (KeypointObject keypoint in keypointList.Value[i])
+                        instanceKeypoints.Add(keypoint.Serialize());
+
+                    sceneKeypoints[i.ToString()] = instanceKeypoints;
+                    
+                }
+                scene[keypointList.Key] = sceneKeypoints;
+            }
+            return scene;
+        }
+    }
 
     [Serializable]
     private struct PoseObject
@@ -281,7 +331,7 @@ public class BOPDatasetExporter
             //add transtalions to the camera transformation matrix
             var translation = v.Value["cam_t_w2c"];
             for (int row = 0; row < 3; ++row)
-                pose.worldToCam[row, 3] = Utils.convertMmToUnity((float)translation[row]);
+                pose.worldToCam[row, 3] = GeometryUtils.convertMmToUnity((float)translation[row]);
 
             //convert the camera transformation matrix to unity coordinate system
             var t = pose.worldToCam.GetTranslation();
@@ -305,7 +355,7 @@ public class BOPDatasetExporter
                 translation = m["cam_t_m2c"];
                 //add the translations (in camera space) of the object to the transformation matrix
                 for (int row = 0; row < 3; ++row)
-                    model.localToWorld[row, 3] = Utils.convertMmToUnity((float)translation[row]);
+                    model.localToWorld[row, 3] = GeometryUtils.convertMmToUnity((float)translation[row]);
 
                 //undo the y flip that is applied on the camera matrix
                 var flipY = Matrix4x4.identity;
@@ -315,13 +365,13 @@ public class BOPDatasetExporter
                 model.localToWorld = pose.worldToCam * flipY * model.localToWorld;
 
                 model.obj_id = m["obj_id"];
-                addBopObjectId(model.obj_id);
                 pose.models.Add(model);
             }
             scene.poses.Add(pose);
         }
         return scene;
     }
+
 
     private static int sceneId = 1;
     static public void SetupExportPath(string outputPath, int sceneNumber, bool exportDepth = false, bool exportNormal = false, bool exportAlbedo = false)
@@ -386,25 +436,21 @@ public class BOPDatasetExporter
 
     struct idExportPair { public int id; public bool exported; }
     private static Dictionary<string, idExportPair> obj_name_to_id = new Dictionary<string, idExportPair>();
-    static public void addBopObjectId(int idNumber)
+    /***
+     * todo make compatible with a combination of bop style naming and random style naming
+     * can contain conflicting id's now.
+    */
+    static private idExportPair getExportIdOfModel(GameObject model)
     {
-        String name = String.Format("obj_{0:000000}", idNumber);
-        if (obj_name_to_id.ContainsKey(name) == false)
-            obj_name_to_id[name] = new idExportPair { id = idNumber, exported = false };
 
-    }
-    static public void addPrefabIds(GameObject[] prefabs)
-    {
-        for (int i = 0; i < prefabs.Length; ++i)
+        if (obj_name_to_id.ContainsKey(model.name) == false)
         {
-            if (obj_name_to_id.ContainsKey(prefabs[i].name) == false)
-            {
-                if (Regex.Match(prefabs[i].name, @"obj_\d\d\d\d\d\d").Success && prefabs[i].name.Length == 10)
-                    obj_name_to_id[prefabs[i].name] = new idExportPair { id = Int32.Parse(prefabs[i].name.Substring(4)), exported = false };
-                else
-                    obj_name_to_id[prefabs[i].name] = new idExportPair { id = obj_name_to_id.Count + 1, exported = false };
-            }
+            if (Regex.Match(model.name, @"obj_\d\d\d\d\d\d").Success && model.name.Length == 10)
+                obj_name_to_id[model.name] = new idExportPair { id = Int32.Parse(model.name.Substring(4)), exported = false };
+            else
+                obj_name_to_id[model.name] = new idExportPair { id = obj_name_to_id.Count + 1, exported = false };
         }
+        return obj_name_to_id[model.name];
     }
 
     static private void exportRenderTexture(RenderTexture renderTexture, int fileID, string outputPath, ImageSaver imageSaver) {
@@ -547,13 +593,61 @@ public class BOPDatasetExporter
         camera_gt.cam_R_w2c = new Matrix3x3Object();
         camera_gt.cam_R_w2c.mat = worldToCam;
         camera_gt.cam_t_w2c = new VectorObject();
-        camera_gt.cam_t_w2c.vector = Utils.convertUnityToMm(new UnityEngine.Vector3(worldToCam[0, 3], worldToCam[1, 3], worldToCam[2, 3]));
+        camera_gt.cam_t_w2c.vector = GeometryUtils.convertUnityToMm(new UnityEngine.Vector3(worldToCam[0, 3], worldToCam[1, 3], worldToCam[2, 3]));
         camera_gt.depth_scale = depthScale;
 
         scene_camera_obj.camera_gt[fileID.ToString()] = camera_gt;
         string text_scene_camera = scene_camera_obj.Serialize().ToString();
         appendToJSON(outputPath + String.Format("bop/train_PBR/{0:000000}/", sceneId) + "scene_camera.json", text_scene_camera, fileID == 1);
     }
+
+    public static void exportKeyPoints(List<GameObject> instantiated_models, RenderTexture depthTexture, int fileID, string outputPath, Camera camera)
+    {
+        RenderTexture currentActiveRT = RenderTexture.active;
+        RenderTexture.active = depthTexture;
+        Texture2D depthText = new Texture2D(depthTexture.width, depthTexture.height);
+        depthText.ReadPixels(new Rect(0, 0, depthTexture.width, depthTexture.height), 0, 0);
+        RenderTexture.active = currentActiveRT;
+
+        KeypointListObject obj = new KeypointListObject();
+        obj.keypoints_gt = new Dictionary<string, List<List<KeypointObject>>>();
+        List<List<KeypointObject>> SceneKeyPoints = new List<List<KeypointObject>>();
+
+        for (int i = 0; i < instantiated_models.Count; ++i)
+        {
+            List<KeypointObject> instanceKeyPoints = new List<KeypointObject>();
+
+            foreach (var keypointObject in instantiated_models[i].GetComponentsInChildren<Transform>().Where(child => child.CompareTag("Keypoint")))
+            {
+                KeypointObject keypoint = new KeypointObject();
+                Matrix4x4 viewMat = GeometryUtils.getModelViewMatrix(keypointObject, camera);
+                Vector3 translation = new Vector3(viewMat[0, 3], viewMat[1, 3], viewMat[2, 3]);
+                keypoint.cam_R_m2c = new Matrix3x3Object();
+                keypoint.cam_R_m2c.mat = viewMat;
+                keypoint.cam_t_m2c = new VectorObject();
+                keypoint.cam_t_m2c.vector = GeometryUtils.convertUnityToMm(translation);
+                keypoint.loc_t_l2m = new VectorObject();
+                keypoint.loc_t_l2m.vector = keypointObject.localPosition;
+                var screenCo = camera.WorldToScreenPoint(keypointObject.position);
+                keypoint.screen_co = new Vector2Int((int) Math.Round(screenCo.x), (int) Math.Round(screenCo.y));
+                if (keypoint.screen_co.x >= 0 && keypoint.screen_co.x < depthText.width
+                    && keypoint.screen_co.y >= 0 && keypoint.screen_co.y < depthText.height) {
+                    var depthDistance = GeometryUtils.convertMmToUnity(depthText.GetPixel(keypoint.screen_co.x, keypoint.screen_co.y).linear.r * depthScale);
+                    keypoint.isVisible = depthDistance - translation.z > 0 && translation.z > 0;
+                }
+                else
+                    keypoint.isVisible = false;
+                instanceKeyPoints.Add(keypoint);
+            }
+            SceneKeyPoints.Add(instanceKeyPoints);
+
+        }
+
+        obj.keypoints_gt[fileID.ToString()] = SceneKeyPoints;
+        string text = obj.Serialize().ToString();
+        appendToJSON(outputPath + String.Format("bop/train_PBR/{0:000000}/", sceneId) + "keyPoints_gt.json", text, fileID == 1);
+    }
+
     static private void exportObjectData(List<UnityEngine.GameObject> instantiated_models, int fileID, string outputPath, Camera camera)
     {
         // exporting scene ground truth metadata
@@ -561,28 +655,17 @@ public class BOPDatasetExporter
         obj.scene_gt = new Dictionary<string, List<PoseObject>>();
         List<PoseObject> poses = new List<PoseObject>();
 
-        foreach (UnityEngine.GameObject model in instantiated_models)
+        foreach (GameObject model in instantiated_models)
         {
-            UnityEngine.Matrix4x4 locToWorld = Matrix4x4.TRS(model.transform.position, model.transform.rotation, new Vector3(1, 1, 1));
-            UnityEngine.Matrix4x4 cameraMatrix = Matrix4x4.TRS(camera.transform.position, camera.transform.rotation, new Vector3(1, 1, 1));
-
-            //convert worldspace coordinates to cameraspace coordinates
-            var flipY = Matrix4x4.identity;//switch handedness of coordinate system
-            flipY[1, 1] *= -1;
-            UnityEngine.Matrix4x4 viewMat = flipY * cameraMatrix.inverse * locToWorld;
-            //magic unity x flip of rotation matrix
-            viewMat[0, 0] *= -1;
-            viewMat[1, 0] *= -1;
-            viewMat[2, 0] *= -1;
-
-            UnityEngine.Vector3 translation = new UnityEngine.Vector3(viewMat[0, 3], viewMat[1, 3], viewMat[2, 3]);
+            Matrix4x4 viewMat = GeometryUtils.getModelViewMatrix(model.transform, camera);
+            Vector3 translation = new Vector3(viewMat[0, 3], viewMat[1, 3], viewMat[2, 3]);
 
             PoseObject pose = new PoseObject();
             pose.cam_R_m2c = new Matrix3x3Object();
             pose.cam_R_m2c.mat = viewMat;
             pose.cam_t_m2c = new VectorObject();
-            pose.cam_t_m2c.vector = Utils.convertUnityToMm(translation);
-            var idExportData = obj_name_to_id[model.name];
+            pose.cam_t_m2c.vector = GeometryUtils.convertUnityToMm(translation);
+            var idExportData = getExportIdOfModel(model);
             pose.obj_id = idExportData.id;
             if (!idExportData.exported)
             {

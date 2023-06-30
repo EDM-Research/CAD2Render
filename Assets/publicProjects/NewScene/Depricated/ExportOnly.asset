@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb0f676c1f4627d48bc1324234433570, type: 3}
+  m_Name: ExportOnly
+  m_EditorClassIdentifier: 
+  applyRandomMaterials: 0
+  materialsPath: 
+  texturesPath: 
+  FalseColorType: 0
+  export: 1
+  generatedTextureResolution: {x: 0, y: 0}
+  applyRandomHSVOffset: 0
+  H_maxOffset: 0
+  S_maxOffset: 0
+  V_maxOffset: 0
+  applyRandomUV: 0
+  applyRandomAlbedoTexture: 0
+  applyDetailMapVariations: 0
+  nrOfScratches: 0
+  scratchWidth: 0
+  nrAntiAliasSamples: 0
+  nrOfDarkspots: 0
+  spotSize: 0
+  detailAlbedoScale: 0
+  detailNormalScale: 0
+  detailSmoothnessScale: 0
+  applyRust: 0
+  rustCoeficient: 0
+  rustMaskZoom: 0
+  rustPaternZoom: 0
+  rustColor1: {r: 0, g: 0, b: 0, a: 0}
+  rustColor2: {r: 0, g: 0, b: 0, a: 0}
+  nrOfOctaves: 0
+  applyManufacturingLines: 0
+  lineSpacing: 0
+  LineAndRustMask: {fileID: 0}
+  applyTextureResampling: 0
+  resampleTextures: 
+  nrResampleSamples: 0
+  nrResampleGenerations: 0
+  varyingMaterial: {fileID: 0}
+  overideVaryingMaterialProperties: 0
+  overideVaryingMaterialColor: 0
+  minColor: {r: 0, g: 0, b: 0, a: 0}
+  maxColor: {r: 0, g: 0, b: 0, a: 0}

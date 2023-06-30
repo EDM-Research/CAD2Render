@@ -7,7 +7,7 @@ using ResourceManager = Assets.Scripts.io.ResourceManager;
 public class TextureResampler
 {
     private ComputeShader TextureSynthesizer;
-    private MaterialRandomizeData dataset;
+    private TextureResamplerData dataset;
     private bool TdrDelay_registerFixed = false;
     private static bool TdrDelay_registerWarningSend = false;
     private Texture sampleTexture { get; set; }
@@ -20,13 +20,15 @@ public class TextureResampler
     //int[] searchRadii = { 64, 55, 48, 40, 32, 30, 28, 24, 20, 16, 12, 8, 7, 6, 5, 4, 3, 2, 2, 1, 1, 1 };
     //int[] searchRadii = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-    public TextureResampler(MaterialRandomizeData dataset)
+    [Obsolete("Use the new modular material randomizers.")]
+    public TextureResampler(MatRandomizeData dataset)
+        :this(new TextureResamplerData(dataset)){}
+
+    public TextureResampler(TextureResamplerData dataset)
     {
         this.dataset = dataset;
         TextureSynthesizer = ResourceManager.loadShader("TextureSynthesizer");
 
-        if (!dataset.applyTextureResampling)
-            return;
         if (TdrDelay_registerWarningSend)
             return;
         TdrDelay_registerWarningSend = true;
@@ -56,12 +58,6 @@ public class TextureResampler
             TdrDelay_registerFixed = !EditorUtility.DisplayDialog("TdrDelay", "Something whent wrong checking the TdrDelay or TdrDdiDelay registry values at\n" + "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" + "\n. This might cause unity to crash when using the texture resampler (losing unsaved changes)", "Don't use the resampler", "I accept the risk"); ;
         }
     }
-
-    /**
-     * deprecated use TextureResampler(MaterialRandomizeData dataset) instead
-     */
-    [Obsolete]
-    public TextureResampler(DatasetInformation data) : this(new MaterialRandomizeData(data)){}
 
     public void ResampleTexture(MaterialTextures textures, Texture sampleTexture, MaterialTextures.MapTypes type, ref RandomNumberGenerator rng)
     {

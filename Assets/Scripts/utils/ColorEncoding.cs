@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class ColorEncoding {
 
-    public static Color[] colors = {  new Color32(255,0,0, 255),
+    private static Color[] colors = {  new Color32(255,0,0, 255),
                                 new Color32(0,255,0, 255),
                                 new Color32(0,0,255, 255),
                                 new Color32(255,255,0, 255),
@@ -94,7 +94,7 @@ public class ColorEncoding {
         return retVal >> sparse;
     }
 
-    public static Color EncodeColorByIndex(int index)
+    public static Color GetColorByIndex(int index)
     {
         if (index >= colors.Length)
         {
@@ -102,16 +102,10 @@ public class ColorEncoding {
         }
         return colors[index % colors.Length];
     }
-    public static int globalColorIndex { private set; get; } = 0;
-    public static void resetGlobalColorIndex() { globalColorIndex = 0; }
-    public static Color EncodeColorByGlobalIndex()
-    {
-        if (globalColorIndex >= colors.Length)
-        {
-            Debug.Log("WARNING EncodeColorByGlobalIndex: index exceeds color array.");
-        }
-        return colors[globalColorIndex++ % colors.Length];
-    }
+
+    private static int globalColorIndex = -1;
+    public static void resetGlobalColorIndex() { globalColorIndex = -1; }
+    public static int NextGlobalColorIndex() { return ++globalColorIndex; }
 
     public static Color EncodeIDAsColor(int instanceId) {
         var uid = instanceId * 2;

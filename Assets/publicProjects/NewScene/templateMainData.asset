@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2191f3c6aa4c704a9658c95b4e266d7, type: 3}
+  m_Name: templateMainData
+  m_EditorClassIdentifier: 
+  outputPath: ../renderings/templateScene/
+  annotationisFile: annotations.txt
+  BOPInputPath: 
+  mmToUnityDistanceScale: 0.01
+  resolution: {x: 1920, y: 1080}
+  renderProfile: {fileID: 11400000, guid: 5ceb2a5a1eae9f4459ff628173172d06, type: 2}
+  rayTracingProfile: {fileID: 11400000, guid: ff2369a8a1c82244f8b2622651312608, type: 2}
+  postProcesingProfile: {fileID: 11400000, guid: 8e2035fb7b1ff22429413db21a7b0beb,
+    type: 2}
+  applyGammaCorrection: 1
+  autoCameraExposure: 1
+  stopSimulationTimeCompletly: 1
+  numRenderFrames: 500
+  numPhysicsFrames: 500
+  startFileCounter: 0
+  numberOfSamples: 50000
+  seed: 42
+  separateUpdates: 0
+  updateIntervals:
+  - randomizerType: 0
+    interval: 0
+  exportToBOP: 1
+  BOPSceneId: 1
+  exportKeyPoints: 1
+  exportDepthTexture: 1
+  maxDepthDistance: 1300
+  exportNormalTexture: 1
+  exportAlbedoTexture: 1
+  exportToFMFormat: 1
+  outputExt: 0
+  exportSubModels: 0
+  exportImagePosition: 0
+  exportToMitsuba: 0
+  mitsubaSampleCount: 128

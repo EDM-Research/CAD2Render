@@ -9,17 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30ac0380b15acc64bb099e5cd3bc9089, type: 3}
+  m_Script: {fileID: 11500000, guid: 67f02abc24e1a524bb1ad59088e28b70, type: 3}
   m_Name: CardHolderSpawnData
   m_EditorClassIdentifier: 
   modelsPath: publicResources/businessCard/Prefabs
   importFromBOP: 0
   uniqueObjects: 0
-  numRandomObjects: 7
+  numRandomObjects: 2
   randomModelTranslations: 1
   randomModelRotations: 1
   randomRotationOffset: 0
   randomRotationOffsetValue: 0
+  randomRotationAxis: {x: 0, y: 0, z: 1}
+  seperateSubmodels: 0
   randomSubModelTranslation: 0
   avoidCollisions: 0
   subModelName: 

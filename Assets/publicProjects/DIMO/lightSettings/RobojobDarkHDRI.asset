@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75813375f5e92846b1d90632a48bb66, type: 3}
+  m_Script: {fileID: 11500000, guid: bf1e30d092367944fa22b6a70b867297, type: 3}
   m_Name: RobojobDarkHDRI
   m_EditorClassIdentifier: 
   environmentsPath: publicResources/DIMO/environmentMaps/darkRoomImage_hdr
