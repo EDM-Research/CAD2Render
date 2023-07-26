@@ -20,6 +20,8 @@ Be sure to [check out this publication](https://openaccess.thecvf.com/content/WA
 </p>
 
 ## Installation
+A tutorial for instaltion and other features is provided on [youtube](https://www.youtube.com/playlist?list=PLDC58CxYwFZ73zdWx70gcxIli1kCc5fV4)
+
 Clone the latest stable release from this repository: [v3.0](https://github.com/EDM-Research/CAD2Render/releases/tag/v3.0).
 
 This release includes four example scenes and a couple of basis models, environment maps and materials:
