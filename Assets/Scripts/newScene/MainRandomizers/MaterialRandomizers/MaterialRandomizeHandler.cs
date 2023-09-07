@@ -9,7 +9,7 @@ public class MaterialRandomizeHandler : RandomizerInterface
     public MaterialRandomizeData dataset;
     private MaterialRandomizerInterface[] linkedMaterialRandomizers;
 
-    public void Start()
+    public void Awake()
     {
         randomizerType = MainRandomizerData.RandomizerTypes.Material;
         LinkGui();

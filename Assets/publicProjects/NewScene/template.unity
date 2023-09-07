@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 50.329628, g: 54.87522, b: 52.205482, a: 1}
+  m_IndirectSpecularColor: {r: 1468.9825, g: 1521.0685, b: 1435.0323, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -995,7 +995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
-  dataset: {fileID: 11400000, guid: 00daa1cea119b0440ba2d9eadb34c881, type: 2}
+  dataset: {fileID: 11400000, guid: 7972928efd5395d44bc4d7c2d3dd2397, type: 2}
 --- !u!1001 &9134569172313873376
 PrefabInstance:
   m_ObjectHideFlags: 0
