@@ -7,6 +7,12 @@ public class TextureResamplerHandler : MaterialRandomizerInterface
     //private RandomNumberGenerator rng;
     private TextureResampler texResampler;
     public TextureResamplerData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     public void Awake()
     {

@@ -7,8 +7,14 @@ public class MaterialRandomizeHandler : RandomizerInterface
     private List<MaterialTextures> materialTextureTable = new List<MaterialTextures>();
     private List<GameObject> subjectInstances;
     public MaterialRandomizeData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
     private MaterialRandomizerInterface[] linkedMaterialRandomizers;
 
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
     public void Awake()
     {
         randomizerType = MainRandomizerData.RandomizerTypes.Material;

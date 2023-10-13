@@ -6,6 +6,12 @@ public class MaterialModelRandomizeHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;
     public MaterialModelRandomizeData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     private Material[] materials = new Material[0];
     public void Awake()

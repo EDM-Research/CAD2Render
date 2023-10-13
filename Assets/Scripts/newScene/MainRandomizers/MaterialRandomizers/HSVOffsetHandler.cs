@@ -6,6 +6,12 @@ public class HSVOffsetHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;
     public HSVOffsetData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
     {

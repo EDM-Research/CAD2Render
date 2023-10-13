@@ -8,9 +8,16 @@ public class RustGenerationHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;
     public RustGenerationData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+
     private RenderTexture RustZoneTexture;
     private ComputeShader rustmapGenerationShader;
 
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     public void Awake()
     {

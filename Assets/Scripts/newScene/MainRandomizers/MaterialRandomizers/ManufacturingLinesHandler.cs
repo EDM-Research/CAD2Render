@@ -8,8 +8,14 @@ public class ManufacturingLinesHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;
     private ComputeShader LineTextureGenerationShader;
-    public ManufacturingLinesData dataset;
     private RenderTexture LineZoneTexture;
+    public ManufacturingLinesData dataset;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     public void Awake()
     {
