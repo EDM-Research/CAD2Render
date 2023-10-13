@@ -10,7 +10,7 @@ public class FalseColor : MonoBehaviour
 {
     public Color falseColor = new Color(0f, 1.0f, 0f, 1f);
     public Texture falseColorTex { get; set; } = null;
-    public Vector4 scaleOffset { get; set; } = new Vector4(0, 0, 1, 1);
+    public Vector4 scaleOffset { get; set; } = new Vector4(1, 1, 0, 0);
     public int objectId  = -1;
 
     [Obsolete("Use ApplyFalseColorProperties instead")]

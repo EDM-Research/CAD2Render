@@ -46,8 +46,8 @@ public class MaterialTextures
         this.materialIndex = materialIndex;
         this.falseColor = null;
 
-        newProperties.Clear();
         rend.GetPropertyBlock(newProperties, materialIndex);
+        newProperties.Clear();
     }
 
     public enum MapTypes
@@ -142,6 +142,10 @@ public class MaterialTextures
         if (falseColor != null)
         {
             falseColor.falseColorTex = get(MapTypes.defectMap);
+            Vector4 scaleOffsetVector = GetCurrentLinkedVector("_BaseColorMap_ST");
+            if (scaleOffsetVector == new Vector4(0, 0, 0, 0))
+                scaleOffsetVector = new Vector4(1, 1, 0, 0);
+            falseColor.scaleOffset = scaleOffsetVector;
             falseColor.ApplyFalseColorProperties(newProperties);
         }
 
