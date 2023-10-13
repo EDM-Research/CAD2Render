@@ -386,7 +386,10 @@ public class BOPDatasetExporter
         ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/mask", sceneId));
         ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib", sceneId));
 
-        if(exportAlbedo)
+        ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect", sceneId));
+        ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect_visib", sceneId));
+
+        if (exportAlbedo)
             ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/albedo", sceneId));
         if(exportNormal)
             ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/normal", sceneId));
@@ -470,6 +473,24 @@ public class BOPDatasetExporter
     }
 
     static RenderTexture splitSegmentationTextures;
+    static RenderTexture splitSegmentationDefectTextures;
+    static RenderTexture splitSegmentationDefectVisibTextures;
+    private static void ensureSplitTextureStack(ref RenderTexture saveLocation, int stackSize, int width, int height)
+    {
+        //create a texture array to generate the segmenation image for each object
+        if (saveLocation == null || saveLocation.volumeDepth < stackSize)
+        {
+            if (saveLocation != null)
+            {
+                saveLocation.Release();
+            }
+            saveLocation = new RenderTexture(width, height, 0, RenderTextureFormat.RFloat);
+            saveLocation.dimension = UnityEngine.Rendering.TextureDimension.Tex2DArray;
+            saveLocation.volumeDepth = stackSize;
+            saveLocation.enableRandomWrite = true;
+            saveLocation.Create();
+        }
+    }
     static private void exportSegmentationTexture(List<UnityEngine.GameObject> instantiated_models, RenderTexture segmentationTexture, RenderTexture segmentationTextureArray, int fileID, string outputPath, ImageSaver imageSaver)
     {
         if (instantiated_models.Count == 0)
@@ -478,17 +499,9 @@ public class BOPDatasetExporter
             return;
         }
 
-        //create a texture array to generate the segmenation image for each object
-        if (splitSegmentationTextures == null || splitSegmentationTextures.volumeDepth < instantiated_models.Count)
-        {
-            if(splitSegmentationTextures != null)
-                splitSegmentationTextures.Release();
-            splitSegmentationTextures = new RenderTexture(segmentationTexture.width, segmentationTexture.height, 0, RenderTextureFormat.RFloat);
-            splitSegmentationTextures.dimension = UnityEngine.Rendering.TextureDimension.Tex2DArray;
-            splitSegmentationTextures.volumeDepth = instantiated_models.Count;
-            splitSegmentationTextures.enableRandomWrite = true;
-            splitSegmentationTextures.Create();
-        }
+        ensureSplitTextureStack(ref splitSegmentationTextures, instantiated_models.Count, segmentationTexture.width, segmentationTexture.height);
+        ensureSplitTextureStack(ref splitSegmentationDefectTextures, instantiated_models.Count, segmentationTexture.width, segmentationTexture.height);
+        ensureSplitTextureStack(ref splitSegmentationDefectVisibTextures, instantiated_models.Count, segmentationTexture.width, segmentationTexture.height);
 
         //save the false collors of each object in an array
         Vector3[] colorData = new Vector3[instantiated_models.Count];
@@ -514,14 +527,20 @@ public class BOPDatasetExporter
         SegmentationShader.SetBuffer(kernelHandle, "FalseColors", ColorBuffer);
 
         //link the input and output texture for the visual mask shader
-        SegmentationShader.SetTexture(kernelHandle, "Results", splitSegmentationTextures);
         SegmentationShader.SetTexture(kernelHandle, "segmentationTexture", segmentationTexture);
+        SegmentationShader.SetTexture(kernelHandle, "ResultSegmentation", splitSegmentationTextures);
+        SegmentationShader.SetTexture(kernelHandle, "ResultDefectVisib", splitSegmentationDefectVisibTextures);
+
+        SegmentationShader.SetTexture(kernelHandle, "segmentationTextureArray", segmentationTextureArray);
+        SegmentationShader.SetTexture(kernelHandle, "ResultDefect", splitSegmentationDefectTextures);
 
         //split the segmentation textures
         SegmentationShader.Dispatch(kernelHandle, segmentationTexture.width / 8, segmentationTexture.height / 8, instantiated_models.Count);
         ColorBuffer.Dispose();//clean disposel of the collor buffer (might want to edit this so the buffer is reused)
 
         imageSaver.SaveArray(splitSegmentationTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
+        imageSaver.SaveArray(splitSegmentationDefectVisibTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect_visib/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
+        imageSaver.SaveArray(splitSegmentationDefectTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
         imageSaver.SaveArray(segmentationTextureArray, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
     }
 
