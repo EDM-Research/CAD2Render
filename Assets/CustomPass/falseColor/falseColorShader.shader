@@ -71,7 +71,7 @@
                     return chosenColor;
 
                 if (_objectId == _currentObjectId) {
-                    return fixed4(1.0f, 1.0f, 1.0f, 1.0f);
+                    return fixed4(1.0f, 1.0f, 1.0f, chosenColor.a);
                 }
                 else
                     return fixed4(0.0f, 0.0f, 0.0f, 1.0f);

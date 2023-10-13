@@ -61,7 +61,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
             //loop renderIndex between [-1: targetTextureArray.volumeDepth[
             int nrOfRenderTargetIds = targetTextureArray ? targetTextureArray.volumeDepth + 1 : 1;
-            renderIndex = ((renderIndex + 1) % nrOfRenderTargetIds) - 1;
+            renderIndex = ((renderIndex + 1)% nrOfRenderTargetIds) - 1;
             //renderIndex = -1 => render the regular segmentation mask
             //renderIndex >= 0 only render the segmentation mask of the selected object (but keep occlusions)
             overrideMaterial.SetInteger("_currentObjectId", renderIndex);
