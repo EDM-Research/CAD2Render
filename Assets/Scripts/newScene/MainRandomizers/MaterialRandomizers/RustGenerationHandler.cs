@@ -66,6 +66,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         textures.linkTexture(MaterialTextures.MapTypes.colorMap);
         textures.linkTexture(MaterialTextures.MapTypes.normalMap);
         textures.linkTexture(MaterialTextures.MapTypes.maskMap);
+        textures.linkTexture(MaterialTextures.MapTypes.defectMap);
         if (normalMap != null)
             textures.linkTexture(MaterialTextures.MapTypes.normalMap);
 

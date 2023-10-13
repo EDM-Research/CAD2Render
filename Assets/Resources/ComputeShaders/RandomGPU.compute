@@ -45,7 +45,7 @@ float FractalBrownianMotion(uint nrOfOctaves, float zoom, inout uint seed, float
         float currentZoom = pow(2, i) * zoom; // * i + zoom;
         float amplitute = pow(0.5f, i);
         totalAmplitute += amplitute;
-        uint2 offset = uint2(nextRand(seed) * 255, nextRand(seed) * 255);
+        uint2 offset = uint2(nextRand(seed) * (1048 * 4), nextRand(seed) * (1048 * 4));
         float2 newCoord = float2(offset + coord) * currentZoom;
         
         value += (sNoise(newCoord) / 2 + 0.5) * amplitute;
