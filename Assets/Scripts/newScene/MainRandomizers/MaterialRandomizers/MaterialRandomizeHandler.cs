@@ -52,7 +52,7 @@ public class MaterialRandomizeHandler : RandomizerInterface
             foreach (MaterialRandomizerInterface randomizer in linkedMaterialRandomizers)
                 if(randomizer.isActiveAndEnabled)
                     randomizer.RandomizeSingleInstance(instance, ref rng, bopSceneIterator);
-            if (instance != this)
+            if (instance != this.gameObject)
                 foreach (MaterialRandomizerInterface randomizer in instance.GetComponents<MaterialRandomizerInterface>())
                     if (randomizer.isActiveAndEnabled)
                         randomizer.RandomizeSingleInstance(instance, ref rng, bopSceneIterator);
