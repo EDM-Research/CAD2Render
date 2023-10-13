@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,7 +38,8 @@ public class MaterialTextures
         {
             if (keyValue.Value == null)
                 continue;
-            textureDisabled.Add(keyValue.Key, true);
+            if(!textureDisabled.ContainsKey(keyValue.Key))
+                textureDisabled.Add(keyValue.Key, true);
         }
 
         this.rend = rend;
