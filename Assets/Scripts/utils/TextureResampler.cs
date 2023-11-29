@@ -46,16 +46,16 @@ public class TextureResampler
                     Int32 TdrDelay = (Int32)key.GetValue("TdrDelay", 0);
                     if (TdrDelay < 30 || TdrDdiDelay < 30)
                     {
-                        TdrDelay_registerFixed = !EditorUtility.DisplayDialog("TdrDelay", "The TdrDelay or TdrDdiDelay registry values at\n" + "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" + "\nare not set or below 30(s). This might cause unity to crash when using the texture resampler (losing unsaved changes)", "Don't use the resampler", "I accept the risk");
+                        TdrDelay_registerFixed = !EditorUtility.DisplayDialog("TdrDelay", "The TdrDelay or TdrDdiDelay registry values at\n" + "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" + "\nare not set or below 30(s).\nThis might cause unity to crash when using the texture resampler (Losing unsaved changes)", "Don't use the resampler", "I understand");
                     }
                     else
                         TdrDelay_registerFixed = true;
                 }
             }
         }
-        catch (Exception ex)  //just for demonstration...it's always best to handle specific exceptions
+        catch (Exception ex)
         {
-            TdrDelay_registerFixed = !EditorUtility.DisplayDialog("TdrDelay", "Something whent wrong checking the TdrDelay or TdrDdiDelay registry values at\n" + "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" + "\n. This might cause unity to crash when using the texture resampler (losing unsaved changes)", "Don't use the resampler", "I accept the risk"); ;
+            TdrDelay_registerFixed = !EditorUtility.DisplayDialog("TdrDelay", "The TdrDelay or TdrDdiDelay registry values at\n" + "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" + "\nare not set or below 30(s).\nThis might cause unity to crash when using the texture resampler (Losing unsaved changes)", "Don't use the resampler", "I understand");
         }
     }
 
@@ -66,8 +66,8 @@ public class TextureResampler
 
         generation = 0;
         this.sampleTexture = sampleTexture;
-        ResetGeneratedTexture(ref rng, textures, type);
-        UpdateGeneratedTexture(ref rng, textures.get(type), textures.getResamplelocations(), dataset.nrResampleGenerations);
+        ShuffleTexturePatches(ref rng, textures, type);
+        BlendPatchBorders(ref rng, textures.get(type), textures.getResamplelocations(), dataset.nrResampleGenerations);
     }
 
     public void applyPreviousResample(MaterialTextures textures, MaterialTextures.MapTypes type)
@@ -82,7 +82,7 @@ public class TextureResampler
         TextureSynthesizer.Dispatch(kernelHandle, textures.resolutionX / 8, textures.resolutionY / 8, 1);
     }
 
-    private void UpdateGeneratedTexture(ref RandomNumberGenerator rng, RenderTexture subjectTexture, RenderTexture locationTexture, int repeatedUpdates = 1)
+    private void BlendPatchBorders(ref RandomNumberGenerator rng, RenderTexture subjectTexture, RenderTexture locationTexture, int repeatedUpdates = 1)
     {
         int kernelHandle = TextureSynthesizer.FindKernel("NeighbourSugestion");
         TextureSynthesizer.SetTexture(kernelHandle, "Resampled", subjectTexture);
@@ -106,11 +106,16 @@ public class TextureResampler
     }
 
 
-    private void ResetGeneratedTexture(ref RandomNumberGenerator rng, MaterialTextures textures, MaterialTextures.MapTypes type)
+    private void ShuffleTexturePatches(ref RandomNumberGenerator rng, MaterialTextures textures, MaterialTextures.MapTypes type)
     {
         int kernelHandle = TextureSynthesizer.FindKernel("Randomize");
         TextureSynthesizer.SetInt("randSeed", rng.IntRange(0, int.MaxValue));
-        textures.set(type, textures.get(type), new Color(0, 0, 0));
+        var currentLinkedTexture = textures.GetCurrentLinkedTexture(textures.getTextureName(type));
+        if(currentLinkedTexture != null)
+            textures.set(type, textures.GetCurrentLinkedTexture(textures.getTextureName(type)), new Color(0, 0, 0));
+        else
+            textures.set(type, textures.get(type), new Color(0, 0, 0));
+
         TextureSynthesizer.SetTexture(kernelHandle, "Resampled", textures.get(type));
         TextureSynthesizer.SetTexture(kernelHandle, "InputLocation", textures.getResamplelocations());
         TextureSynthesizer.SetTexture(kernelHandle, "Input", sampleTexture);
