@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MaterialRandomizeHandler : RandomizerInterface
@@ -19,7 +20,7 @@ public class MaterialRandomizeHandler : RandomizerInterface
     {
         randomizerType = MainRandomizerData.RandomizerTypes.Material;
         LinkGui();
-        linkedMaterialRandomizers = GetComponentsInChildren<MaterialRandomizerInterface>();
+        linkedMaterialRandomizers = GetComponentsInChildren<MaterialRandomizerInterface>().OrderByDescending(o => o.getPriority()).ToArray();
     }
 
     public void initialize(ref List<GameObject> instantiatedModels)
@@ -49,36 +50,39 @@ public class MaterialRandomizeHandler : RandomizerInterface
 
         foreach (GameObject instance in subjectInstances)
         {
-            foreach (MaterialRandomizerInterface randomizer in linkedMaterialRandomizers)
-                if(randomizer.isActiveAndEnabled)
-                    randomizer.RandomizeSingleInstance(instance, ref rng, bopSceneIterator);
-            if (instance != this.gameObject)
-                foreach (MaterialRandomizerInterface randomizer in instance.GetComponents<MaterialRandomizerInterface>())
-                    if (randomizer.isActiveAndEnabled)
+            //Run all RandomizeSingleInstance functions that are part of the material randomizer inside the generator
+            if (instance != this.gameObject)//skip if the instance is the same gameobject as the gameObject inside the generator (this is execute in the next loop)
+                foreach (MaterialRandomizerInterface randomizer in linkedMaterialRandomizers)
+                    if(randomizer.isActiveAndEnabled)
                         randomizer.RandomizeSingleInstance(instance, ref rng, bopSceneIterator);
+
+            //Run all RandomizeSingleInstance functions that are directly linked to the instance
+            foreach (MaterialRandomizerInterface randomizer in instance.GetComponentsInChildren<MaterialRandomizerInterface>().OrderByDescending(o => o.getPriority()))
+                if (randomizer.isActiveAndEnabled)
+                    randomizer.RandomizeSingleInstance(randomizer.gameObject, ref rng, bopSceneIterator);
 
             foreach (Renderer rend in instance.GetComponentsInChildren<Renderer>())
             {
-
-                if (instance != rend.gameObject)
-                    foreach (MaterialRandomizerInterface randomizer in rend.gameObject.GetComponents<MaterialRandomizerInterface>())
-                        if (randomizer.isActiveAndEnabled)
-                            randomizer.RandomizeSingleInstance(rend.gameObject, ref rng, bopSceneIterator);
-
                 for (int materialIndex = 0; materialIndex < rend.materials.Length; ++materialIndex)
                 {
+                    //Reuse the MaterialTextures objects to limit the amount of textures that need to be created and destroyed
                     if (index < materialTextureTable.Count)
                         materialTextureTable[index].UpdateLinkedRenderer(rend, materialIndex);
                     else
                         materialTextureTable.Add(new MaterialTextures(dataset.generatedTextureResolution, rend, materialIndex));
-                    
-                    foreach (MaterialRandomizerInterface randomizer in linkedMaterialRandomizers)
-                        if (randomizer.isActiveAndEnabled)
-                            randomizer.RandomizeSingleMaterial(materialTextureTable[index], ref rng, bopSceneIterator);
-                    if (instance != this)
-                        foreach (MaterialRandomizerInterface randomizer in rend.gameObject.GetComponentsInParent<MaterialRandomizerInterface>())
+
+                    //Run all RandomizeSingleMaterial functions that are part of the material randomizer inside the generator
+                    if (instance != this.gameObject)//skip if the instance is the same gameobject as the gameObject inside the generator (this is execute in the next loop)
+                        foreach (MaterialRandomizerInterface randomizer in linkedMaterialRandomizers)
                             if (randomizer.isActiveAndEnabled)
                                 randomizer.RandomizeSingleMaterial(materialTextureTable[index], ref rng, bopSceneIterator);
+
+                    //Run all RandomizeSingleMaterial functions that are directly linked to the instance (starting from each renderer component find all MaterialRandomizerInterface linked to the renderer or one of its (grand)parents)
+                    foreach (MaterialRandomizerInterface randomizer in rend.gameObject.GetComponentsInParent<MaterialRandomizerInterface>().OrderByDescending(o => o.getPriority()))
+                        if (randomizer.isActiveAndEnabled)
+                            randomizer.RandomizeSingleMaterial(materialTextureTable[index], ref rng, bopSceneIterator);
+
+                    //Submit the changes done by the randomizers to the GPU
                     materialTextureTable[index].linkpropertyBlock();
                     ++index;
                 }

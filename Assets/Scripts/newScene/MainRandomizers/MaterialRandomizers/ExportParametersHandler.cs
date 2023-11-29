@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ExportParametersHandler : MaterialRandomizerInterface
 {
+
+    public override int getPriority() { return 100; }
+
     public override void RandomizeSingleInstance(GameObject instance, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
     {
         var falseColor = instance.GetComponent<FalseColor>();
