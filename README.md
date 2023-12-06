@@ -31,7 +31,7 @@ This release includes four example scenes and a couple of basis models, environm
 - Assets/publicProjects/RobojobPaper/robojob_import.unity
 
 ### Requirements
-Unity Version [2021.2.0b1](https://unity3d.com/unity/beta/2021.2.0b1) or higher.
+Unity Version [2021.2.0b1](https://unity3d.com/unity/beta/2022.2.0b1) or higher.
  
 NVIDIA RTX series card with the latest drivers [here](https://www.nvidia.com/Download/index.aspx?lang=com) Windows 10 RS5 (Build 1809) or later
 Ray tracing hardware acceleration is only available on certain graphics cards.
