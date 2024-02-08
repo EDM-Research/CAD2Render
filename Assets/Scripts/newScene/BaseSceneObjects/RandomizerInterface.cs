@@ -24,14 +24,16 @@ public abstract class RandomizerInterface : MonoBehaviour
     {
         if (updateIntervals == null)
             return true;
-        foreach(var pair in updateIntervals)
+        bool defaultTypeUpdate = true;//no default defined => randomize every update
+        foreach (var pair in updateIntervals)
         {
             if(pair.randomizerType == randomizerType)
-            {
                 return currentUpdate % Math.Max(pair.interval, 1) == 0;
-            }
+
+            if (pair.randomizerType == MainRandomizerData.RandomizerTypes.Default)
+                defaultTypeUpdate = currentUpdate % Math.Max(pair.interval, 1) == 0;
         }
-        return true;//no default defined => randomize every update
+        return defaultTypeUpdate;
     }
 
     protected void resetFrameAccumulation()
