@@ -2,6 +2,7 @@
 using UnityEngine;
 
 
+[AddComponentMenu("Cad2Render/MaterialRandomizers/HSV Offset")]
 public class HSVOffsetHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;

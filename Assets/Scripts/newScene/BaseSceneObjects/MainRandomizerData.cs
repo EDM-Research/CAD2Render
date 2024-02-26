@@ -59,7 +59,7 @@ public class MainRandomizerData : ScriptableObject {
     [Tooltip("Start id of first generated image.")]
     public int startFileCounter = 0;
     [Tooltip("Number of samples to generate (-1 for indefinite).")]
-    public int numberOfSamples = -1;
+    public int numberOfImages = -1;
     [Tooltip("Seed for random number generator.")]
     public int seed = 42;
     [Tooltip("Update the randomizers on diferent intervals.")]

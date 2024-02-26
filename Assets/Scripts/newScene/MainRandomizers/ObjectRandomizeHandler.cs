@@ -6,6 +6,7 @@ using System.Linq;
 using ResourceManager = Assets.Scripts.io.ResourceManager;
 
 
+[AddComponentMenu("Cad2Render/Object Randomize Handler")]
 [RequireComponent(typeof(Collider))]
 public class ObjectRandomizeHandler : RandomizerInterface
 {

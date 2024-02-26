@@ -2,6 +2,7 @@
 using UnityEngine;
 
 
+[AddComponentMenu("Cad2Render/MaterialRandomizers/Export Parameters")]
 public class ExportParametersHandler : MaterialRandomizerInterface
 {
 

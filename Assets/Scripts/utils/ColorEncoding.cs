@@ -96,6 +96,10 @@ public class ColorEncoding {
 
     public static Color GetColorByIndex(int index)
     {
+        if (index < 0) {
+            Debug.LogWarning("WARNING EncodeColorByIndex: index is negative");
+            return Color.black; 
+        }
         if (index >= colors.Length)
         {
             Debug.Log("WARNING EncodeColorByIndex: index exceeds color array.");

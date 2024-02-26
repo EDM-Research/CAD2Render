@@ -17,6 +17,8 @@ using UnityEngine.SceneManagement;
 
 //using UnityEngine.Profiling;
 
+
+[AddComponentMenu("Cad2Render/Main Randomizer")]
 public class MainRandomizer : MonoBehaviour
 {
     [Header("Dataset")]
@@ -87,8 +89,8 @@ public class MainRandomizer : MonoBehaviour
                 }
             }
             loadNextBopScene();
-            if (dataset.numberOfSamples < 0)
-                dataset.numberOfSamples = bopScene.poses.Count;
+            if (dataset.numberOfImages < 0)
+                dataset.numberOfImages = bopScene.poses.Count;
             bopSceneIterator = new BOPDatasetExporter.SceneIterator(bopScene);
         }
 
@@ -134,8 +136,8 @@ public class MainRandomizer : MonoBehaviour
         rng = new RandomNumberGenerator(dataset.seed + sceneId);
 
         bopScene = BOPDatasetExporter.Load(currentBopPath);
-        if (dataset.numberOfSamples < 0)
-            dataset.numberOfSamples = bopScene.poses.Count;
+        if (dataset.numberOfImages < 0)
+            dataset.numberOfImages = bopScene.poses.Count;
         bopSceneIterator = new BOPDatasetExporter.SceneIterator(bopScene);
         return true;
     }
@@ -449,7 +451,7 @@ public class MainRandomizer : MonoBehaviour
         if (imageCounterLabel != null)
             imageCounterLabel.text = $"Counter:\n{exportHandler.fileCounter}";
 
-        if (exportHandler.fileCounter == dataset.numberOfSamples && capturing)
+        if (exportHandler.fileCounter == dataset.numberOfImages && capturing)
         {
             if (loadNextBopScene())
             {

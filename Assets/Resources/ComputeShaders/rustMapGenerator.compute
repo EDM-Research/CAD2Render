@@ -56,20 +56,20 @@ float4 packNormal(float3 normal)
     return packedNormal;
 }
 
-float2 noiseDerivatives(uint2 co)
+float2 noiseDerivatives(uint2 co, int2 resolution)
 {
     //todo find analyticly
-    uint originalRandomSeed = randSeed;//reset seed for each lookup
-    float prevX = FractalBrownianMotion(nrOfOctaves, maskZoom, originalRandomSeed, co + int2(-1, 0));
+    uint threadRandSeed = randSeed;//reset seed for each lookup
+    float prevX = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(-1, 0), resolution);
     prevX = 1 - easeFunction(prevX, rustCo);
-    originalRandomSeed = randSeed;
-    float nextX = FractalBrownianMotion(nrOfOctaves, maskZoom, originalRandomSeed, co + int2(1, 0));
+    threadRandSeed = randSeed;
+    float nextX = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(1, 0), resolution);
     nextX = 1 - easeFunction(nextX, rustCo);
-    originalRandomSeed = randSeed;
-    float prevY = FractalBrownianMotion(nrOfOctaves, maskZoom, originalRandomSeed, co + int2(0, -1));
+    threadRandSeed = randSeed;
+    float prevY = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(0, -1), resolution);
     prevY = 1 - easeFunction(prevY, rustCo);
-    originalRandomSeed = randSeed;
-    float nextY = FractalBrownianMotion(nrOfOctaves, maskZoom, originalRandomSeed, co + int2(0, 1));
+    threadRandSeed = randSeed;
+    float nextY = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(0, 1), resolution);
     nextY = 1 - easeFunction(nextY, rustCo);
     
     return float2(nextX - prevX, -nextY + prevY);// y needs to be reversed for the normal map
@@ -80,10 +80,13 @@ float2 noiseDerivatives(uint2 co)
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {   
-    uint functionRandomSeed = randSeed;
+    uint threadRandSeed = createThreadRandomSeed(id.xy, randSeed);
+    int2 resolution;
+    MaskMapInOut.GetDimensions(resolution.x, resolution.y);
+    
     rustCo = rustCo * rustMask[id.xy].b;
-    float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, functionRandomSeed, id.xy);
-    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, functionRandomSeed, id.xy);
+    float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, randSeed, id.xy, resolution);
+    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, randSeed, id.xy, resolution);
     float stepRustValue = step(rustValue, rustCo); //1 - easeFunction(rustValue, rustCo); //clamp((value), 0, 1);
     
     float4 oldColor = ColorMapInOut[id.xy];

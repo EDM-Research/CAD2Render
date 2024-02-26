@@ -2,6 +2,8 @@
 using UnityEngine;
 using ResourceManager = Assets.Scripts.io.ResourceManager;
 
+
+[AddComponentMenu("Cad2Render/MaterialRandomizers/Material Model")]
 public class MaterialModelRandomizeHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;

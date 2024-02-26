@@ -4,6 +4,7 @@ using UnityEngine;
 using ResourceManager = Assets.Scripts.io.ResourceManager;
 
 
+[AddComponentMenu("Cad2Render/MaterialRandomizers/ManufacturingLines")]
 public class ManufacturingLinesHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;

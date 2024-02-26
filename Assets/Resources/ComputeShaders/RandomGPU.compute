@@ -1,4 +1,4 @@
-﻿
+
 static const float PI = 3.14159265358979323846f;
 uint randSeed;
 
@@ -36,7 +36,7 @@ float nextRand(inout uint s, bool updateSeed = true)
 
 float sNoise(float2 v);
 // return simplex noise sum between [0:1]
-float FractalBrownianMotion(uint nrOfOctaves, float zoom, inout uint seed, float2 coord)
+float FractalBrownianMotion(uint nrOfOctaves, float zoom, inout uint seed, float2 coord, int2 resolution)
 {
     float value = 0.0f;
     float totalAmplitute = 0;
@@ -45,7 +45,8 @@ float FractalBrownianMotion(uint nrOfOctaves, float zoom, inout uint seed, float
         float currentZoom = pow(2, i) * zoom; // * i + zoom;
         float amplitute = pow(0.5f, i);
         totalAmplitute += amplitute;
-        uint2 offset = uint2(nextRand(seed) * (1048 * 4), nextRand(seed) * (1048 * 4));
+        
+        uint2 offset = uint2(nextRand(seed) * resolution.x, nextRand(seed) * resolution.y);
         float2 newCoord = float2(offset + coord) * currentZoom;
         
         value += (sNoise(newCoord) / 2 + 0.5) * amplitute;

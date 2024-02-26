@@ -1,8 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+[AddComponentMenu("Cad2Render/MaterialRandomizers/Main Material Randomizer", 1)]
 public class MaterialRandomizeHandler : RandomizerInterface
 {
     private List<MaterialTextures> materialTextureTable = new List<MaterialTextures>();

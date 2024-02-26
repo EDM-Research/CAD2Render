@@ -2,6 +2,7 @@
 using UnityEngine;
 
 
+[AddComponentMenu("Cad2Render/MaterialRandomizers/Texture Resampler")]
 public class TextureResamplerHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;

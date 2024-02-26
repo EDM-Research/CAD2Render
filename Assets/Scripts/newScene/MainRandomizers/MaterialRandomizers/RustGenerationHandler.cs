@@ -4,6 +4,7 @@ using UnityEngine;
 using ResourceManager = Assets.Scripts.io.ResourceManager;
 
 
+[AddComponentMenu("Cad2Render/MaterialRandomizers/Rust generation")]
 public class RustGenerationHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;

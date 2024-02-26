@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
+
+[AddComponentMenu("Cad2Render/Light Randomize Handler")]
 public class LightRandomizeHandler : RandomizerInterface
 {
     public LightRandomizeData dataset;
