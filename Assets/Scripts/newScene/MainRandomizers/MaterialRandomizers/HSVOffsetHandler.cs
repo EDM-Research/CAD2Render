@@ -37,11 +37,10 @@ public class HSVOffsetHandler : MaterialRandomizerInterface
 
         Color randomColor = Color.HSVToRGB(H / 360.0f, S / 100.0f, V / 100.0f);
 
-        //doesnt work anymore with the lit shader (default shader)(last known unity version that this did work is 2021.2.0b1)
         textures.newProperties.SetColor("_ColorTint", randomColor);
         textures.newProperties.SetColor("_Color", randomColor);
         textures.newProperties.SetColor("_PaintColor", randomColor);
-        textures.newProperties.SetColor("_BaseColor", randomColor);
+        textures.newProperties.SetColor("_BaseColor", randomColor);//lit shader (recomended)
     }
 
     public override ScriptableObject getDataset()

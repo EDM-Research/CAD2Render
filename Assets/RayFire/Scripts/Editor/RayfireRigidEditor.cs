@@ -267,7 +267,7 @@ namespace RayFire
                 GUILayout.Space (space);
                 
                 EditorGUI.BeginChangeCheck();
-                rigid.physics.material = (PhysicMaterial)EditorGUILayout.ObjectField (gui_phy_mat, rigid.physics.material, typeof(PhysicMaterial), true);
+                rigid.physics.material = (PhysicsMaterial)EditorGUILayout.ObjectField (gui_phy_mat, rigid.physics.material, typeof(PhysicsMaterial), true);
                 if (EditorGUI.EndChangeCheck() == true)
                     foreach (RayfireRigid scr in targets)
                     {

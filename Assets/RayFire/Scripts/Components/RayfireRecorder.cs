@@ -214,7 +214,7 @@ namespace RayFire
                 // Create animator
                 if (animator == null)
                     animator = gameObject.AddComponent<Animator>();
-                animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
+                animator.updateMode = AnimatorUpdateMode.Fixed;
 
                 // Set defined controller
                 animator.runtimeAnimatorController = controller;

@@ -170,7 +170,7 @@ namespace RayFire
                 GUILayout.Space (space);
                 
                 EditorGUI.BeginChangeCheck();
-                root.physics.material = (PhysicMaterial)EditorGUILayout.ObjectField (gui_phy_mat, root.physics.material, typeof(PhysicMaterial), true);
+                root.physics.material = (PhysicsMaterial)EditorGUILayout.ObjectField (gui_phy_mat, root.physics.material, typeof(PhysicsMaterial), true);
                 if (EditorGUI.EndChangeCheck() == true)
                     foreach (RayfireRigidRoot scr in targets)
                     {

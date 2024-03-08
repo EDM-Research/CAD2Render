@@ -336,7 +336,7 @@ namespace RayFire
                 GUILayout.Space (space);
                 
                 EditorGUI.BeginChangeCheck();
-                mat.material = (PhysicMaterial)EditorGUILayout.ObjectField (gui_mat_mat, mat.material, typeof(PhysicMaterial), true);
+                mat.material = (PhysicsMaterial)EditorGUILayout.ObjectField (gui_mat_mat, mat.material, typeof(PhysicsMaterial), true);
                 if (EditorGUI.EndChangeCheck() == true)
                     SetDirty (man);
                 

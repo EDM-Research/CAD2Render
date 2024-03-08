@@ -631,7 +631,7 @@ namespace RayFire
         {
             // Stop simulation
             rigid.physics.rigidBody.useGravity      = false;
-            rigid.physics.rigidBody.velocity        = Vector3.zero;
+            rigid.physics.rigidBody.linearVelocity        = Vector3.zero;
             rigid.physics.rigidBody.angularVelocity = Vector3.zero;
             
             // Scale object down during fade time
@@ -685,7 +685,7 @@ namespace RayFire
         {
             // Stop simulation
             shard.rb.useGravity      = false;
-            shard.rb.velocity        = Vector3.zero;
+            shard.rb.linearVelocity        = Vector3.zero;
             shard.rb.angularVelocity = Vector3.zero;
             
             // Scale object down during fade time

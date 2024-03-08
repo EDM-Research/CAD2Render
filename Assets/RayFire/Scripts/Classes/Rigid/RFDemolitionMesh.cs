@@ -311,7 +311,7 @@ namespace RayFire
 
             // Inherit velocity
             scr.physics.velocity           = rigid.physics.velocity;
-            scr.physics.rigidBody.velocity = rigid.physics.velocity;
+            scr.physics.rigidBody.linearVelocity = rigid.physics.velocity;
             
             // Demolish cluster and get solo shards
             List<RFShard> detachShards = RFDemolitionCluster.DemolishConnectedCluster (scr);
