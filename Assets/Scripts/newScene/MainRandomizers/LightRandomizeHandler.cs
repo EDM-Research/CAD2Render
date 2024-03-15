@@ -90,11 +90,7 @@ public class LightRandomizeHandler : RandomizerInterface
             lightSource.transform.LookAt(this.transform);
             instantiatedLights.Add(lightSource);
 
-            //changing the light intensity only works with the HDAdditionalLightData in hdrp.
             lightSource.intensity *= (float)Math.Pow(2, rng.Range(dataset.minIntensityModifier, dataset.maxIntensityModifier));
-            var lightData = lightSource.gameObject.GetComponent<HDAdditionalLightData>();
-            if(lightData)
-                lightData.intensity *= (float)Math.Pow(2, rng.Range(dataset.minIntensityModifier, dataset.maxIntensityModifier));
 
             if (dataset.applyProjectorVariations && projectorMaps.Length > 0)
             {
