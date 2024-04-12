@@ -24,11 +24,4 @@ public class TextureResamplerData : ScriptableObject {
     public int nrResampleSamples = 9;
     [Range(5, 17)]
     public int nrResampleGenerations = 17;
-
-    [Obsolete("Use the new modular material randomizers.")]
-    public TextureResamplerData(MatRandomizeData dataset)
-    {
-        nrResampleSamples = dataset.nrResampleSamples;
-        nrResampleGenerations = dataset.nrResampleGenerations;
-    }
 }

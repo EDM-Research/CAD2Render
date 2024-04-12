@@ -20,10 +20,6 @@ public class TextureResampler
     //int[] searchRadii = { 64, 55, 48, 40, 32, 30, 28, 24, 20, 16, 12, 8, 7, 6, 5, 4, 3, 2, 2, 1, 1, 1 };
     //int[] searchRadii = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-    [Obsolete("Use the new modular material randomizers.")]
-    public TextureResampler(MatRandomizeData dataset)
-        :this(new TextureResamplerData(dataset)){}
-
     public TextureResampler(TextureResamplerData dataset)
     {
         this.dataset = dataset;
