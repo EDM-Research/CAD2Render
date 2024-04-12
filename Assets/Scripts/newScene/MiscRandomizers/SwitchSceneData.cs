@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/New scene switcher Data", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New scene switcher Data", order = 2)]
 public class SwitchSceneData : ScriptableObject {
     [Header("Input/output paths")]
     [Tooltip("Path to the new scene to load (relative to Resources dir)")]

@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/Material randomizer Data/New HSV offset data")]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New HSV offset data")]
 public class HSVOffsetData : ScriptableObject
 {
     [Tooltip("Random Hue offset")]

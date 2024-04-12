@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 [HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/New Main Dataset", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Main Dataset", order = 2)]
 public class MainRandomizerData : ScriptableObject {
     //public enum Parametersource { Forced, AutoDetect, TextFile }
     //public DatasetInformation.Parametersource parametersource = DatasetInformation.Parametersource.Forced;

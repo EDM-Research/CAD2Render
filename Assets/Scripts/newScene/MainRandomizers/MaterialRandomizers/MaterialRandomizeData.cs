@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/New Material randomize Data", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Material randomize Data", order = 2)]
 public class MaterialRandomizeData : ScriptableObject
 {
     [Tooltip("The resolution that generated texture wil have. when 0 it wil either default to 2048 or take the same resolution as the first input texture used for texture generation")]

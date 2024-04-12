@@ -9,7 +9,7 @@ using UnityEngine.Rendering;
 
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/Material randomizer Data/New Rust Generation data")]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New Rust Generation data")]
 public class RustGenerationData : ScriptableObject
 {
     [Header("Rust generation settings")]

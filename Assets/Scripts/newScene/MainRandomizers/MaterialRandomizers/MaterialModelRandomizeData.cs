@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/Material randomizer Data/New Material model data")]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New Material model data")]
 public class MaterialModelRandomizeData : ScriptableObject
 {
     [Tooltip("Path to materials (relative to Resources dir)")]

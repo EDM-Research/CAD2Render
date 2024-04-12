@@ -20,7 +20,7 @@ public class PLYExporter
 
         sb.Append("ply").Append("\n");
         sb.Append("format ascii 1.0").Append("\n");
-        sb.Append("comment Generated with HDRPSyntheticDataGenerator").Append("\n");
+        sb.Append("comment Generated with Cad2Render").Append("\n");
 
 
         sb.Append(string.Format("element vertex {0}\n", m.vertices.Length));

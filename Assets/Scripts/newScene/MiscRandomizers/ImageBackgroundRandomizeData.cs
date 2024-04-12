@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/New background image randomize Data", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New background image randomize Data", order = 2)]
 public class ImageBackgroundRandomizeData : ScriptableObject
 {
     [Header("Image background Variations")]

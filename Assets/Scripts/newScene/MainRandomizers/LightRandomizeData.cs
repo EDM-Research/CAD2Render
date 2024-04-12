@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 [HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/New Light randomize Data", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Light randomize Data", order = 2)]
 public class LightRandomizeData : ScriptableObject {
 
     [Header("Input/output paths")]

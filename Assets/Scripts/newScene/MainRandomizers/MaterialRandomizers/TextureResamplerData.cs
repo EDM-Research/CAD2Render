@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/Material randomizer Data/New Texture resampler data")]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New Texture resampler data")]
 public class TextureResamplerData : ScriptableObject {
     [Header("Texture resampler settings (preview)")]
     public MaterialTextures.MapTypes[] resampleTextures = new MaterialTextures.MapTypes[0];

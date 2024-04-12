@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "HDRPSyntheticDataGenerator/Material randomizer Data/New manufacturing lines data")]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New manufacturing lines data")]
 public class ManufacturingLinesData : ScriptableObject
 {
     [Header("Manufacturing lines generation settings")]
