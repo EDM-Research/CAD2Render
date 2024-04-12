@@ -228,7 +228,7 @@ void RandomizePerlinPatches (uint3 id : SV_DispatchThreadID)
     int2 resolutionInput;
     Input.GetDimensions(resolutionInput.x, resolutionInput.y);
     
-    uint threadRandomSeed = round(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy) * 10);
+    uint threadRandomSeed = round(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy, resolutionInput) * 10);
     float2 scaledInputLocation = float2(id.xy) / resolutionInput;
     float2 randomStartLocation = float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed));
     float2 location = scaledInputLocation + randomStartLocation;
@@ -246,7 +246,7 @@ void RandomizePerlinInfill(uint3 id : SV_DispatchThreadID)
     Input.GetDimensions(resolutionInput.x, resolutionInput.y);
     
     uint threadRandomSeed = createThreadRandomSeed(id.xy, randSeed);
-    float2 location = float2(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy), FractalBrownianMotion(3, 0.0023456, randSeed, id.xy));
+    float2 location = float2(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy, resolutionInput), FractalBrownianMotion(3, 0.0023456, randSeed, id.xy, resolutionInput));
     
     Resampled[id.xy] = Input[int2(location * resolutionInput)];
     InputLocation[id.xy] = float4(location, 0, 1);
@@ -260,7 +260,7 @@ void RandomizeGridPatchesPerlinInfill(uint3 id : SV_DispatchThreadID)
     
     uint threadRandomSeed = createThreadRandomSeed(id.xy - id.xy % uint2(55, 55), randSeed);
     float2 locationPatch = float2(nextRand(threadRandomSeed), nextRand(threadRandomSeed)) + float2(id.xy) % float2(55, 55) / resolutionInput;
-    float2 locationRandom = float2(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy), FractalBrownianMotion(3, 0.0023456, randSeed, id.xy));
+    float2 locationRandom = float2(FractalBrownianMotion(3, 0.0023456, randSeed, id.xy, resolutionInput), FractalBrownianMotion(3, 0.0023456, randSeed, id.xy, resolutionInput));
     
     float2 location = all(step(id.xy % 55, 25)) * locationPatch + (1 - all(step(id.xy % 55, 25))) * locationRandom;
     location -= floor(location);

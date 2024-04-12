@@ -105,7 +105,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     MaskMapInOut[id.xy] = oldMask;    
     
     float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 5, 0);
-    rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) *0.2* (1 - easeFunction(rustValue, rustCo)) * 0.5;
+    float normalModifier = 0.1f;
+    rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalModifier * (1 - easeFunction(rustValue, rustCo));
     rustNormal.z = 0.0f;
      
     float3 oldNormal = float3(0.5, 0.5, 1);

@@ -1,0 +1,124 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+//float maskZoom; //higher number means more zoomed out => more changes
+//float rustPaternZoom; //higher number means more zoomed out => more changes
+//float rustCo; //higher number means more: [:0,05]=(almost)no rust [0.1: 0.2]=lite rust  [0.3:75]=heavy rust [0.95:]=fully rusted
+//uint nrOfOctaves; //higher number means more detail in simplex noise
+
+uint useNormalMapInput;
+RWTexture2D<float4> NormalMapInOut;
+RWTexture2D<float4> ColorMapInOut;
+
+float dentSize;
+float dentStrength;
+
+#include "RandomGPU.compute"
+
+//unity uses DXT5nm format for normals
+// store in X in the A and Y in the G. ignore R and B
+float3 unpackNormal(float4 packedNormal){
+    float3 normal;
+    normal.xy = packedNormal.ag * 2 - 1;
+    normal.z = sqrt(1 - saturate(dot(normal.xy, normal.xy)));
+    return normal;
+}
+float4 packNormal(float3 normal){
+    float4 packedNormal;
+    packedNormal.rb = normal.z;
+    packedNormal.ag = normal.xy * 0.5f + 0.5f;
+    return packedNormal;
+}
+
+float squareWrappedDistance(float2 point1, float2 point2)
+{
+    float2 difference = abs(point1 - point2);
+    float2 minDifference = min(difference, 1 - difference);
+    return dot(minDifference * minDifference, float2(1, 1) );//sum of squares
+}
+float2 wrappedDirection(float2 point1, float2 point2)
+{
+    float2 diff = point2 - point1;
+    float2 wrappedDiff = diff - round(diff);
+    return wrappedDiff;
+}
+
+// https://www.desmos.com/calculator/gu95zsivwf
+float mexicanHatWavelet(float x)
+{
+    const float sigma = 0.3; //wavelet width
+    
+    //float a = 2 / sqrt(3 * sigma) * pow(PI, 0.25f);
+    float b = pow(x / sigma, 2);
+    float c = exp(-(x * x) / (2 * sigma * sigma));
+    //return a * b * c;
+    return b * c;
+}
+
+void circleDent(uint3 id : SV_DispatchThreadID)
+{
+    uint threadRandSeed = createThreadRandomSeed(id.xy, randSeed);
+    int2 resolution;
+    NormalMapInOut.GetDimensions(resolution.x, resolution.y);
+    
+    float2 dentLocation = float2(nextRand(randSeed), nextRand(randSeed));
+    
+    float quadDistance = squareWrappedDistance(dentLocation, (id.xy / (float2) resolution));
+    float normalMultiplier = quadDistance / dentSize; // * step(quadDistance, dentSizeRadius);
+    
+    
+    float3 normalChange = float3(normalize(wrappedDirection(id.xy / (float2) resolution, dentLocation)), 0);
+    normalChange *= mexicanHatWavelet(normalMultiplier) * dentStrength;
+    
+    float3 oldNormal = float3(0.5, 0.5, 0);
+    if (useNormalMapInput)
+        oldNormal = unpackNormal(NormalMapInOut[id.xy]);
+    float3 newNormal = normalize(normalChange + oldNormal);
+    
+    NormalMapInOut[id.xy] = packNormal(newNormal);
+    //ColorMapInOut[id.xy] = newNormal;
+}
+
+void voronoiDent(uint3 id : SV_DispatchThreadID)
+{
+    int2 resolution;
+    NormalMapInOut.GetDimensions(resolution.x, resolution.y);
+    
+    float2 DentCenter = float2(nextRand(randSeed), nextRand(randSeed));
+    float2 DentBorderPoint1 = (0.5 - float2(nextRand(randSeed), nextRand(randSeed))) * dentSize + DentCenter;
+    float2 DentBorderPoint2 = (0.5 - float2(nextRand(randSeed), nextRand(randSeed))) * dentSize + DentCenter;
+    float2 DentBorderPoint3 = (0.5 - float2(nextRand(randSeed), nextRand(randSeed))) * dentSize + DentCenter;
+    
+    float2 thisLocation = (id.xy / (float2) resolution);
+    
+    float3 distances = float3(
+        squareWrappedDistance(thisLocation, DentBorderPoint1),
+        squareWrappedDistance(thisLocation, DentBorderPoint2),
+        squareWrappedDistance(thisLocation, DentBorderPoint3)
+    );
+    float minDistance = min(min(distances.x, distances.y), distances.z);
+    float2 closestPoint = lerp(DentBorderPoint1, lerp(DentBorderPoint2, DentBorderPoint3, step(distances.z, distances.y)), step(minDistance, distances.y));
+    
+    float distanceRatio = squareWrappedDistance(DentCenter, thisLocation) / minDistance * 2;
+    distanceRatio *= step(distanceRatio, 1);
+    float normalMultiplier = mexicanHatWavelet(distanceRatio);
+    
+    float3 normalChange = float3(normalize(wrappedDirection(id.xy / (float2) resolution, DentCenter)), 0);
+    normalChange *= normalMultiplier * dentStrength;
+    
+    float3 oldNormal = float3(0.5, 0.5, sqrt(0.5));
+    if (useNormalMapInput)
+        oldNormal = unpackNormal(NormalMapInOut[id.xy]);
+    float3 newNormal = normalize(normalChange + oldNormal);
+    
+    NormalMapInOut[id.xy] = packNormal(newNormal);
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{   
+    voronoiDent(id);
+    //circleDent(id);
+
+}
+
