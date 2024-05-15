@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac28d3cf259507e4ca9e2f3254c15f7e, type: 3}
   m_Name: ManufacturingLinedataset
   m_EditorClassIdentifier: 
-  lineSpacing: 0.04
+  lineSpacing: 0.1379
   LineCreationZoneTexture: {fileID: 2800000, guid: a1300d7eb1ed85c4cbcfdcc4c0a7db46,
     type: 3}

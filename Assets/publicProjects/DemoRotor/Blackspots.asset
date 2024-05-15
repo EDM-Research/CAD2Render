@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb05d18db90e90f44b22303aba4790fe, type: 3}
+  m_Name: Blackspots
+  m_EditorClassIdentifier: 
+  rustCoeficient: {x: 0.80866754, y: 1}
+  rustMaskZoom: 0.0675
+  rustPaternZoom: 0.39
+  rustColor1: {r: 0, g: 0, b: 0, a: 1}
+  rustColor2: {r: 0, g: 0, b: 0, a: 1}
+  nrOfOctaves: 7
+  RustCreationZoneTexture: {fileID: 2800000, guid: a1300d7eb1ed85c4cbcfdcc4c0a7db46,
+    type: 3}
