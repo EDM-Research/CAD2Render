@@ -57,7 +57,8 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         rustmapGenerationShader.SetVector("colorRust2", dataset.rustColor2);
         rustmapGenerationShader.SetFloat("maskZoom", dataset.rustMaskZoom / textures.resolutionX * 100);
         rustmapGenerationShader.SetFloat("rustPaternZoom", dataset.rustPaternZoom / textures.resolutionY * 100);
-        rustmapGenerationShader.SetFloat("rustCo", dataset.rustCoeficient);
+        rustmapGenerationShader.SetFloat("rustCoMin", dataset.rustCoeficient.x);
+        rustmapGenerationShader.SetFloat("rustCoMax", dataset.rustCoeficient.y);
         rustmapGenerationShader.SetInt("nrOfOctaves", (int)dataset.nrOfOctaves);
 
         //execute shader

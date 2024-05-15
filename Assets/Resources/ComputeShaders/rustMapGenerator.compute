@@ -25,7 +25,9 @@ float4 colorRust1;
 float4 colorRust2;
 float maskZoom; //higher number means more zoomed out => more changes
 float rustPaternZoom; //higher number means more zoomed out => more changes
-float rustCo; //higher number means more: [:0,05]=(almost)no rust [0.1: 0.2]=lite rust  [0.3:75]=heavy rust [0.95:]=fully rusted
+//higher number means more: [:0,05]=(almost)no rust [0.1: 0.2]=limited rust [0.3:75]=heavy rust [0.95:]=fully rusted
+float rustCoMin; 
+float rustCoMax;
 uint nrOfOctaves; //higher number means more detail in simplex noise
 
 uint useNormalMapInput;
@@ -59,6 +61,7 @@ float4 packNormal(float3 normal)
 float2 noiseDerivatives(uint2 co, int2 resolution)
 {
     //todo find analyticly
+	float rustCo = (rustCoMin + rustCoMax) / 2;
     uint threadRandSeed = randSeed;//reset seed for each lookup
     float prevX = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(-1, 0), resolution);
     prevX = 1 - easeFunction(prevX, rustCo);
@@ -84,10 +87,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     int2 resolution;
     MaskMapInOut.GetDimensions(resolution.x, resolution.y);
     
-    rustCo = rustCo * rustMask[id.xy].b;
+    rustCoMin = rustCoMax - ((rustCoMax - rustCoMin) / 2) * rustMask[id.xy].b;
     float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, randSeed, id.xy, resolution);
     float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, randSeed, id.xy, resolution);
-    float stepRustValue = step(rustValue, rustCo); //1 - easeFunction(rustValue, rustCo); //clamp((value), 0, 1);
+    float stepRustValue = step(rustValue, rustCoMax); //1 - easeFunction(rustValue, rustCo); //clamp((value), 0, 1);
+    stepRustValue *= step(rustCoMin, rustValue);
     
     float4 oldColor = ColorMapInOut[id.xy];
     float4 newColor = lerp(colorRust1, colorRust2, saturate(rustAge));
@@ -95,7 +99,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     
     // 1 = no defect; 0 = defect
     float4 defectMapValue = DefectMapInOut[id.xy];
-    defectMapValue.a = max(0, defectMapValue.a - stepRustValue);
+    defectMapValue.a = defectMapValue.a * (1 - stepRustValue);
     DefectMapInOut[id.xy] = defectMapValue;
     //ColorMapInOut[id.xy] = float4(rustValue, rustValue, rustValue, 1);
     
@@ -106,7 +110,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     
     float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 5, 0);
     float normalModifier = 0.1f;
-    rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalModifier * (1 - easeFunction(rustValue, rustCo));
+    rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalModifier * stepRustValue;
     rustNormal.z = 0.0f;
      
     float3 oldNormal = float3(0.5, 0.5, 1);

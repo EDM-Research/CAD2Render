@@ -1,5 +1,6 @@
 ﻿//Copyright (c) 2020 Nick Michiels <nick.michiels@uhasselt.be>, Hasselt University, Belgium, All rights reserved.
 
+using SneakySquirrelLabs.MinMaxRangeAttribute;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,15 +8,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
 [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New Rust Generation data")]
 public class RustGenerationData : ScriptableObject
 {
     [Header("Rust generation settings")]
-    [Range(0.0f, 1.0f)]
+    //[Range(0.0f, 1.0f)]
+    [MinMaxRange(0, 1,3)]
     [Tooltip("Amount of rust to be applied")]
-    public float rustCoeficient = 0.39f;
+    public Vector2 rustCoeficient = new Vector2(0.39f, 1.0f);
     [Tooltip("determines the size of rust spots")]
     [Range(0.0151f, 0.1f)]
     public float rustMaskZoom = 0.009f;
