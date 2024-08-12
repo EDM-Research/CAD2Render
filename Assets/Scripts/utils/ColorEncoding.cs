@@ -100,6 +100,43 @@ public class ColorEncoding {
             Debug.LogWarning("WARNING EncodeColorByIndex: index is negative");
             return Color.black; 
         }
+        if (index > 47)
+            return getHighIdColor(index);
+
+        //hue
+        float SegmentIndex = Mathf.Floor(Mathf.Log(index / 3, 2));
+        float segmentSize = Mathf.Pow(2, SegmentIndex) * 3;
+        float offset = 120 / Mathf.Pow(2, SegmentIndex + 1);
+        float angle = 360 / segmentSize * (index % segmentSize);
+        angle += offset;
+        angle -= 360.0f * ((int)angle / 360);
+        if (index <= 2)
+            angle = 360 / 3 * index;
+
+        //value
+        float value = 1 - (index / 300) * 0.08f;
+        value = 1.0f;
+        //value
+        float saturation = Mathf.Cos((float)index * 43.0f) / 3.0f + 0.66f;
+        saturation = 1.0f;
+
+        return Color.HSVToRGB(angle / 360.0f, saturation, value);
+    }
+
+    public static Color getHighIdColor(int index)
+    {
+        int minValueDif = 19;//dot product of diffrence > 0.005
+        int modulo = (255 / minValueDif);
+        return new Color((index % modulo) * minValueDif, ((index / modulo) % modulo) * minValueDif, (index / (modulo * modulo)) % modulo * minValueDif,255.0f) / 255.0f;
+    }
+
+    public static Color GetColorByIndexOld(int index)
+    {
+        if (index < 0)
+        {
+            Debug.LogWarning("WARNING EncodeColorByIndex: index is negative");
+            return Color.black;
+        }
         if (index >= colors.Length)
         {
             Debug.Log("WARNING EncodeColorByIndex: index exceeds color array.");
