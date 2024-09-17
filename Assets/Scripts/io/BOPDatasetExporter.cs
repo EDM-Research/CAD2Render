@@ -13,6 +13,8 @@ using System.Linq;
 // https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md
 public class BOPDatasetExporter
 {
+    public static int maxSegmentationObjects = 20;
+
     [Serializable]
     private struct Matrix3x3Object
     {
@@ -102,6 +104,7 @@ public class BOPDatasetExporter
         public Matrix3x3Object cam_R_m2c;
         public VectorObject cam_t_m2c;
         public int obj_id;
+        public Color falseColor;
 
         public JSONNode Serialize()
         {
@@ -109,6 +112,8 @@ public class BOPDatasetExporter
             n["cam_R_m2c"] = cam_R_m2c.Serialize();
             n["cam_t_m2c"] = cam_t_m2c.Serialize();
             n["obj_id"] = obj_id;
+            if (falseColor != Color.black)
+                n["false_color"] = falseColor.ToString("F7");
             return n;
         }
     }
@@ -498,6 +503,11 @@ public class BOPDatasetExporter
             Debug.LogWarning("No objects are exported. Check the export settings of the main generator and the object spawners");
             return;
         }
+        if(instantiated_models.Count > maxSegmentationObjects)
+        {
+            imageSaver.Save(segmentationTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.png, true, false);
+            return;
+        }
 
         ensureSplitTextureStack(ref splitSegmentationTextures, instantiated_models.Count, segmentationTexture.width, segmentationTexture.height);
         ensureSplitTextureStack(ref splitSegmentationDefectTextures, instantiated_models.Count, segmentationTexture.width, segmentationTexture.height);
@@ -686,6 +696,21 @@ public class BOPDatasetExporter
             pose.cam_t_m2c.vector = GeometryUtils.convertUnityToMm(translation);
             var idExportData = getExportIdOfModel(model);
             pose.obj_id = idExportData.id;
+            
+            if(instantiated_models.Count > maxSegmentationObjects)
+            {
+                var temp = model.GetComponent<FalseColor>();
+                if (temp != null)
+                    pose.falseColor = temp.falseColor;
+                else
+                {
+                    Debug.LogError("No false color attached to export object: " + model.name);
+                    pose.falseColor = Color.black;
+                }
+            }
+            else
+                pose.falseColor = Color.black;
+
             if (!idExportData.exported)
             {
                 //TODO fix bug for complex meshes: exportModel(model, outputPath + String.Format("bop/models/{0:000000}.ply", idExportData.id));

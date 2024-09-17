@@ -110,7 +110,6 @@ public class MainRandomizer : MonoBehaviour
         else
             Debug.LogWarning("exposure component not found.");
 
-
         exportHandler = new Exporter(dataset, this.gameObject);
         setupRenderTextures();
         BOPDatasetExporter.setNrOfRaytracingSamples(dataset.numRenderFrames);
@@ -241,6 +240,8 @@ public class MainRandomizer : MonoBehaviour
 
     public List<GameObject> getExportObjects()
     {
+        //return getVisibleExportObjects();
+
         return new List<GameObject>(GameObject.FindGameObjectsWithTag("ExportInstanceInfo"));
 
         //if (dataset.exportModelsByTag)
@@ -251,6 +252,25 @@ public class MainRandomizer : MonoBehaviour
         //foreach (RandomizerInterface child in this.GetComponentsInChildren<RandomizerInterface>())
         //    instantiatedModels.AddRange(child.getExportObjects());
         //return instantiatedModels;
+    }
+    public List<GameObject> getVisibleExportObjects()
+    {
+        var fullList = new List<GameObject>(GameObject.FindGameObjectsWithTag("ExportInstanceInfo"));
+        var filteredList = new List<GameObject>();
+
+        foreach (var exportObject in fullList)
+        {
+            foreach (var renderer in exportObject.GetComponentsInChildren<Renderer>())
+            {
+                if (renderer.isVisible)
+                {
+                    filteredList.Add(exportObject);
+                    break;
+                }
+            }
+        }
+
+        return filteredList;
     }
 
     private uint update = 0;
@@ -294,7 +314,7 @@ public class MainRandomizer : MonoBehaviour
         var exportObjects = getExportObjects();
         int count = exportObjects.Count;
 
-        if (count <= 0)
+        if (count <= 0 || count > BOPDatasetExporter.maxSegmentationObjects)
             return;
         if (segmentationTextureArray != null && segmentationTextureArray.volumeDepth == count)
             return;

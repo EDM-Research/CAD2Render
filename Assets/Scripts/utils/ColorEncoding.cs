@@ -100,7 +100,7 @@ public class ColorEncoding {
             Debug.LogWarning("WARNING EncodeColorByIndex: index is negative");
             return Color.black; 
         }
-        if (index > 47)
+        if (index > 23)
             return getHighIdColor(index);
 
         //hue
@@ -120,7 +120,12 @@ public class ColorEncoding {
         float saturation = Mathf.Cos((float)index * 43.0f) / 3.0f + 0.66f;
         saturation = 1.0f;
 
-        return Color.HSVToRGB(angle / 360.0f, saturation, value);
+        Color resultingColor = Color.HSVToRGB(angle / 360.0f, saturation, value);
+        resultingColor.r = Mathf.Round(resultingColor.r * 255) / 255.0f;
+        resultingColor.g = Mathf.Round(resultingColor.g * 255) / 255.0f;
+        resultingColor.b = Mathf.Round(resultingColor.b * 255) / 255.0f;
+
+        return resultingColor;
     }
 
     public static Color getHighIdColor(int index)
