@@ -17,13 +17,13 @@ StructuredBuffer<float3> FalseColors;
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     //if(dot(FalseColors[id.z].rgb == float3(0.0f, 0.0f, 0.0f))
-    if (dot(FalseColors[id.z].rgb, float3(1.0f, 1.0f, 1.0f)) < 0.005f)
+    if (dot(FalseColors[id.z].rgb, float3(1.0f, 1.0f, 1.0f)) < 0.0001f)
     {
         ResultSegmentation[id.xyz] = 0.0f;
         return;
     }
     float3 colorDif = segmentationTexture[id.xy].rgb - FalseColors[id.z].rgb;
-    ResultSegmentation[id.xyz] = step(dot(colorDif, colorDif), 0.005f); //black if colors differ to much white otherwise
+    ResultSegmentation[id.xyz] = step(dot(colorDif, colorDif), 0.0001f); //black if colors differ to much white otherwise
     //if collors match = step(dot(colorDif, colorDif), 0.005f)
     //defects are stored in the alpha channel as transparent so 1 - alpha is used to display a defect as 1
     float defectVisib = 1 - segmentationTexture[id.xy].a;
