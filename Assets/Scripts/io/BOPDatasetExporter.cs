@@ -61,8 +61,8 @@ public class BOPDatasetExporter
         {
             var n = new JSONObject();
             n["loc_t_l2m"] = loc_t_l2m.Serialize();
-            n["cam_R_m2c"] = cam_R_m2c.Serialize();
-            n["cam_t_m2c"] = cam_t_m2c.Serialize();
+            //n["cam_R_m2c"] = cam_R_m2c.Serialize();
+            //n["cam_t_m2c"] = cam_t_m2c.Serialize();
             JSONObject vec = new JSONObject();
             vec["x"] = screen_co.x;
             vec["y"] = screen_co.y;
@@ -82,14 +82,14 @@ public class BOPDatasetExporter
             var scene = new JSONObject();
             foreach (var keypointList in keypoints_gt)
             {
-                var sceneKeypoints = new JSONObject();
+                var sceneKeypoints = new JSONArray();
                 for (int i = 0; i < keypointList.Value.Count; ++i)
                 {
                     JSONArray instanceKeypoints = new JSONArray();
                     foreach (KeypointObject keypoint in keypointList.Value[i])
                         instanceKeypoints.Add(keypoint.Serialize());
-
-                    sceneKeypoints[i.ToString()] = instanceKeypoints;
+                    sceneKeypoints.Add(instanceKeypoints);
+                    //sceneKeypoints[i.ToString()] = instanceKeypoints;
                     
                 }
                 scene[keypointList.Key] = sceneKeypoints;
@@ -651,18 +651,19 @@ public class BOPDatasetExporter
                 KeypointObject keypoint = new KeypointObject();
                 Matrix4x4 viewMat = GeometryUtils.getModelViewMatrix(keypointObject, camera);
                 Vector3 translation = new Vector3(viewMat[0, 3], viewMat[1, 3], viewMat[2, 3]);
-                keypoint.cam_R_m2c = new Matrix3x3Object();
-                keypoint.cam_R_m2c.mat = viewMat;
-                keypoint.cam_t_m2c = new VectorObject();
-                keypoint.cam_t_m2c.vector = GeometryUtils.convertUnityToMm(translation);
+                //keypoint.cam_R_m2c = new Matrix3x3Object();
+                //keypoint.cam_R_m2c.mat = viewMat;
+                //keypoint.cam_t_m2c = new VectorObject();
+                //keypoint.cam_t_m2c.vector = GeometryUtils.convertUnityToMm(translation);
                 keypoint.loc_t_l2m = new VectorObject();
                 keypoint.loc_t_l2m.vector = keypointObject.localPosition;
                 var screenCo = camera.WorldToScreenPoint(keypointObject.position);
-                keypoint.screen_co = new Vector2Int((int) Math.Round(screenCo.x), (int) Math.Round(screenCo.y));
+                keypoint.screen_co = new Vector2Int((int) Math.Round(screenCo.x), (int) Math.Round(camera.pixelHeight - screenCo.y));
                 if (keypoint.screen_co.x >= 0 && keypoint.screen_co.x < depthText.width
                     && keypoint.screen_co.y >= 0 && keypoint.screen_co.y < depthText.height) {
                     var depthDistance = GeometryUtils.convertMmToUnity(depthText.GetPixel(keypoint.screen_co.x, keypoint.screen_co.y).linear.r * depthScale);
-                    keypoint.isVisible = depthDistance - translation.z > 0 && translation.z > 0;
+                    float delta = GeometryUtils.convertMmToUnity(0.5f);//use 0.5mm of error margin on visibility check with the depth test
+                    keypoint.isVisible = depthDistance - translation.z > -delta && translation.z > 0;
                 }
                 else
                     keypoint.isVisible = false;
