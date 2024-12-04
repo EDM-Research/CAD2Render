@@ -24,15 +24,22 @@ public class FalseColor : MonoBehaviour
         if (rend == null)
             return;
 
-        var propertyBlock = new MaterialPropertyBlock();
         for (int materialIndex = 0; materialIndex < rend.materials.Length; ++materialIndex)
         {
-            rend.GetPropertyBlock(propertyBlock, materialIndex);
-
-            ApplyFalseColorProperties(propertyBlock);
-
-            rend.SetPropertyBlock(propertyBlock, materialIndex);
+            SetColor(newColor, rend, materialIndex);
         }
+    }
+
+    [Obsolete("Use ApplyFalseColorProperties instead")]
+    public void SetColor(Color newColor, Renderer rend, int materialIndex)
+    {
+        if (rend == null)
+            return;
+
+        var propertyBlock = new MaterialPropertyBlock();
+        rend.GetPropertyBlock(propertyBlock, materialIndex);
+        ApplyFalseColorProperties(propertyBlock);
+        rend.SetPropertyBlock(propertyBlock, materialIndex);
     }
 
     public void ApplyFalseColorProperties(MaterialPropertyBlock propertyBlock)

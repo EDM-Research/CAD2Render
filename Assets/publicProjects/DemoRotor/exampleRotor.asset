@@ -15,30 +15,29 @@ MonoBehaviour:
   outputPath: ../renderings/RotorDemo/
   annotationisFile: annotations.txt
   BOPInputPath: 
-  mmToUnityDistanceScale: 0
+  mmToUnityDistanceScale: 0.01
   resolution: {x: 1048, y: 1048}
-  renderProfile: {fileID: 11400000, guid: 5ceb2a5a1eae9f4459ff628173172d06, type: 2}
-  rayTracingProfile: {fileID: 11400000, guid: ff2369a8a1c82244f8b2622651312608, type: 2}
-  postProcesingProfile: {fileID: 11400000, guid: 8e2035fb7b1ff22429413db21a7b0beb,
-    type: 2}
+  renderProfile: {fileID: 0}
+  rayTracingProfile: {fileID: 0}
+  postProcesingProfile: {fileID: 0}
   applyGammaCorrection: 1
   autoCameraExposure: 0
   stopSimulationTimeCompletly: 0
-  numRenderFrames: 500
+  numRenderFrames: 150
   numPhysicsFrames: 50
   startFileCounter: 0
-  numberOfSamples: -1
+  numberOfImages: -1
   seed: 42
   separateUpdates: 0
   updateIntervals: []
-  exportModelsByTag: 0
-  exportToBOP: 0
+  exportToBOP: 1
   BOPSceneId: 0
+  exportKeyPoints: 0
   exportDepthTexture: 0
   maxDepthDistance: 0
   exportNormalTexture: 0
   exportAlbedoTexture: 0
-  exportToFMFormat: 0
+  exportToFMFormat: 1
   outputExt: 0
   exportSubModels: 0
   exportImagePosition: 0

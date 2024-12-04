@@ -201,7 +201,7 @@ namespace Assets.Scripts.newScene
         {
             string metadataPath = "metaData/";
             if (dataset.exportToBOP)
-                metadataPath = "bop/" + metadataPath;
+                metadataPath = String.Format("bop/train_PBR/{0:000000}/metaData/", dataset.BOPSceneId);
             StreamWriter writer = new StreamWriter(dataset.outputPath + metadataPath + "versionInfo.json", false);
             
             var version = PlanetaGameLabo.UnityGitVersion.GitVersion.version;

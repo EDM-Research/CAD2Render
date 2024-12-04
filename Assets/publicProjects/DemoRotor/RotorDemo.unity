@@ -182,10 +182,12 @@ GameObject:
   - component: {fileID: 479011774}
   - component: {fileID: 479011776}
   - component: {fileID: 479011779}
+  - component: {fileID: 479011783}
   - component: {fileID: 479011778}
   - component: {fileID: 479011780}
   - component: {fileID: 479011777}
   - component: {fileID: 479011781}
+  - component: {fileID: 479011782}
   m_Layer: 0
   m_Name: Spawned Objects
   m_TagString: Untagged
@@ -265,7 +267,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479011773}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2cccd91da57f4e844bbccafea7c841b9, type: 3}
   m_Name: 
@@ -299,6 +301,174 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataset: {fileID: 11400000, guid: dd5ee5b73234bdf4083576e0cf141b22, type: 2}
   clone: 0
+--- !u!114 &479011782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479011773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b55d9bb3ec909340848c72a5bfc0ad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  voronoi:
+    amount: 31
+    centerBias: 0
+  splinters:
+    axis: 1
+    amount: 30
+    strength: 0.7
+    centerBias: 0
+  slabs:
+    axis: 1
+    amount: 30
+    strength: 0.7
+    centerBias: 0
+  radial:
+    centerAxis: 1
+    radius: 1
+    divergence: 1
+    restrictToPlane: 1
+    rings: 10
+    focus: 0
+    focusStr: 50
+    randomRings: 50
+    rays: 10
+    randomRays: 0
+    twist: 0
+  custom:
+    source: 4
+    useAs: 12
+    amount: 100
+    radius: 1
+    enable: 1
+    size: 0.05
+    transforms: []
+    vector3: []
+    noPoints: 0
+    outputPoints: []
+    inBoundPoints: []
+    outBoundPoints: []
+  mirrored:
+    amount: 50
+    planeType: 0
+    noPoints: 0
+  slice:
+    plane: 1
+    sliceList: []
+  bricks:
+    amountType: 0
+    mult: 1
+    amount_X: 3
+    amount_Y: 6
+    amount_Z: 0
+    size_Lock: 0
+    size_X: 1
+    size_Y: 1
+    size_Z: 1
+    sizeVar_X: 0
+    sizeVar_Y: 0
+    sizeVar_Z: 0
+    offset_X: 0.5
+    offset_Y: 0.5
+    offset_Z: 0
+    split_X: 0
+    split_Y: 0
+    split_Z: 0
+    split_probability: 0
+    split_offset: 0.5
+    split_rotation: 30
+  voxels:
+    size: 1
+  tets:
+    lattice: 0
+    density: 7
+    noise: 100
+  mode: 0
+  material:
+    innerMaterial: {fileID: 2100000, guid: 89a41048c644b7340bae39f62fcc2470, type: 2}
+    mappingScale: 0.1
+    outerMaterial: {fileID: 0}
+    needNewMat: 0
+  clusters:
+    enable: 0
+    count: 10
+    seed: 1
+    relax: 0.5
+    amount: 0
+    layers: 0
+    scale: 1
+    min: 1
+    max: 3
+  advanced:
+    seed: 0
+    decompose: 1
+    removeCollinear: 0
+    copyComponents: 0
+    postWeld: 0
+    smooth: 0
+    inputPrecap: 1
+    outputPrecap: 0
+    removeDoubleFaces: 1
+    elementSizeThreshold: 5
+    combineChildren: 0
+    inner: 0
+    planar: 0
+    relativeSize: 4
+    absoluteSize: 0.1
+    sizeLimitation: 0
+    sizeAmount: 5
+    vertexLimitation: 0
+    vertexAmount: 300
+    triangleLimitation: 0
+    triangleAmount: 300
+  export:
+    source: 0
+    suffix: _frags
+  showCenter: 0
+  centerPosition: {x: 0, y: 0, z: 0}
+  centerDirection: {x: 0, y: 0, z: 0, w: 1}
+  transForm: {fileID: 0}
+  meshFilter: {fileID: 0}
+  meshRenderer: {fileID: 0}
+  skinnedMeshRend: {fileID: 0}
+  meshFilters: []
+  meshes: []
+  pivots: []
+  rootChildList: []
+  fragmentsAll: []
+  fragmentsLast: []
+  origSubMeshIdsRF: []
+  materials: []
+  shatterMode: 1
+  colorPreview: 0
+  scalePreview: 1
+  previewScale: 0
+  size: 0
+  rescaleFix: 1
+  originalScale: {x: 0, y: 0, z: 0}
+  bound:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  resetState: 0
+--- !u!114 &479011783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479011773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48a5a827bd3c6f4e9d9567fec668580, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addRandomizeButton: 1
+  objectData: {fileID: 11400000, guid: 1d4aa52846bc85e48b79e35e34bd0166, type: 2}
+  cloneObjectDataset: 0
 --- !u!1001 &643693473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -335,17 +505,17 @@ PrefabInstance:
     - target: {fileID: 6384159389465141804, guid: 889e247bd07414d41a2f4e58faf4de4e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.205001
+      value: 1.5773249
       objectReference: {fileID: 0}
     - target: {fileID: 6384159389465141804, guid: 889e247bd07414d41a2f4e58faf4de4e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.6629572
+      value: 7.9121017
       objectReference: {fileID: 0}
     - target: {fileID: 6384159389465141804, guid: 889e247bd07414d41a2f4e58faf4de4e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.3080213
+      value: 1.5847483
       objectReference: {fileID: 0}
     - target: {fileID: 6384159389465141804, guid: 889e247bd07414d41a2f4e58faf4de4e,
         type: 3}
@@ -618,7 +788,7 @@ Transform:
   m_GameObject: {fileID: 1867474091}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.7823257, y: -4.2491446, z: 1.723273}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -975,7 +1145,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 8e2035fb7b1ff22429413db21a7b0beb, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 38205628d07d2c64c8531a6f41da5b79, type: 2}
 --- !u!1 &1273972601562303418
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,7 +1213,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 7573c471e8d22ba44af268361028a006, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 16a5e87ed77cffa498a9af1ab74d606a, type: 2}
 --- !u!4 &1273972602211658994
 Transform:
   m_ObjectHideFlags: 0
@@ -1221,7 +1391,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 2045252196}
   - {fileID: 1273972601667475826}
-  - {fileID: 643693473}
   - {fileID: 1079844561}
+  - {fileID: 643693473}
   - {fileID: 1867474093}
   - {fileID: 178315861}

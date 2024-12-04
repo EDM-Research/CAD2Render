@@ -25,7 +25,6 @@ public class RotationHandler : MaterialRandomizerInterface
         Quaternion nextRoation = Quaternion.Euler(rng.Angle(dataset.rotation_X.x, dataset.rotation_X.y), 
                                                     rng.Angle(dataset.rotation_Y.x, dataset.rotation_Y.y),
                                                     rng.Angle(dataset.rotation_Z.x, dataset.rotation_Z.y));
-        
         this.gameObject.transform.rotation *= Quaternion.Inverse(previousRotation) * nextRoation;
         previousRotation = nextRoation;
     }

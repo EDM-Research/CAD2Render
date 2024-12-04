@@ -50,6 +50,9 @@ MonoBehaviour:
   lastBounce:
     m_OverrideState: 0
     m_Value: 3
+  ambientProbeDimmer:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &8128460960178630274
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -73,7 +76,7 @@ MonoBehaviour:
       m_Bits: 4294967295
   maximumSamples:
     m_OverrideState: 1
-    m_Value: 2707
+    m_Value: 29
   minimumDepth:
     m_OverrideState: 1
     m_Value: 1
@@ -92,6 +95,9 @@ MonoBehaviour:
   temporal:
     m_OverrideState: 0
     m_Value: 1
+  separateVolumetrics:
+    m_OverrideState: 0
+    m_Value: 0
   asyncDenoising:
     m_OverrideState: 0
     m_Value: 1
@@ -101,3 +107,9 @@ MonoBehaviour:
   tilingParameters:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
+  seedMode:
+    m_OverrideState: 0
+    m_Value: 0
+  customSeed:
+    m_OverrideState: 0
+    m_Value: 0

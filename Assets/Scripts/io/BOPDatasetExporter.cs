@@ -383,10 +383,10 @@ public class BOPDatasetExporter
     {
         sceneId = sceneNumber;
         ensureDir(outputPath + "bop/");
-        ensureDir(outputPath + "bop/metaData/");
         ensureDir(outputPath + "bop/models/");
         ensureDir(outputPath + "bop/train_PBR/");
         ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}", sceneId));
+        ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/metaData", sceneId));
         ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/rgb", sceneId));
         ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/mask", sceneId));
         ensureDir(outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib", sceneId));

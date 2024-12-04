@@ -19,13 +19,13 @@ public class ObjectRandomizeHandler : RandomizerInterface
     }
 
 
-    private RandomNumberGenerator rng;
+    protected RandomNumberGenerator rng;
 
     private GameObject[] models = new GameObject[0];
     private List<GameObject> submodels = new List<GameObject>();
 
-    private List<GameObject> instantiatedModels = new List<GameObject>();
-    private List<GameObject> instantiatedSubModels = new List<GameObject>();
+    protected List<GameObject> instantiatedModels = new List<GameObject>();
+    protected List<GameObject> instantiatedSubModels = new List<GameObject>();
     private MaterialRandomizeHandler materialRandomizeHandler;
 
     public void Start()
@@ -100,7 +100,7 @@ public class ObjectRandomizeHandler : RandomizerInterface
         instantiatedSubModels.Clear();
         instantiatedModels.Clear();
     }
-    private void CreateModels(BOPDatasetExporter.SceneIterator bopSceneIterator)
+    virtual protected void CreateModels(BOPDatasetExporter.SceneIterator bopSceneIterator)
     {
         if (bopSceneIterator != null && objectData.importFromBOP != ObjectRandomizeData.BopImportType.NoImport)
         {

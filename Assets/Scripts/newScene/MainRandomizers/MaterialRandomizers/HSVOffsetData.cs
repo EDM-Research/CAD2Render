@@ -28,4 +28,9 @@ public class HSVOffsetData : ScriptableObject
     [Tooltip("Random Value offset")]
     [Range(0.0f, 50.0f)]
     public float V_maxOffset = 0.0f;
+
+
+    [Tooltip("Alpha Value offset")]
+    [Range(0.0f, 50.0f)]
+    public float A_maxOffset = 0.0f;
 }

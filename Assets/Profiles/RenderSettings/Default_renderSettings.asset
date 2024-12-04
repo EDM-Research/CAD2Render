@@ -92,16 +92,16 @@ MonoBehaviour:
   active: 1
   rotation:
     m_OverrideState: 1
-    m_Value: 347.71042
+    m_Value: 188.19513
   skyIntensityMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11.77
+    m_Value: 6.8319464
   multiplier:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 12
   upperHemisphereLuxValue:
     m_OverrideState: 1
     m_Value: 3.0973694
@@ -109,8 +109,8 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: {x: 0.4466774, y: 0.5, z: 0.4922215}
   desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
+    m_OverrideState: 1
+    m_Value: 10
   updateMode:
     m_OverrideState: 0
     m_Value: 0
