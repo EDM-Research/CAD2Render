@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using System.Linq;
+//using System.Drawing;
 
 // https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md
 public class BOPDatasetExporter
@@ -113,7 +114,7 @@ public class BOPDatasetExporter
             n["cam_t_m2c"] = cam_t_m2c.Serialize();
             n["obj_id"] = obj_id;
             if (falseColor != Color.black)
-                n["false_color"] = falseColor.ToString("F7");
+                n["mask_color"] =  "#" + ColorUtility.ToHtmlStringRGB(falseColor);//falseColor.ToString("F7");
             return n;
         }
     }
