@@ -170,7 +170,7 @@ namespace Assets.Scripts.newScene
             {
                 BOPDatasetExporter.exportFrame(instantiatedModels, renderTexture, segmentationTexture, segmentationTextureArray, fileCounter, dataset.outputPath, mainCamera, imageSaver);
                 if (dataset.exportDepthTexture)
-                    BOPDatasetExporter.exportDepthTexture(depthTexture, fileCounter, dataset.outputPath, imageSaver);
+                    BOPDatasetExporter.exportDepthTexture(depthTexture, fileCounter, dataset.outputPath, imageSaver, dataset.depthMapExt);
                 if (dataset.exportAlbedoTexture)
                     BOPDatasetExporter.exportAlbedoTexture(albedoTexture, fileCounter, dataset.outputPath, imageSaver);
                 if (dataset.exportNormalTexture)
@@ -195,7 +195,7 @@ namespace Assets.Scripts.newScene
             if (segmentationTexture)
                 imageSaver.Save(segmentationTexture, dataset.outputPath + "segmentation/" + fileCounter + "_seg", dataset.outputExt, true);
             if (dataset.exportDepthTexture)
-                imageSaver.Save(depthTexture, dataset.outputPath + "depth/" + fileCounter + "_depth", ImageSaver.Extension.exr, true, true);
+                imageSaver.Save(depthTexture, dataset.outputPath + "depth/" + fileCounter + "_depth", dataset.depthMapExt, true, true);
         }
         private void ExportDatasetInfo()
         {

@@ -464,9 +464,9 @@ public class BOPDatasetExporter
     static private void exportRenderTexture(RenderTexture renderTexture, int fileID, string outputPath, ImageSaver imageSaver) {
         imageSaver.Save(renderTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/rgb/", sceneId)  + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
     }
-    static public void exportDepthTexture(RenderTexture depthTexture, int fileID, string outputPath, ImageSaver imageSaver)
+    static public void exportDepthTexture(RenderTexture depthTexture, int fileID, string outputPath, ImageSaver imageSaver, ImageSaver.Extension extension = ImageSaver.Extension.png)
     {
-        imageSaver.Save(depthTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/depth/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.exr, false, true);
+        imageSaver.Save(depthTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/depth/", sceneId) + fileID.ToString("D6"), extension, false, true);
     }
     static public void exportAlbedoTexture(RenderTexture albedoTexture, int fileID, string outputPath, ImageSaver imageSaver)
     {

@@ -348,7 +348,7 @@ public class MainRandomizer : MonoBehaviour
         segmentationTexture = new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
         albedoTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
         normalTexture =       new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
-        depthTexture =        new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24);
+        depthTexture =        new RenderTexture(dataset.resolution.x, dataset.resolution.y, 24,RenderTextureFormat.ARGBFloat);
 
         if (mainCamera != null)
         {
