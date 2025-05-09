@@ -22,6 +22,7 @@ public class LightRandomizeHandler : RandomizerInterface
 
     private List<Light> instantiatedLights;
     GameObject renderSettings = null;
+    GameObject postProcesingSettings = null;
 
     private int LightIndex = 0;
 
@@ -46,7 +47,7 @@ public class LightRandomizeHandler : RandomizerInterface
         {
             renderSettings = (GameObject)temp.transform.Find("Rendering Settings")?.gameObject;
             //raytracingSettings = temp.transform.Find("Ray Tracing Settings")?.gameObject;
-            //postProcesingSettings = temp.transform.Find("PostProcessing")?.gameObject;
+            postProcesingSettings = temp.transform.Find("PostProcessing")?.gameObject;
         }
 
         instantiatedLights = new List<Light>();
@@ -138,7 +139,15 @@ public class LightRandomizeHandler : RandomizerInterface
 
         if (dataset.randomExposuresEnvironment)
         {
-            sky.exposure.value = rng.Range(dataset.minExposure, dataset.maxExposure);
+            Exposure exposureCorrection = null;
+            if (postProcesingSettings != null)
+                postProcesingSettings.GetComponent<Volume>()?.profile.TryGet<Exposure>(out exposureCorrection);
+            if (exposureCorrection == null)
+            {
+                Debug.LogWarning("No exposure found in the post processing gameobject");
+                return;
+            }
+            exposureCorrection.fixedExposure.value = rng.Range(dataset.minExposure, dataset.maxExposure);
         }
     }
 }
