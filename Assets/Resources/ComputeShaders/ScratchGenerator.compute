@@ -1,0 +1,107 @@
+﻿#pragma kernel CSMain
+
+#include "RandomGPU.compute"
+
+struct lineSegment
+{
+    float2 a;
+    float2 b;
+};
+StructuredBuffer<lineSegment> scratchLines;
+//Texture2D<float4> NormalMapIn;
+
+uint nrScratches;
+float scratchWidth;
+uint nrAASamples;
+
+RWTexture2D<float4> NormalMapInOut;
+RWTexture2D<float4> DefectMapInOut;
+Texture2D<float4> applyScratchMask;
+
+float3 unpackNormal(float4 packedNormal)
+{
+    float3 normal;
+    normal.xy = packedNormal.wy * 2 - 1;
+    normal.z = sqrt(1 - (dot(normal.xy, normal.xy)));
+    return normal;
+}
+float4 packNormal(float3 normal)
+{
+    float4 packedNormal;
+    packedNormal.xyzw = normal.zyzx * 0.5f + 0.5f;
+    return packedNormal;
+}
+
+float2 getProjectionPoint(float2 lineSeg1, float2 lineSeg2, float2 p)
+{
+  // Return minimum distance between the line segment and point p
+    const float l2 = dot(lineSeg1 - lineSeg2, lineSeg1 - lineSeg2);
+    if (l2 == 0.0)
+        return lineSeg1; // lineSeg1 == w case
+  // Consider the line extending the segment, parameterized as lineSeg1 + t (lineSeg2 - lineSeg1).
+  // We find projection of point p onto the line. 
+  // It falls where t = [(p-lineSeg1) . (lineSeg2-lineSeg1)] / |lineSeg2-lineSeg1|^2
+  // We clamp t from [0,1] to handle points outside the line segment.
+    const float t = max(0, min(1, dot(p - lineSeg1, lineSeg2 - lineSeg1) / l2));
+    const float2 projection = lineSeg1 + t * (lineSeg2 - lineSeg1); // Projection falls on the segment
+    return projection;
+}
+float mexicanHatWaveletDerivative(float x)
+{
+    const float sigma = 0.3; //wavelet width
+    
+    //float a = 2 / sqrt(3 * sigma) * pow(PI, 0.25f);
+    float b = 1 - pow(x / sigma, 2);
+    float DerB = (-2 * x) / pow(sigma, 2);
+    
+    float c = exp(-pow(x / sigma, 2) / 2);
+    float DerC = c * (-2 * x / pow(sigma, 2));
+    
+    return b * DerC + DerB * c;
+}
+// return value between [-0.5;1]
+// positive when x is [+-0.3]
+// negative when x is [-1;-0.3] and [0.3;1]
+// https://www.desmos.com/calculator/kyzso7pbv4
+float mexicanHatWavelet(float x)
+{
+    const float sigma = 0.3; //wavelet width
+    
+    //float a = 2 / sqrt(3 * sigma) * pow(PI, 0.25f);
+    float b = 1 - pow(x / sigma, 2);
+    float c = exp(-(x * x) / (2 * sigma * sigma));
+    //return a * b * c;
+    return b * c;
+}
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    uint threadRandSeed = createThreadRandomSeed(id.xy, randSeed);
+    int2 resolution;
+    NormalMapInOut.GetDimensions(resolution.x, resolution.y);
+    
+    float3 scratchDirection;
+    uint temp = randSeed;
+    for (uint u = 0; u < nrScratches * nrAASamples; ++u)
+    {
+        randSeed = temp;
+        float2 aaCoord = float2(id.xy) + float2(nextRand(threadRandSeed), nextRand(threadRandSeed));
+        //float2 projectionPoint = getProjectionPoint(scratchLines[u % scratchCount].a, scratchLines[u % scratchCount].b, aaCoord);
+        float2 projectionPoint = getProjectionPoint(float2(nextRand(randSeed), nextRand(randSeed)) * resolution, 
+                                                    float2(nextRand(randSeed), nextRand(randSeed)) * resolution,
+                                                    aaCoord);
+        float scratchDistance = distance(projectionPoint, aaCoord);
+        scratchDirection.xy += normalize(projectionPoint - aaCoord) * mexicanHatWavelet(scratchDistance / scratchWidth);
+    }
+    scratchDirection /= nrAASamples;
+    scratchDirection.z = 0;
+    float3 oldNormal = unpackNormal(NormalMapInOut[id.xy]);
+    float3 newNormal = normalize(scratchDirection + oldNormal);
+    
+    float4 defectMapValue = DefectMapInOut[id.xy];
+    defectMapValue.a = defectMapValue.a * (1 - clamp(length(scratchDirection.xy), 0, 1));
+    
+    DefectMapInOut[id.xy] = defectMapValue;
+    NormalMapInOut[id.xy] = packNormal(newNormal);
+}
