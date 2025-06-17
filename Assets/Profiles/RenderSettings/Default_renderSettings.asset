@@ -92,13 +92,13 @@ MonoBehaviour:
   active: 1
   rotation:
     m_OverrideState: 1
-    m_Value: 347.71042
+    m_Value: 160
   skyIntensityMode:
     m_OverrideState: 0
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11.77
+    m_Value: 15.76
   multiplier:
     m_OverrideState: 0
     m_Value: 1
@@ -122,7 +122,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 7638fde96cdc64a44b213af8399601e0, type: 3}
+    m_Value: {fileID: 8900000, guid: 003d772730330a64695ea74e5aaea7bd, type: 3}
   distortionMode:
     m_OverrideState: 0
     m_Value: 0

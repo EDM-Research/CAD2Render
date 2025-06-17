@@ -27,7 +27,7 @@ MonoBehaviour:
   numRenderFrames: 50
   numPhysicsFrames: 50
   startFileCounter: 0
-  numberOfSamples: -1
+  numberOfImages: -1
   seed: 42
   separateUpdates: 0
   updateIntervals: []
@@ -38,9 +38,9 @@ MonoBehaviour:
   maxDepthDistance: 1500
   exportNormalTexture: 0
   exportAlbedoTexture: 0
-  exportToFMFormat: 0
+  exportToFMFormat: 1
   outputExt: 0
   exportSubModels: 0
-  exportImagePosition: 0
+  exportImagePosition: 1
   exportToMitsuba: 0
   mitsubaSampleCount: 128

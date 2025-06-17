@@ -1,25 +1,14 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSMain
 
-struct lineSegment
-{
-    float2 a;
-    float2 b;
-};
-StructuredBuffer<lineSegment> scratchLines;
-//Texture2D<float4> NormalMapIn;
-
-
-
-uint applyScratches;
-uint nrScratches;
-float scratchWidth;
-
 uint applyRust;
 RWTexture2D<float4> ColorMapInOut;
 RWTexture2D<float4> MaskMapInOut;
 RWTexture2D<float4> DefectMapInOut;
 Texture2D<float4> rustMask;
+
+uint useNormalMapInput;
+RWTexture2D<float4> NormalMapInOut;
 
 float4 colorRust1;
 float4 colorRust2;
@@ -30,8 +19,6 @@ float rustCoMin;
 float rustCoMax;
 uint nrOfOctaves; //higher number means more detail in simplex noise
 
-uint useNormalMapInput;
-RWTexture2D<float4> NormalMapInOut;
 
 //forward declarations
 #include "RandomGPU.compute"
