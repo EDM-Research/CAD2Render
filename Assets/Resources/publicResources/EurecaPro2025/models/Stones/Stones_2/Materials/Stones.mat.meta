@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6745167470224e74db37c9f8c2cf4d25
+timeCreated: 1435485843
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 40329
+  packageName: Stones
+  packageVersion: 1.0
+  assetPath: Assets/Free/Stones/Materials/Stones.mat
+  uploadId: 70119

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf1e30d092367944fa22b6a70b867297, type: 3}
+  m_Name: WhiteLight_1
+  m_EditorClassIdentifier: 
+  environmentsPath: 
+  lightSourcePrefab: {fileID: 7839572819224775403, guid: 46fa802352bf277438ada87f724ff8fa,
+    type: 3}
+  environmentVariatons: 1
+  pickRandomEnvironment: 1
+  randomEnvironmentRotations: 1
+  minEnvironmentAngle: 0
+  maxEnvironmentAngle: 360
+  randomExposuresEnvironment: 1
+  minExposure: 10.52
+  maxExposure: 17.66
+  lightsourceVariatons: 1
+  numLightsources: 1
+  minIntensityModifier: -0.82
+  maxIntensityModifier: 3.65
+  minThetaLight: 46.1
+  maxThetaLight: 89
+  minPhiLight: -180
+  maxPhiLight: 180
+  minRadiusLight: 1
+  maxRadiusLight: 1
+  applyProjectorVariations: 0
+  projectorTexturePath: 
