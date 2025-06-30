@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.atteneder.gltfast": "https://github.com/atteneder/glTFast.git",
     "com.sneakysquirrellabs.minmaxrangeattribute": "https://github.com/matheusamazonas/min_max_range_attribute.git?path=Assets/Libraries/MinMaxRangeAttribute#latest",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
@@ -18,7 +19,6 @@
     "com.unity.test-framework": "1.4.3",
     "com.unity.timeline": "1.8.6",
     "com.unity.xr.legacyinputhelpers": "2.1.10",
-    "org.khronos.unitygltf": "https://github.com/KhronosGroup/UnityGLTF.git",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

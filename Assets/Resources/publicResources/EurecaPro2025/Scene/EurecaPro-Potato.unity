@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2678.221, g: 2716.6565, b: 2411.7214, a: 1}
+  m_IndirectSpecularColor: {r: 0.014649151, g: 0.014858985, b: 0.013190461, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -879,7 +879,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addRandomizeButton: 1
-  wbRngRange: 70
 --- !u!1 &854675269
 GameObject:
   m_ObjectHideFlags: 0
