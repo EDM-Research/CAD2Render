@@ -29,26 +29,41 @@ public class RustGenerationHandler : MaterialRandomizerInterface
     {
         int kernelHandle = rustmapGenerationShader.FindKernel("CSMain");
         rustmapGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
-        rustmapGenerationShader.SetInt("applyRust", 1);
 
         textures.set(MaterialTextures.MapTypes.maskMap, textures.GetCurrentLinkedTexture("_MaskMap"), new Color(textures.GetCurrentLinkedFloat("_Metallic"), 1, 0,
                                                                                                                    textures.GetCurrentLinkedFloat("_Smoothness")));
-        rustmapGenerationShader.SetTexture(kernelHandle, "MaskMapInOut", textures.get(MaterialTextures.MapTypes.maskMap));
+        if (dataset.changeColor)
+        {
+            rustmapGenerationShader.SetInt("changeColor", 1);
+            textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture("_BaseColorMap"), textures.GetCurrentLinkedColor("_Color"));
+            rustmapGenerationShader.SetTexture(kernelHandle, "ColorMapInOut", textures.get(MaterialTextures.MapTypes.colorMap));
+        }
+        else
+            rustmapGenerationShader.SetInt("changeColor", 0);
 
-        textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture("_BaseColorMap"), textures.GetCurrentLinkedColor("_Color"));
-        rustmapGenerationShader.SetTexture(kernelHandle, "ColorMapInOut", textures.get(MaterialTextures.MapTypes.colorMap));
+        if (dataset.changeMaskMap)
+        {
+            rustmapGenerationShader.SetInt("changeMaskmap", 1);
+            rustmapGenerationShader.SetTexture(kernelHandle, "MaskMapInOut", textures.get(MaterialTextures.MapTypes.maskMap));
+        }
+        else
+            rustmapGenerationShader.SetInt("changeMaskmap", 0);
+
+        if (dataset.changeNormalMap) { 
+            rustmapGenerationShader.SetInt("changeNormalMap", 1);
+            var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
+            textures.set(MaterialTextures.MapTypes.normalMap, normalMap, new Color(0.5f, 0.5f, 1.0f));
+            rustmapGenerationShader.SetTexture(kernelHandle, "NormalMapInOut", textures.get(MaterialTextures.MapTypes.normalMap));
+            if (normalMap != null)
+                rustmapGenerationShader.SetInt("useNormalMapInput", 1);
+            else
+                rustmapGenerationShader.SetInt("useNormalMapInput", 0);
+        }
+        else
+            rustmapGenerationShader.SetInt("changeNormalMap", 0);
 
         textures.set(MaterialTextures.MapTypes.defectMap, textures.get(MaterialTextures.MapTypes.defectMap), textures.falseColor.falseColor);
         rustmapGenerationShader.SetTexture(kernelHandle, "DefectMapInOut", textures.get(MaterialTextures.MapTypes.defectMap));
-
-        var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
-        textures.set(MaterialTextures.MapTypes.normalMap, normalMap, new Color(0.5f, 0.5f, 1.0f));
-        rustmapGenerationShader.SetTexture(kernelHandle, "NormalMapInOut", textures.get(MaterialTextures.MapTypes.normalMap));
-        if (normalMap != null)
-            rustmapGenerationShader.SetInt("useNormalMapInput", 1);
-        else
-            rustmapGenerationShader.SetInt("useNormalMapInput", 0);
-
         updateRustZoneTexture(textures.resolutionX, textures.resolutionY);
         rustmapGenerationShader.SetTexture(kernelHandle, "rustMask", RustZoneTexture);
 
@@ -69,7 +84,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         textures.linkTexture(MaterialTextures.MapTypes.normalMap);
         textures.linkTexture(MaterialTextures.MapTypes.maskMap);
         textures.linkTexture(MaterialTextures.MapTypes.defectMap);
-        if (normalMap != null)
+        if (dataset.changeNormalMap)
             textures.linkTexture(MaterialTextures.MapTypes.normalMap);
 
     }

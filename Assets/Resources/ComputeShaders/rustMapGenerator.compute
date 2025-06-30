@@ -1,7 +1,10 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSMain
 
-uint applyRust;
+uint changeColor;
+uint changeMaskmap;
+uint changeNormalMap;
+
 RWTexture2D<float4> ColorMapInOut;
 RWTexture2D<float4> MaskMapInOut;
 RWTexture2D<float4> DefectMapInOut;
@@ -80,31 +83,39 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float stepRustValue = step(rustValue, rustCoMax); //1 - easeFunction(rustValue, rustCo); //clamp((value), 0, 1);
     stepRustValue *= step(rustCoMin, rustValue);
     
+    if (changeColor == 1)
+    {
     float4 oldColor = ColorMapInOut[id.xy];
     float4 newColor = lerp(colorRust1, colorRust2, saturate(rustAge));
-    ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a * stepRustValue).rgb, 1);
+        ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a * stepRustValue).rgb, 1);
+    }
     
     // 1 = no defect; 0 = defect
     float4 defectMapValue = DefectMapInOut[id.xy];
     defectMapValue.a = defectMapValue.a * (1 - stepRustValue);
     DefectMapInOut[id.xy] = defectMapValue;
-    //ColorMapInOut[id.xy] = float4(rustValue, rustValue, rustValue, 1);
     
-    float4 oldMask = MaskMapInOut[id.xy];
-    oldMask.r *= 1 - newColor.a * stepRustValue * 0.4; //reduce metalicness
-    oldMask.a *= 1 - stepRustValue * 0.4; //reduce smoothness
-    MaskMapInOut[id.xy] = oldMask;    
+    if (changeMaskmap == 1)
+    {
+        float4 oldMask = MaskMapInOut[id.xy];
+        oldMask.r *= 1 - stepRustValue * 0.4; //reduce metalicness
+        oldMask.a *= 1 - stepRustValue * 0.4; //reduce smoothness
+        MaskMapInOut[id.xy] = oldMask;
+    }
     
-    float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 5, 0);
-    float normalModifier = 0.1f;
-    rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalModifier * stepRustValue;
-    rustNormal.z = 0.0f;
+    if (changeNormalMap == 1)
+    {
+        float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 5, 0);
+        float normalModifier = 0.1f;
+        rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalModifier * stepRustValue;
+        rustNormal.z = 0.0f;
      
-    float3 oldNormal = float3(0.5, 0.5, 1);
-    if (useNormalMapInput)
-        oldNormal = unpackNormal(NormalMapInOut[id.xy]);
-    float3 newNormal = normalize(rustNormal + oldNormal);
-    NormalMapInOut[id.xy] = packNormal(newNormal);
+        float3 oldNormal = float3(0.5, 0.5, 1);
+        if (useNormalMapInput)
+            oldNormal = unpackNormal(NormalMapInOut[id.xy]);
+        float3 newNormal = normalize(rustNormal + oldNormal);
+        NormalMapInOut[id.xy] = packNormal(newNormal);
+    }
 }
 
 

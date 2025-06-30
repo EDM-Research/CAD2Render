@@ -23,11 +23,16 @@ public class RustGenerationData : ScriptableObject
     [Tooltip("determines the size of color variations in rust spots")]
     [Range(0.0021f, 0.49f)]
     public float rustPaternZoom = 0.39f;
-    public Color rustColor1 = new Color(133.0f / 255, 60.0f / 255, 42.0f / 255, 1);
-    public Color rustColor2 = new Color(65.0f / 255, 33.0f / 255, 15.0f / 255, 1);
+
     [Tooltip("determines the detail in the rust mask and patern, comes with computational cost.")]
     [Range(1, 10)]
     public uint nrOfOctaves = 5;
     public Texture RustCreationZoneTexture;
 
+    public Boolean changeColor = true;
+    public Color rustColor1 = new Color(133.0f / 255, 60.0f / 255, 42.0f / 255, 1);
+    public Color rustColor2 = new Color(65.0f / 255, 33.0f / 255, 15.0f / 255, 1);
+
+    public Boolean changeMaskMap = true;
+    public Boolean changeNormalMap = true;
 }
