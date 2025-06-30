@@ -14,46 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: 8128460960178630274}
-  - {fileID: 8842950807207500632}
---- !u!114 &6783999440065968821
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46a79c9cffef5cc469553b1341c2ecdf, type: 3}
-  m_Name: RecursiveRendering
-  m_EditorClassIdentifier: 
-  active: 1
-  enable:
-    m_OverrideState: 0
-    m_Value: 0
-  layerMask:
-    m_OverrideState: 0
-    m_Value:
-      serializedVersion: 2
-      m_Bits: 4294967295
-  maxDepth:
-    m_OverrideState: 0
-    m_Value: 4
-  rayLength:
-    m_OverrideState: 0
-    m_Value: 10
-  minSmoothness:
-    m_OverrideState: 0
-    m_Value: 0.5
-  rayMiss:
-    m_OverrideState: 0
-    m_Value: 3
-  lastBounce:
-    m_OverrideState: 0
-    m_Value: 3
-  ambientProbeDimmer:
-    m_OverrideState: 0
-    m_Value: 1
 --- !u!114 &8128460960178630274
 MonoBehaviour:
   m_ObjectHideFlags: 3
