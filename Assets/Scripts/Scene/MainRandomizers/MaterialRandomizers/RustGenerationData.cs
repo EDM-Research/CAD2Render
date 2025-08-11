@@ -23,6 +23,8 @@ public class RustGenerationData : ScriptableObject
     [Tooltip("determines the size of color variations in rust spots")]
     [Range(0.0021f, 0.49f)]
     public float rustPaternZoom = 0.39f;
+    [Tooltip("stretch or compact the rust patern in the x direction")]
+    public float xSkew = 1.0f;
 
     [Tooltip("determines the detail in the rust mask and patern, comes with computational cost.")]
     [Range(1, 10)]
@@ -33,6 +35,12 @@ public class RustGenerationData : ScriptableObject
     public Color rustColor1 = new Color(133.0f / 255, 60.0f / 255, 42.0f / 255, 1);
     public Color rustColor2 = new Color(65.0f / 255, 33.0f / 255, 15.0f / 255, 1);
 
+    [Space(10)]
     public Boolean changeMaskMap = true;
+    [Range(-1.0f, 1.0f)]
+    public float metalicnessOffset = -0.4f;
+    [Space(10)]
     public Boolean changeNormalMap = true;
+    [Range(-1.0f, 1.0f)]
+    public float dentModifier = 1.0f;
 }

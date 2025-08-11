@@ -45,6 +45,8 @@ public class ImageSaver
 
     public void Save(RenderTexture renderTex, string filename, Extension outputExt, bool gammaCorrection, bool singleChannel = false)
     {
+        if (renderTex == null)
+            return;
         var oldRT = RenderTexture.active;
 
 

@@ -1,23 +1,29 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSMain
+#pragma multi_compile __ changeNormalMap
+#pragma multi_compile __ changeMaskMap
+#pragma multi_compile __ changeColor
 
-uint changeColor;
-uint changeMaskmap;
-uint changeNormalMap;
-
-RWTexture2D<float4> ColorMapInOut;
-RWTexture2D<float4> MaskMapInOut;
 RWTexture2D<float4> DefectMapInOut;
 Texture2D<float4> rustMask;
 
-uint useNormalMapInput;
-RWTexture2D<float4> NormalMapInOut;
+#if changeColor 
+    RWTexture2D<float4> ColorMapInOut;
+    float4 colorRust1;
+    float4 colorRust2;
+#endif
+#if changeNormalMap
+    RWTexture2D<float4> NormalMapInOut;
+    float dentModifier;
+#endif
+#if changeMaskMap
+    RWTexture2D<float4> MaskMapInOut;
+    float metalicnessOffset;
+#endif
 
-float4 colorRust1;
-float4 colorRust2;
 float maskZoom; //higher number means more zoomed out => more changes
 float rustPaternZoom; //higher number means more zoomed out => more changes
-//higher number means more: [:0,05]=(almost)no rust [0.1: 0.2]=limited rust [0.3:75]=heavy rust [0.95:]=fully rusted
+float xSkew; //skew the rust patern zoom in x direction
 float rustCoMin; 
 float rustCoMax;
 uint nrOfOctaves; //higher number means more detail in simplex noise
@@ -27,12 +33,17 @@ uint nrOfOctaves; //higher number means more detail in simplex noise
 #include "RandomGPU.compute"
 
 // function that makes a fast but smooth transition between 0 and 1
-// rustCo determines where this transition happens
-// https://www.desmos.com/calculator/dyhhwcgpmb
-float easeFunction(float x, float rustCo)
+// the function returns 1 when x is between rustCoMin and rustCoMax
+// https://www.desmos.com/calculator/1ak13sbgml
+float easeFunction(float x)
 {
-    const float sigma = 20;
-    return atan(sigma * (x + (-rustCo))) / PI + 0.5;
+    const float sharpness = 200;
+    
+
+    float lower_sigmoid = 1 / (1 + exp(-sharpness * (x - rustCoMin)));
+    float upper_sigmoid = 1 / (1 + exp( sharpness * (x - rustCoMax)));
+
+    return lower_sigmoid * upper_sigmoid;
 }
 
 float3 unpackNormal(float4 packedNormal){
@@ -53,17 +64,17 @@ float2 noiseDerivatives(uint2 co, int2 resolution)
     //todo find analyticly
 	float rustCo = (rustCoMin + rustCoMax) / 2;
     uint threadRandSeed = randSeed;//reset seed for each lookup
-    float prevX = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(-1, 0), resolution);
-    prevX = 1 - easeFunction(prevX, rustCo);
+    float prevX = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, threadRandSeed, co + int2(-1, 0), resolution);
+    prevX = prevX * easeFunction(prevX);
     threadRandSeed = randSeed;
-    float nextX = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(1, 0), resolution);
-    nextX = 1 - easeFunction(nextX, rustCo);
+    float nextX = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, threadRandSeed, co + int2(1, 0), resolution);
+    nextX = nextX * easeFunction(nextX);
     threadRandSeed = randSeed;
-    float prevY = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(0, -1), resolution);
-    prevY = 1 - easeFunction(prevY, rustCo);
+    float prevY = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, threadRandSeed, co + int2(0, -1), resolution);
+    prevY = prevY * easeFunction(prevY);
     threadRandSeed = randSeed;
-    float nextY = FractalBrownianMotion(nrOfOctaves, maskZoom, threadRandSeed, co + int2(0, 1), resolution);
-    nextY = 1 - easeFunction(nextY, rustCo);
+    float nextY = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, threadRandSeed, co + int2(0, 1), resolution);
+    nextY = nextY * easeFunction(nextY);
     
     return float2(nextX - prevX, -nextY + prevY);// y needs to be reversed for the normal map
 }
@@ -74,48 +85,46 @@ float2 noiseDerivatives(uint2 co, int2 resolution)
 void CSMain (uint3 id : SV_DispatchThreadID)
 {   
     uint threadRandSeed = createThreadRandomSeed(id.xy, randSeed);
+    uint startRandSeed = randSeed;
     int2 resolution;
-    MaskMapInOut.GetDimensions(resolution.x, resolution.y);
+    rustMask.GetDimensions(resolution.x, resolution.y);
     
     rustCoMin = rustCoMax - ((rustCoMax - rustCoMin) / 2) * rustMask[id.xy].b;
-    float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, randSeed, id.xy, resolution);
-    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, randSeed, id.xy, resolution);
-    float stepRustValue = step(rustValue, rustCoMax); //1 - easeFunction(rustValue, rustCo); //clamp((value), 0, 1);
-    stepRustValue *= step(rustCoMin, rustValue);
+    float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, randSeed, id.xy, resolution);
+    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, xSkew, randSeed, id.xy, resolution);
+    //float stepRustValue = step(rustValue, rustCoMax);
+    //stepRustValue *= step(rustCoMin, rustValue);
+    float stepRustValue = easeFunction(rustValue);
     
-    if (changeColor == 1)
-    {
-    float4 oldColor = ColorMapInOut[id.xy];
-    float4 newColor = lerp(colorRust1, colorRust2, saturate(rustAge));
+    #if changeColor 
+        float4 oldColor = ColorMapInOut[id.xy];
+        float4 newColor = lerp(colorRust1, colorRust2, saturate(rustAge));
         ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a * stepRustValue).rgb, 1);
-    }
+    #endif
     
     // 1 = no defect; 0 = defect
     float4 defectMapValue = DefectMapInOut[id.xy];
     defectMapValue.a = defectMapValue.a * (1 - stepRustValue);
     DefectMapInOut[id.xy] = defectMapValue;
     
-    if (changeMaskmap == 1)
-    {
+    #if changeMaskMap 
         float4 oldMask = MaskMapInOut[id.xy];
-        oldMask.r *= 1 - stepRustValue * 0.4; //reduce metalicness
+        oldMask.r += stepRustValue * metalicnessOffset; //metalicness
         oldMask.a *= 1 - stepRustValue * 0.4; //reduce smoothness
-        MaskMapInOut[id.xy] = oldMask;
-    }
+        MaskMapInOut[id.xy] = saturate(oldMask);
+    #endif
     
-    if (changeNormalMap == 1)
-    {
-        float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 5, 0);
-        float normalModifier = 0.1f;
-        rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalModifier * stepRustValue;
+    #if changeNormalMap 
+        randSeed = startRandSeed;
+        float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 2, 0) * dentModifier;
+        float normalNoiseModifier = 0.01f;
+        //rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalNoiseModifier * stepRustValue;
         rustNormal.z = 0.0f;
      
-        float3 oldNormal = float3(0.5, 0.5, 1);
-        if (useNormalMapInput)
-            oldNormal = unpackNormal(NormalMapInOut[id.xy]);
+        float3 oldNormal = unpackNormal(NormalMapInOut[id.xy]);
         float3 newNormal = normalize(rustNormal + oldNormal);
         NormalMapInOut[id.xy] = packNormal(newNormal);
-    }
+#endif
 }
 
 

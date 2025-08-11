@@ -38,7 +38,7 @@ public class MaterialTextures
         {
             if (keyValue.Value == null)
                 continue;
-            if(!textureDisabled.ContainsKey(keyValue.Key))
+            if (!textureDisabled.ContainsKey(keyValue.Key))
                 textureDisabled.Add(keyValue.Key, true);
         }
 
@@ -97,9 +97,9 @@ public class MaterialTextures
     public RenderTexture getResamplelocations()
     {
         //return get(MapTypes.resampleLocationMap);
-        if(resampleLocations == null || resampleLocations.width != this.resolutionX || resampleLocations.height != this.resolutionY)
+        if (resampleLocations == null || resampleLocations.width != this.resolutionX || resampleLocations.height != this.resolutionY)
         {
-            if(resampleLocations != null)
+            if (resampleLocations != null)
                 resampleLocations.Release();
             resampleLocations = new RenderTexture(resolutionX, resolutionY, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
             resampleLocations.enableRandomWrite = true;
@@ -131,7 +131,7 @@ public class MaterialTextures
     public void linkpropertyBlock()
     {
         //texture asseignment
-        foreach(var keyValue in this.textures)
+        foreach (var keyValue in this.textures)
         {
             if (keyValue.Value == null || textureDisabled.ContainsKey(keyValue.Key))
                 continue;
@@ -219,6 +219,11 @@ public class MaterialTextures
 
         Debug.LogWarning("Error occured while requesting a property of a material. Probably an unsuported material shader is used. <br>Shader: <b>" + rend.material.shader.name + "</b> has no attribute: <b>" + propertyName + "</b>");
         return new Color(0, 0, 0, 0);
+    }
+
+    public Texture GetCurrentLinkedTexture(MapTypes map)
+    {
+        return GetCurrentLinkedTexture(getTextureName(map));
     }
     public Texture GetCurrentLinkedTexture(string propertyName)
     {

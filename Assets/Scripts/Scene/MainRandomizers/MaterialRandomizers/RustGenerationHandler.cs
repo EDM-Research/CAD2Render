@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using ResourceManager = Assets.Scripts.io.ResourceManager;
 
 
@@ -14,6 +15,9 @@ public class RustGenerationHandler : MaterialRandomizerInterface
 
     private RenderTexture RustZoneTexture;
     private ComputeShader rustmapGenerationShader;
+    private LocalKeyword changeMaskmap;
+    private LocalKeyword changeNormalMap;
+    private LocalKeyword changeColor;
 
     private void TriggerCloneClicked()
     {
@@ -23,44 +27,48 @@ public class RustGenerationHandler : MaterialRandomizerInterface
     public void Awake()
     {
         rustmapGenerationShader = ResourceManager.loadShader("rustMapGenerator");
+        changeNormalMap = new LocalKeyword(rustmapGenerationShader, "changeNormalMap");
+        changeMaskmap = new LocalKeyword(rustmapGenerationShader, "changeMaskMap");
+        changeColor = new LocalKeyword(rustmapGenerationShader, "changeColor");
     }
+
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
     {
         int kernelHandle = rustmapGenerationShader.FindKernel("CSMain");
         rustmapGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
 
-        textures.set(MaterialTextures.MapTypes.maskMap, textures.GetCurrentLinkedTexture("_MaskMap"), new Color(textures.GetCurrentLinkedFloat("_Metallic"), 1, 0,
+        textures.set(MaterialTextures.MapTypes.maskMap, textures.GetCurrentLinkedTexture(MaterialTextures.MapTypes.maskMap), new Color(textures.GetCurrentLinkedFloat("_Metallic"), 1, 0,
                                                                                                                    textures.GetCurrentLinkedFloat("_Smoothness")));
         if (dataset.changeColor)
         {
-            rustmapGenerationShader.SetInt("changeColor", 1);
-            textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture("_BaseColorMap"), textures.GetCurrentLinkedColor("_Color"));
+            rustmapGenerationShader.EnableKeyword(changeColor);
+            textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture(MaterialTextures.MapTypes.colorMap), textures.GetCurrentLinkedColor("_Color"));
             rustmapGenerationShader.SetTexture(kernelHandle, "ColorMapInOut", textures.get(MaterialTextures.MapTypes.colorMap));
+            rustmapGenerationShader.SetVector("colorRust1", dataset.rustColor1);
+            rustmapGenerationShader.SetVector("colorRust2", dataset.rustColor2);
         }
         else
-            rustmapGenerationShader.SetInt("changeColor", 0);
+            rustmapGenerationShader.DisableKeyword(changeColor);
 
         if (dataset.changeMaskMap)
         {
-            rustmapGenerationShader.SetInt("changeMaskmap", 1);
+            rustmapGenerationShader.EnableKeyword(changeMaskmap);
             rustmapGenerationShader.SetTexture(kernelHandle, "MaskMapInOut", textures.get(MaterialTextures.MapTypes.maskMap));
+            rustmapGenerationShader.SetFloat("metalicnessOffset", dataset.metalicnessOffset);
         }
         else
-            rustmapGenerationShader.SetInt("changeMaskmap", 0);
+            rustmapGenerationShader.DisableKeyword(changeMaskmap);
 
         if (dataset.changeNormalMap) { 
-            rustmapGenerationShader.SetInt("changeNormalMap", 1);
-            var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
-            textures.set(MaterialTextures.MapTypes.normalMap, normalMap, new Color(0.5f, 0.5f, 1.0f));
+            rustmapGenerationShader.EnableKeyword(changeNormalMap);
+            textures.set(MaterialTextures.MapTypes.normalMap, textures.GetCurrentLinkedTexture(MaterialTextures.MapTypes.normalMap) , new Color(0.5f, 0.5f, 1.0f, 1.0f));
             rustmapGenerationShader.SetTexture(kernelHandle, "NormalMapInOut", textures.get(MaterialTextures.MapTypes.normalMap));
-            if (normalMap != null)
-                rustmapGenerationShader.SetInt("useNormalMapInput", 1);
-            else
-                rustmapGenerationShader.SetInt("useNormalMapInput", 0);
+            rustmapGenerationShader.SetFloat("dentModifier", dataset.dentModifier);
         }
         else
-            rustmapGenerationShader.SetInt("changeNormalMap", 0);
+            rustmapGenerationShader.DisableKeyword(changeNormalMap);
+        
 
         textures.set(MaterialTextures.MapTypes.defectMap, textures.get(MaterialTextures.MapTypes.defectMap), textures.falseColor.falseColor);
         rustmapGenerationShader.SetTexture(kernelHandle, "DefectMapInOut", textures.get(MaterialTextures.MapTypes.defectMap));
@@ -68,10 +76,9 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         rustmapGenerationShader.SetTexture(kernelHandle, "rustMask", RustZoneTexture);
 
 
-        rustmapGenerationShader.SetVector("colorRust1", dataset.rustColor1);
-        rustmapGenerationShader.SetVector("colorRust2", dataset.rustColor2);
         rustmapGenerationShader.SetFloat("maskZoom", dataset.rustMaskZoom / textures.resolutionX * 100);
         rustmapGenerationShader.SetFloat("rustPaternZoom", dataset.rustPaternZoom / textures.resolutionY * 100);
+        rustmapGenerationShader.SetFloat("xSkew", dataset.xSkew);
         rustmapGenerationShader.SetFloat("rustCoMin", dataset.rustCoeficient.x);
         rustmapGenerationShader.SetFloat("rustCoMax", dataset.rustCoeficient.y);
         rustmapGenerationShader.SetInt("nrOfOctaves", (int)dataset.nrOfOctaves);
