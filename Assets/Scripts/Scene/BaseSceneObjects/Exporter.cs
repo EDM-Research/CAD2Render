@@ -168,13 +168,13 @@ namespace Assets.Scripts.newScene
 
             if (dataset.exportToBOP)
             {
-                BOPDatasetExporter.exportFrame(instantiatedModels, renderTexture, segmentationTexture, segmentationTextureArray, fileCounter, dataset.outputPath, mainCamera, imageSaver);
+                BOPDatasetExporter.exportFrame(instantiatedModels, renderTexture, segmentationTexture, segmentationTextureArray, fileCounter, dataset.outputPath, dataset.outputExtBOP, mainCamera, imageSaver);
                 if (dataset.exportDepthTexture)
                     BOPDatasetExporter.exportDepthTexture(depthTexture, fileCounter, dataset.outputPath, imageSaver, dataset.depthMapExt);
                 if (dataset.exportAlbedoTexture)
-                    BOPDatasetExporter.exportAlbedoTexture(albedoTexture, fileCounter, dataset.outputPath, imageSaver);
+                    BOPDatasetExporter.exportAlbedoTexture(albedoTexture, fileCounter, dataset.outputPath, dataset.outputExtBOP, imageSaver);
                 if (dataset.exportNormalTexture)
-                    BOPDatasetExporter.exportNormalTexture(normalTexture, fileCounter, dataset.outputPath, imageSaver);
+                    BOPDatasetExporter.exportNormalTexture(normalTexture, fileCounter, dataset.outputPath, dataset.outputExtBOP, imageSaver);
                 if (dataset.exportKeyPoints)
                     BOPDatasetExporter.exportKeyPoints(instantiatedModels, depthTexture, fileCounter, dataset.outputPath, mainCamera);
             }

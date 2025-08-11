@@ -114,6 +114,8 @@ public class MainRandomizer : MonoBehaviour
         setupRenderTextures();
         BOPDatasetExporter.setNrOfRaytracingSamples(dataset.numRenderFrames);
         BOPDatasetExporter.setDepthScale(dataset.maxDepthDistance);
+        if (dataset.exportColoredSegmentations)
+            BOPDatasetExporter.maxSegmentationObjects = 0;
 
         setupGui();
     }

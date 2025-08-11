@@ -81,6 +81,8 @@ public class MainRandomizerData : ScriptableObject {
     [Space(5)]
     [Tooltip("Export BOP files")]
     public bool exportToBOP = true;
+    [Tooltip("Extension of generated images and masks.")]
+    public ImageSaver.Extension outputExtBOP = ImageSaver.Extension.jpg;
     [Tooltip("The scene id used when exporting to the bop format")]
     public int BOPSceneId = 1;
     [Tooltip("Export the location of objects with the keypoint tag.")]
@@ -97,6 +99,8 @@ public class MainRandomizerData : ScriptableObject {
     public bool exportNormalTexture = false;
     [Tooltip("Export albedo map")]
     public bool exportAlbedoTexture = false;
+    [Tooltip("When set to true, only a collored segmentation mask is exported. This behaviour will automaticly happen when more then 20 objects need to be exported (to prevent a crash due to high ram usages of texture reservations.).")]
+    public bool exportColoredSegmentations = false;
 
     [Space(5)]
     [Tooltip("Export fm_format files (deprecated)")]

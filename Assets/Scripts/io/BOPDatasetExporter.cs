@@ -462,20 +462,20 @@ public class BOPDatasetExporter
         return obj_name_to_id[model.name];
     }
 
-    static private void exportRenderTexture(RenderTexture renderTexture, int fileID, string outputPath, ImageSaver imageSaver) {
-        imageSaver.Save(renderTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/rgb/", sceneId)  + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
+    static private void exportRenderTexture(RenderTexture renderTexture, int fileID, string outputPath, ImageSaver.Extension outputExt, ImageSaver imageSaver) {
+        imageSaver.Save(renderTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/rgb/", sceneId)  + fileID.ToString("D6"), outputExt, true, true);
     }
     static public void exportDepthTexture(RenderTexture depthTexture, int fileID, string outputPath, ImageSaver imageSaver, ImageSaver.Extension extension = ImageSaver.Extension.png)
     {
         imageSaver.Save(depthTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/depth/", sceneId) + fileID.ToString("D6"), extension, false, true);
     }
-    static public void exportAlbedoTexture(RenderTexture albedoTexture, int fileID, string outputPath, ImageSaver imageSaver)
+    static public void exportAlbedoTexture(RenderTexture albedoTexture, int fileID, string outputPath, ImageSaver.Extension outputExt, ImageSaver imageSaver)
     {
-        imageSaver.Save(albedoTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/albedo/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
+        imageSaver.Save(albedoTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/albedo/", sceneId) + fileID.ToString("D6"), outputExt, true);
     }
-    static public void exportNormalTexture(RenderTexture normalTexture, int fileID, string outputPath, ImageSaver imageSaver)
+    static public void exportNormalTexture(RenderTexture normalTexture, int fileID, string outputPath, ImageSaver.Extension outputExt, ImageSaver imageSaver)
     {
-        imageSaver.Save(normalTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/normal/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, true);
+        imageSaver.Save(normalTexture, outputPath + String.Format("bop/train_PBR/{0:000000}/normal/", sceneId) + fileID.ToString("D6"), outputExt, true);
     }
 
     static RenderTexture splitSegmentationTextures;
@@ -497,7 +497,7 @@ public class BOPDatasetExporter
             saveLocation.Create();
         }
     }
-    static private void exportSegmentationTexture(List<UnityEngine.GameObject> instantiated_models, RenderTexture segmentationTexture, RenderTexture segmentationTextureArray, int fileID, string outputPath, ImageSaver imageSaver)
+    static private void exportSegmentationTexture(List<UnityEngine.GameObject> instantiated_models, RenderTexture segmentationTexture, RenderTexture segmentationTextureArray, int fileID, string outputPath, ImageSaver.Extension outputExt, ImageSaver imageSaver)
     {
         if (instantiated_models.Count == 0)
         {
@@ -549,10 +549,10 @@ public class BOPDatasetExporter
         SegmentationShader.Dispatch(kernelHandle, segmentationTexture.width / 8, segmentationTexture.height / 8, instantiated_models.Count);
         ColorBuffer.Dispose();//clean disposel of the collor buffer (might want to edit this so the buffer is reused)
 
-        imageSaver.SaveArray(splitSegmentationTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
-        imageSaver.SaveArray(splitSegmentationDefectVisibTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect_visib/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
-        imageSaver.SaveArray(splitSegmentationDefectTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
-        imageSaver.SaveArray(segmentationTextureArray, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask/", sceneId) + fileID.ToString("D6"), ImageSaver.Extension.jpg, false, true);
+        imageSaver.SaveArray(splitSegmentationTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_visib/", sceneId) + fileID.ToString("D6"), outputExt, false, true);
+        imageSaver.SaveArray(splitSegmentationDefectVisibTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect_visib/", sceneId) + fileID.ToString("D6"), outputExt, false, true);
+        imageSaver.SaveArray(splitSegmentationDefectTextures, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask_defect/", sceneId) + fileID.ToString("D6"), outputExt, false, true);
+        imageSaver.SaveArray(segmentationTextureArray, instantiated_models.Count, outputPath + String.Format("bop/train_PBR/{0:000000}/mask/", sceneId) + fileID.ToString("D6"), outputExt, false, true);
     }
 
 
@@ -797,9 +797,9 @@ public class BOPDatasetExporter
         appendToJSON(outputPath + String.Format("bop/train_PBR/{0:000000}/", sceneId) + "scene_info.json", text, fileID == 1);
     }
 
-    static public void exportFrame(List<UnityEngine.GameObject> instantiated_models, RenderTexture renderTexture, RenderTexture segmentationTexture, RenderTexture segmentationTextureArray, int fileID, string outputPath, Camera camera, ImageSaver imageSaver) {
-        exportRenderTexture(renderTexture, fileID, outputPath, imageSaver);
-        exportSegmentationTexture(instantiated_models, segmentationTexture, segmentationTextureArray, fileID, outputPath, imageSaver);
+    static public void exportFrame(List<UnityEngine.GameObject> instantiated_models, RenderTexture renderTexture, RenderTexture segmentationTexture, RenderTexture segmentationTextureArray, int fileID, string outputPath, ImageSaver.Extension outputExt, Camera camera, ImageSaver imageSaver) {
+        exportRenderTexture(renderTexture, fileID, outputPath, outputExt, imageSaver);
+        exportSegmentationTexture(instantiated_models, segmentationTexture, segmentationTextureArray, fileID, outputPath, outputExt, imageSaver);
         exportCameraData(renderTexture, fileID, outputPath, camera);
         exportObjectData(instantiated_models,  fileID, outputPath, camera);
         exportSceneData(fileID, outputPath);
