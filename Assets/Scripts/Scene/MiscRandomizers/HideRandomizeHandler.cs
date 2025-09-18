@@ -15,7 +15,7 @@ public class HideRandomizeHandler : RandomizerInterface
     }
     public float hideChance = 0.5f;
 
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
         this.gameObject.SetActive(rng.Next() > hideChance);
         resetFrameAccumulation();

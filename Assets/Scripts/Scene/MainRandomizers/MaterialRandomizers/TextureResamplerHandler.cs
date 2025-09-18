@@ -20,7 +20,7 @@ public class TextureResamplerHandler : MaterialRandomizerInterface
         texResampler = new TextureResampler(dataset);
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         bool first = true;
         foreach (MaterialTextures.MapTypes type in dataset.resampleTextures)

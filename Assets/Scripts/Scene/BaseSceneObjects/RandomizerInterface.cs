@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.io;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,7 @@ using UnityEngine.UIElements;
 
 public abstract class RandomizerInterface : MonoBehaviour
 {
-    public abstract void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null);
+    public abstract void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null);
 
     [Obsolete("exports are now selected by using the ExportInstanceInfo tag")]
     public virtual List<GameObject> getExportObjects() { return new List<GameObject>(); }

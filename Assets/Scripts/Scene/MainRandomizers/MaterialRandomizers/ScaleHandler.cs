@@ -20,7 +20,7 @@ public class ScaleHandler : MaterialRandomizerInterface
     //}
 
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         Vector3 nextScale = new Vector3(rng.Next()*0.3f + 0.85f, rng.Next() * 0.3f + 0.85f, rng.Next() * 0.3f + 0.85f);
         previousScale.x = 1 / previousScale.x;

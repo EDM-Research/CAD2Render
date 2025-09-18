@@ -23,7 +23,7 @@ public class ManufacturingLinesHandler : MaterialRandomizerInterface
         LineTextureGenerationShader = ResourceManager.loadShader("LineTextureGenerator");
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         var ColorTexture = textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture("_BaseColorMap"), textures.GetCurrentLinkedColor("_Color"));
         int texSizeX = ColorTexture.width;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.io.BOP;
+using System.Collections;
 using UnityEngine;
 
 
@@ -14,7 +15,7 @@ public class HSVOffsetHandler : MaterialRandomizerInterface
         RandomizerInterface.CloneDataset(ref dataset);
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         Color color = textures.GetCurrentLinkedColor("_Color");
 

@@ -24,7 +24,7 @@ public class ScratchGenerationHandler : MaterialRandomizerInterface
         ScratchGenerator = ResourceManager.loadShader("ScratchGenerator");
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         if (!textures.rend.material.IsKeywordEnabled("_NORMALMAP"))
             textures.rend.material.EnableKeyword("_NORMALMAP");
@@ -39,7 +39,7 @@ public class ScratchGenerationHandler : MaterialRandomizerInterface
         ScratchGenerator.SetTexture(kernelHandle, "DefectMapInOut", textures.get(MaterialTextures.MapTypes.defectMap));
 
 
-        ScratchGenerator.SetInt("nrScratches", 5);
+        ScratchGenerator.SetInt("nrScratches", 20);
         ScratchGenerator.SetFloat("scratchWidth", 2.5f);
         ScratchGenerator.SetInt("nrAASamples", 8);
 

@@ -67,14 +67,14 @@ public class ObjectRandomizeHandler : RandomizerInterface
         return objectData;
     }
 
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
         DestroyModels();
         this.rng = rng;
-        CreateModels(bopSceneIterator);
+        CreateModels(sceneIterator);
 
         if (materialRandomizeHandler != null)
-            materialRandomizeHandler.Randomize(ref rng, bopSceneIterator);
+            materialRandomizeHandler.Randomize(ref rng, sceneIterator);
         else
             resetFrameAccumulation();
     }
@@ -100,11 +100,11 @@ public class ObjectRandomizeHandler : RandomizerInterface
         instantiatedSubModels.Clear();
         instantiatedModels.Clear();
     }
-    private void CreateModels(BOPDatasetExporter.SceneIterator bopSceneIterator)
+    private void CreateModels(SceneIteratorInterface sceneIterator)
     {
-        if (bopSceneIterator != null && objectData.importFromBOP != ObjectRandomizeData.BopImportType.NoImport)
+        if (sceneIterator != null && objectData.importFromBOP != ObjectRandomizeData.BopImportType.NoImport)
         {
-            List<BOPDatasetExporter.Model> bopModels = bopSceneIterator.GetPose().models;
+            List<SceneIteratorInterface.C2RModel> bopModels = sceneIterator.GetPose().models;
             for (int i = 0; i < bopModels.Count; ++i)
             {
                 GameObject model = FindModel(bopModels[i].obj_id);

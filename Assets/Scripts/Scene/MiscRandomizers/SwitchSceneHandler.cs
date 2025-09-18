@@ -13,7 +13,7 @@ public class SwitchSceneHandler : RandomizerInterface
         RandomizerInterface.CloneDataset(ref dataset);
     }
 
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
         SceneManager.LoadSceneAsync(dataset.scenePath);//make sure it is not a child of the main randomizer
     }

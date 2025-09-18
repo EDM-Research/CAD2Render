@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 595b268c2df5b724e85867d7da315635, type: 3}
+  m_Name: FM_exportSettings
+  m_EditorClassIdentifier: 
+  exportRender: 1
+  outputExt: 0
+  exportSegmentationMasks: 1
+  exportCameraData: 1
+  exportSubModels: 0
+  exportWorldposition: 1
+  exportImagePosition: 0
+  exportKeypoints: 0
+  exportDepth: 1
+  depthMapExt: 0
+  applyGammaCorrection: 1

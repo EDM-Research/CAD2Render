@@ -11,6 +11,8 @@ TagManager:
   - GUI
   - CustomPass
   - Keypoint
+  - Exporter
+  - Generator
   layers:
   - Default
   - TransparentFX
@@ -25,9 +27,9 @@ TagManager:
   - FalseColor
   - Color
   - Prefabs
-  - 
-  - 
-  - 
+  - PSP_VirtualContent
+  - PSP_LeftEye
+  - PSP_RightEye
   - 
   - 
   - 

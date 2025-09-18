@@ -33,10 +33,11 @@ public class RustGenerationHandler : MaterialRandomizerInterface
     }
 
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         int kernelHandle = rustmapGenerationShader.FindKernel("CSMain");
         rustmapGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
+        rustmapGenerationShader.SetFloat("sharpness", dataset.sharpness);
 
         textures.set(MaterialTextures.MapTypes.maskMap, textures.GetCurrentLinkedTexture(MaterialTextures.MapTypes.maskMap), new Color(textures.GetCurrentLinkedFloat("_Metallic"), 1, 0,
                                                                                                                    textures.GetCurrentLinkedFloat("_Smoothness")));

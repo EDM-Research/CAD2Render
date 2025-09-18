@@ -13,7 +13,7 @@ public class AnimationProgressRandomizeHandler : RandomizerInterface
         return null;
     }
 
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
         if(animator == null)
             animator = GetComponent<Animator>();

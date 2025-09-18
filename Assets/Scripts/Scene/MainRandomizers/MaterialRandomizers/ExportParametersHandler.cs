@@ -8,7 +8,7 @@ public class ExportParametersHandler : MaterialRandomizerInterface
 
     public override int getPriority() { return 100; }
 
-    public override void RandomizeSingleInstance(GameObject instance, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleInstance(GameObject instance, ref RandomNumberGenerator rng)
     {
         var falseColor = instance.GetComponent<FalseColor>();
         if (falseColor == null)
@@ -20,7 +20,7 @@ public class ExportParametersHandler : MaterialRandomizerInterface
         instance.tag = "ExportInstanceInfo";
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         var parent = textures.rend.gameObject.GetComponentInParent<FalseColor>();
         if(parent == null)

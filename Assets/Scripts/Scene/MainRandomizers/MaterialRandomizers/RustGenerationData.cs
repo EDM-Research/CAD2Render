@@ -43,4 +43,6 @@ public class RustGenerationData : ScriptableObject
     public Boolean changeNormalMap = true;
     [Range(-1.0f, 1.0f)]
     public float dentModifier = 1.0f;
+    [Tooltip("Sharpness transition between clean and rusty surface.")]
+    public float sharpness = 200.0f;
 }

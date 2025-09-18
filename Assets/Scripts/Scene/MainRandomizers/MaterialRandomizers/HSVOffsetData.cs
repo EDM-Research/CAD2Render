@@ -20,12 +20,12 @@ using UnityEngine.Rendering;
 public class HSVOffsetData : ScriptableObject
 {
     [Tooltip("Random Hue offset")]
-    [Range(0.0f, 180.0f)]
+    [Range(0.0f, 360.0f)]
     public float H_maxOffset = 0.0f;
     [Tooltip("Random Saturation offset")]
-    [Range(0.0f, 50.0f)]
+    [Range(0.0f, 100.0f)]
     public float S_maxOffset = 0.0f;
     [Tooltip("Random Value offset")]
-    [Range(0.0f, 50.0f)]
+    [Range(0.0f, 100.0f)]
     public float V_maxOffset = 0.0f;
 }

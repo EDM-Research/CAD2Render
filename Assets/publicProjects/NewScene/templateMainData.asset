@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: templateMainData
   m_EditorClassIdentifier: 
   outputPath: ../renderings/templateScene/
-  annotationisFile: annotations.txt
+  sceneId: 1
   BOPInputPath: 
   mmToUnityDistanceScale: 0.01
   resolution: {x: 1920, y: 1080}
@@ -24,22 +24,19 @@ MonoBehaviour:
   applyGammaCorrection: 1
   autoCameraExposure: 1
   stopSimulationTimeCompletly: 1
-  numRenderFrames: 500
+  numRenderFrames: 50
   numPhysicsFrames: 500
   startFileCounter: 0
-  numberOfSamples: 50000
+  numberOfImages: -1
   seed: 42
   separateUpdates: 0
   updateIntervals:
   - randomizerType: 0
     interval: 0
-  exportToBOP: 1
-  BOPSceneId: 1
-  exportKeyPoints: 1
-  exportDepthTexture: 1
   maxDepthDistance: 1300
   exportNormalTexture: 1
   exportAlbedoTexture: 1
+  exportColoredSegmentations: 0
   exportToFMFormat: 1
   outputExt: 0
   exportSubModels: 0

@@ -42,18 +42,49 @@ public class ImageBackgroundRandomizeHandler : RandomizerInterface
 
     GameObject backgroundPlane = null;
     Material background = null;
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
         if (backgroundPlane == null)
             setupBackgroundPlane();
 
         if (dataset.randomizeRotation)
-            backgroundPlane.transform.localEulerAngles = new Vector3(rng.Range(dataset.minRotationAngle, dataset.maxRotationAngle), -90, 90);
+            backgroundPlane.transform.localEulerAngles = new Vector3(rng.Range(-dataset.rotationAngle, dataset.rotationAngle) + dataset.offsetRotationAngle, -90, 90);
 
         if (backgroundTextures.Length > 1)
             background.mainTexture = backgroundTextures[rng.IntRange(0, backgroundTextures.Length)];
 
+        if (dataset.hsvOffsetData != null)
+            HSVOffset(ref rng);
+
         resetFrameAccumulation();
+    }
+
+    private void HSVOffset(ref RandomNumberGenerator rng)
+    {
+        Color color = Color.white;
+
+        float H, S, V;
+        Color.RGBToHSV(color, out H, out S, out V);
+
+        H = H * 360.0f + rng.Range(-dataset.hsvOffsetData.H_maxOffset, +dataset.hsvOffsetData.H_maxOffset);
+        S = S * 100.0f + rng.Range(-dataset.hsvOffsetData.S_maxOffset, +dataset.hsvOffsetData.S_maxOffset);
+        V = V * 100.0f + rng.Range(-dataset.hsvOffsetData.V_maxOffset, 0);
+
+        if (H < 0.0f)
+            H = H + 360.0f;
+        if (H >= 360.0f)
+            H = H - 360.0f;
+        S = Mathf.Min(S, 100.0f);
+        S = Mathf.Max(S, 0.0f);
+        V = Mathf.Min(V, 100.0f);
+        V = Mathf.Max(V, 0.0f);
+
+        Color randomColor = Color.HSVToRGB(H / 360.0f, S / 100.0f, V / 100.0f);
+        background.color = randomColor;
+        background.SetColor("_ColorTint", randomColor);
+        background.SetColor("_Color", randomColor);
+        background.SetColor("_PaintColor", randomColor);
+        background.SetColor("_Color", randomColor);
     }
 
     private void setupBackgroundPlane()

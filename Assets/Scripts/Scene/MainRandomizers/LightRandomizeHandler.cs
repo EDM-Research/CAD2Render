@@ -58,7 +58,7 @@ public class LightRandomizeHandler : RandomizerInterface
         return dataset;
     }
 
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
         if (dataset.environmentVariatons)
             RandomizeEnvironment(ref rng);

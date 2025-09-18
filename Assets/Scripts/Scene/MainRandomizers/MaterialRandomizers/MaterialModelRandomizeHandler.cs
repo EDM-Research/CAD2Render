@@ -15,16 +15,17 @@ public class MaterialModelRandomizeHandler : MaterialRandomizerInterface
         RandomizerInterface.CloneDataset(ref dataset);
     }
 
+    public override int getPriority() { return 100; }
     private Material[] materials = new Material[0];
     public void Awake()
     {
         materials = ResourceManager.LoadAll<Material>(dataset.materialsPath);
-
+        
         if (materials.Length == 0)
             Debug.LogWarning("No materials found in " + dataset.materialsPath);
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         if (materials.Length == 0)
             return;

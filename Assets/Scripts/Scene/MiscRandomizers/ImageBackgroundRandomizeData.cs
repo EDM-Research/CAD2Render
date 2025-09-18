@@ -11,17 +11,17 @@ using UnityEngine.Rendering;
 public class ImageBackgroundRandomizeData : ScriptableObject
 {
     [Header("Image background Variations")]
-    [Tooltip("Enable image background variations")]
-    public bool ImageBackgroundVariatons = false;
     [Tooltip("Path to background images (relative to Resources dir)")]
     public string backgroundImagePath;
 
     public bool randomizeRotation = true;
-    [Tooltip("Min rotation angle")]
+    [Tooltip("set default rotation angle")]
     [Range(0.0f, 360.0f)]
-    public float minRotationAngle = 0.0f;
-    [Tooltip("Max rotation angle")]
-    [Range(0.0f, 360.0f)]
-    public float maxRotationAngle = 360.0f;
+    public float offsetRotationAngle = 0.0f;
+    [Tooltip("set variation of rotation angle")]
+    [Range(0.0f, 180.0f)]
+    public float rotationAngle = 180.0f;
 
+    [Tooltip("set to change the color of the background image")]
+    public HSVOffsetData hsvOffsetData = null;
 }

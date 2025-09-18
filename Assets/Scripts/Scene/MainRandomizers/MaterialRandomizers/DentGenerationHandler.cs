@@ -24,7 +24,7 @@ public class DentGenerationHandler : MaterialRandomizerInterface
         DentedNormalGenerator = ResourceManager.loadShader("DentedNormalGenerator");
     }
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         if (!textures.rend.material.IsKeywordEnabled("_NORMALMAP"))
             textures.rend.material.EnableKeyword("_NORMALMAP");

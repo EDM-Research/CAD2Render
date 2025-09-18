@@ -49,7 +49,7 @@ public class TextureResampler
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             TdrDelay_registerFixed = !EditorUtility.DisplayDialog("TdrDelay", "The TdrDelay or TdrDdiDelay registry values at\n" + "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" + "\nare not set or below 30(s).\nThis might cause unity to crash when using the texture resampler (Losing unsaved changes)", "Don't use the resampler", "I understand");
         }

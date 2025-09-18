@@ -74,9 +74,9 @@ public class ViewRandomizeHandler : RandomizerInterface
     }
 
     //int i = 0;
-    public override void Randomize(ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
-        if (dataset.importFromBOP && bopSceneIterator == null)
+        if (dataset.importFromBOP && sceneIterator == null)
             Debug.LogWarning("Import camera pose from bop is enababled but the bob scene == null"); ;
 
         //rng calls are done first so the rng stays consitent between imported en randomized viewpoints
@@ -89,14 +89,14 @@ public class ViewRandomizeHandler : RandomizerInterface
             up.y = rng.RandomSign();
 
 
-        if (dataset.importFromBOP && bopSceneIterator != null)
+        if (dataset.importFromBOP && sceneIterator != null)
         {
-            mainCamera.transform.SetPositionAndRotation(bopSceneIterator.GetPose().worldToCam.GetTranslation(), bopSceneIterator.GetPose().worldToCam.GetRotation());
+            mainCamera.transform.SetPositionAndRotation(sceneIterator.GetPose().worldToCam.GetTranslation(), sceneIterator.GetPose().worldToCam.GetRotation());
 
-            cameraMatrix[0, 0] = bopSceneIterator.GetPose().projMat[0, 0];
-            cameraMatrix[0, 2] = bopSceneIterator.GetPose().projMat[0, 2];
-            cameraMatrix[1, 1] = bopSceneIterator.GetPose().projMat[1, 1];
-            cameraMatrix[1, 2] = bopSceneIterator.GetPose().projMat[1, 2];
+            cameraMatrix[0, 0] = sceneIterator.GetPose().projMat[0, 0];
+            cameraMatrix[0, 2] = sceneIterator.GetPose().projMat[0, 2];
+            cameraMatrix[1, 1] = sceneIterator.GetPose().projMat[1, 1];
+            cameraMatrix[1, 2] = sceneIterator.GetPose().projMat[1, 2];
             SetCameraProperties();
         }
         else

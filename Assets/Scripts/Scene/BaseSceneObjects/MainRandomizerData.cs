@@ -23,15 +23,12 @@ public class MainRandomizerData : ScriptableObject {
 
 
     [Header("Input/output paths")]
-    [Tooltip("Path to output dataset folder.")]
-    public string outputPath = "../renderings/";
-    [Tooltip("Name of annotations file. Relative to output path.")]
-    public string annotationisFile = "annotations.txt";
+    [Tooltip("Location where the exported datasets are saved.")]
+    public string outputPath = "";
+    [Tooltip("The scene id")]
+    public int sceneId = 1;
     [Tooltip("Location of the bop file to import.")]
     public string BOPInputPath = "";
-    [Tooltip("With which value the unity units need to be multiplied to get mm.")]
-    [Range(0.001f, 10)]
-    public float mmToUnityDistanceScale = 0.01f;
 
     [Header("Render settings")]
     [Tooltip("Resolution of generated images.")]
@@ -44,8 +41,6 @@ public class MainRandomizerData : ScriptableObject {
     public VolumeProfile postProcesingProfile = null;
     [Tooltip("Enable gamma correction. Required to map linear scale rendered texture to gamma scale.")]
     public bool applyGammaCorrection = true;
-    //[Tooltip("Gamma correction gamma (pixel^(1/gamma)")]
-    //public float gammaCorrection = 2.2f;
     [Tooltip("Enable auto exposure of camera. Avoids too bright or too dark images.")]
     public bool autoCameraExposure = false;
     [Tooltip("Stop simumation time when rendering.")]
@@ -78,42 +73,11 @@ public class MainRandomizerData : ScriptableObject {
 
     [Header("Export settings")]
 
+    [Tooltip("With which value the unity units need to be multiplied to get mm.")]
+    [Range(0.001f, 10)]
+    public float mmToUnityDistanceScale = 0.01f;
     [Space(5)]
-    [Tooltip("Export BOP files")]
-    public bool exportToBOP = true;
-    [Tooltip("Extension of generated images and masks.")]
-    public ImageSaver.Extension outputExtBOP = ImageSaver.Extension.jpg;
-    [Tooltip("The scene id used when exporting to the bop format")]
-    public int BOPSceneId = 1;
-    [Tooltip("Export the location of objects with the keypoint tag.")]
-    public bool exportKeyPoints = false;
-
-    [Space(5)]
-    [Tooltip("Export depth map")]
-    public bool exportDepthTexture = false;
-    [Tooltip("Format of depth map export")]
-    public ImageSaver.Extension depthMapExt = ImageSaver.Extension.png;
     [Tooltip("The max distance the depth in mm texture displays correctly, further away objects wil be sturated. Lower values mean more detailed depth texture")]
     public float maxDepthDistance = 1000.0f;
-    [Tooltip("Export normal map")]
-    public bool exportNormalTexture = false;
-    [Tooltip("Export albedo map")]
-    public bool exportAlbedoTexture = false;
-    [Tooltip("When set to true, only a collored segmentation mask is exported. This behaviour will automaticly happen when more then 20 objects need to be exported (to prevent a crash due to high ram usages of texture reservations.).")]
-    public bool exportColoredSegmentations = false;
 
-    [Space(5)]
-    [Tooltip("Export fm_format files (deprecated)")]
-    public bool exportToFMFormat = false;
-    [Tooltip("Extension of generated images. Segmentation masks are always exported as png.")]
-    public ImageSaver.Extension outputExt = ImageSaver.Extension.png;
-    [Tooltip("Enable exporting sub-models.")]
-    public bool exportSubModels = false;
-    [Tooltip("Enable to export 2d image positions of sub models. Used for keypoints.")]
-    public bool exportImagePosition = false;
-    [Space(5)]
-    [Tooltip("Export Mitsuba Render files")]
-    public bool exportToMitsuba = false;
-    [Tooltip("Number of Mitsuba samples")]
-    public int mitsubaSampleCount = 128;
 }

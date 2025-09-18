@@ -20,7 +20,7 @@ public class RotationHandler : MaterialRandomizerInterface
     }
 
 
-    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng, BOPDatasetExporter.SceneIterator bopSceneIterator = null)
+    public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         Quaternion nextRoation = Quaternion.Euler(rng.Angle(dataset.rotation_X.x, dataset.rotation_X.y), 
                                                     rng.Angle(dataset.rotation_Y.x, dataset.rotation_Y.y),
