@@ -17,7 +17,7 @@ namespace Assets.Scripts.io.BOP
     [System.Serializable]
     public class BOPDatasetExporter : ExportDatasetInterface
     {
-        private ImageSaver imageSaver;
+        protected ImageSaver imageSaver;
 
         public BOPExportSettings dataset;
         [InspectorButton("TriggerCloneClicked")]
@@ -86,7 +86,7 @@ namespace Assets.Scripts.io.BOP
 
         public void exportRenderTexture(int fileID)
         {
-            imageSaver.Save(renderTexture, getFullPath()+ "rgb/" + fileID.ToString("D6"), dataset.outputExt, true, true);
+            imageSaver.Save(renderTexture, getFullPath()+ "rgb/" + fileID.ToString("D6"), dataset.outputExt, true, false);
         }
         public void exportDepthTexture(int fileID)
         {
