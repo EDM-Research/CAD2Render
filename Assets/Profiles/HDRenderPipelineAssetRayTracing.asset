@@ -34,11 +34,9 @@ MonoBehaviour:
     supportWater: 0
     waterSimulationResolution: 128
     supportWaterExclusion: 1
-    supportWaterDeformation: 1
-    deformationAtlasSize: 512
-    maximumDeformerCount: 64
-    supportWaterFoam: 1
-    foamAtlasSize: 512
+    supportWaterDecals: 1
+    waterDecalAtlasSize: 1024
+    maximumWaterDecalCount: 48
     waterScriptInteractionsMode: 0
     waterFullCPUSimulation: 0
     supportComputeThickness: 0
@@ -66,8 +64,8 @@ MonoBehaviour:
     supportDecalLayers: 0
     supportSurfaceGradient: 0
     decalNormalBufferHP: 0
-    supportHighQualityLineRendering: 0
-    highQualityLineRenderingMemoryBudget: 128
+    supportHighQualityLineRendering: 1
+    highQualityLineRenderingMemoryBudget: 512
     msaaSampleCount: 1
     supportMotionVectors: 1
     supportScreenSpaceLensFlare: 1
@@ -75,7 +73,7 @@ MonoBehaviour:
     supportDitheringCrossFade: 1
     supportRuntimeAOVAPI: 0
     supportTerrainHole: 0
-    lightProbeSystem: 0
+    lightProbeSystem: 1
     oldLightProbeSystem: 0
     probeVolumeMemoryBudget: 1024
     supportProbeVolumeGPUStreaming: 0
@@ -85,7 +83,7 @@ MonoBehaviour:
     supportProbeVolumeScenarioBlending: 1
     probeVolumeBlendingMemoryBudget: 128
     supportRayTracing: 1
-    supportVFXRayTracing: 0
+    supportVFXRayTracing: 1
     supportedRayTracingMode: 3
     lightLoopSettings:
       cookieAtlasSize: 2048
@@ -101,7 +99,7 @@ MonoBehaviour:
       reflectionProbeTexCacheSize: 16384
       reflectionProbeTexLastValidCubeMip: 3
       reflectionProbeTexLastValidPlanarMip: 0
-      reflectionProbeDecreaseResToFit: 1
+      reflectionProbeDecreaseResToFit: 0
       skyReflectionSize: 256
       skyLightingOverrideLayerMask:
         serializedVersion: 2
@@ -170,6 +168,9 @@ MonoBehaviour:
       advancedUpscalersByPriority: 00
       DLSSPerfQualitySetting: 2
       DLSSInjectionPoint: 0
+      TAAUInjectionPoint: 0
+      STPInjectionPoint: 0
+      defaultInjectionPoint: 2
       DLSSUseOptimalSettings: 1
       DLSSSharpness: 0
       FSR2EnableSharpness: 0
@@ -188,9 +189,10 @@ MonoBehaviour:
       lowResTransparencyMinimumThreshold: 0
       rayTracingHalfResThreshold: 50
       lowResSSGIMinimumThreshold: 0
+      lowResVolumetricCloudsMinimumThreshold: 50
       enableDLSS: 0
     lowresTransparentSettings:
-      enabled: 1
+      enabled: 0
       checkerboardDepthBuffer: 1
       upsampleType: 1
     xrSettings:
@@ -212,6 +214,10 @@ MonoBehaviour:
       DoFResolution: 040000000200000001000000
       DoFHighQualityFiltering: 000101
       DoFPhysicallyBased: 000000
+      AdaptiveSamplingWeight:
+      - 0.5
+      - 0.75
+      - 2
       LimitManualRangeNearBlur: 000000
       MotionBlurSampleCount: 04000000080000000c000000
       BloomRes: 040000000200000002000000
@@ -265,10 +271,6 @@ MonoBehaviour:
       - 50
       - 50
       RTGIFullResolution: 000001
-      RTGIClampValue:
-      - 0.5
-      - 0.8
-      - 1.5
       RTGIRaySteps: 200000003000000040000000
       RTGIDenoise: 010101
       RTGIHalfResDenoise: 010000
@@ -289,10 +291,6 @@ MonoBehaviour:
       - 50
       - 50
       - 50
-      RTRClampValue:
-      - 0.8
-      - 1
-      - 1.2
       RTRFullResolution: 000001
       RTRRayMaxIterations: 200000003000000040000000
       RTRDenoise: 010101

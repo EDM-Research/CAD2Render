@@ -38,33 +38,37 @@ public class HSVOffsetHandler : MaterialRandomizerInterface
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
-        bool gLTFshader = true;
-        // glTF shaders
-        Color initialColor = textures.GetCurrentLinkedColor("baseColorFactor");
-        //HDRP lit shader
-        if (initialColor == Color.clear)
+        Color initialColor = Color.white;
+        switch (textures.rend.material.shader.name)
         {
-            initialColor = textures.GetCurrentLinkedColor("_BaseColor");
-            gLTFshader = false;
+            //     color = textures.GetCurrentLinkedColor("_PaintColor");
+            //     color = textures.GetCurrentLinkedColor("_ColorTint");
+            //     color = textures.GetCurrentLinkedColor("_Color");
+            case "":
+                initialColor = textures.GetCurrentLinkedColor("baseColorFactor");
+                break;
+            case "HDRP/Lit":
+            default:
+                initialColor = textures.GetCurrentLinkedColor("_BaseColor");
+                break;
         }
-        // if(color == Color.clear)
-        //     color = textures.GetCurrentLinkedColor("_Color");
-        // if(color == Color.clear)
-        //     color = textures.GetCurrentLinkedColor("_ColorTint");
-        // if(color == Color.clear)
-        //     color = textures.GetCurrentLinkedColor("_PaintColor");
 
         // generate a random color based on min and max hsv values
         Color randomColor = generateRandomcolor(ref rng, initialColor);
 
-        if (gLTFshader)
-            textures.newProperties.SetColor("baseColorFactor", randomColor);//glb shader
-        else
-            textures.newProperties.SetColor("_BaseColor", randomColor);//lit shader (recomended)
-
-        // textures.newProperties.SetColor("_ColorTint", randomColor);
-        // textures.newProperties.SetColor("_Color", randomColor);
-        // textures.newProperties.SetColor("_PaintColor", randomColor);
+        switch (textures.rend.material.shader.name)
+        {
+            case "":
+                textures.newProperties.SetColor("baseColorFactor", randomColor);//glb shader
+                break;
+            case "HDRP/Lit":
+            default:
+                //textures.newProperties.SetColor("_BaseColor", randomColor);//lit shader (recomended)
+                textures.newProperties.SetColor("_Color", randomColor);
+                textures.newProperties.SetColor("_ColorTint", randomColor);
+                textures.newProperties.SetColor("_PaintColor", randomColor);
+                break;
+        }
     }
 
     public override ScriptableObject getDataset()

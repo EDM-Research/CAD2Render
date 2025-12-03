@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fee1aee55c7104087269cb48c7e086, type: 3}
   m_Name: HSV_SmallChanges
   m_EditorClassIdentifier: 
-  H_maxOffset: 10
-  S_maxOffset: 5
-  V_maxOffset: 5
-  A_maxOffset: 5.3
+  H_maxOffset: 360
+  S_maxOffset: 18
+  V_maxOffset: 17.8
