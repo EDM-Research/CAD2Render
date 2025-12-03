@@ -60,6 +60,8 @@ public class GUIManager : MonoBehaviour
         {
             foreach(var titleTexturePair in pass.getTextureOutputs())
             {
+                if (titleTexturePair.Item2 == null)
+                    continue;
                 var image = new Image();
                 image.scaleMode = ScaleMode.ScaleToFit;
                 image.image = titleTexturePair.Item2;

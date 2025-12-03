@@ -29,13 +29,12 @@ namespace UnityEngine.Rendering.HighDefinition
         public RenderTexture depth360Texture { get; private set; }
         public RenderTexture color360Texture { get; private set; }
         private RenderTexture cubemap = null;
-        //public RenderTexture equirect = null;
+        public RenderTexture equirect = null;
 
         private RayTracingAccelerationStructure raytracingAccelerationStructure = null;
         private RayTracingShader lidarRaySpawner = null;
 
         static ShaderTagId[] shaderTags;
-        Color backgroundColor;
 
         public LidarCustomPass(LidarExportSettings settings, Camera camera) : base()
         {
@@ -43,21 +42,11 @@ namespace UnityEngine.Rendering.HighDefinition
             overrideMaterial = new Material(Shader.Find("Unlit/RayTracing/worldPosition"));
             lidarRaySpawner = Assets.Scripts.io.MyResourceManager.loadRTXShader("LidarRaytracingShader");
             bakingCamera = camera;
-        }
 
-        protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
-        {
-            Cleanup();
-
-            backgroundColor = new Color(0.0f, 0.0f, 0.0f, 1.0f);
-            shaderTags = new ShaderTagId[]
-            {
-                new ShaderTagId("RayTracing"),
-            };
             depth360Texture = new RenderTexture(exportSettings.resolution.x, exportSettings.resolution.y, 24, RenderTextureFormat.ARGBFloat);
             depth360Texture.enableRandomWrite = true;
             depth360Texture.Create();
-            
+
             color360Texture = new RenderTexture(exportSettings.resolution.x, exportSettings.resolution.y, 24, RenderTextureFormat.ARGB32);
             color360Texture.enableRandomWrite = true;
             color360Texture.Create();
@@ -74,24 +63,16 @@ namespace UnityEngine.Rendering.HighDefinition
             cubeCamera = cubeCameraGo.AddComponent<Camera>();
             cubeCamera.enabled = false;
 
-            /*
-            equirect = new RenderTexture(resolution*2, resolution, 16);
-            var GUI = GameObject.FindGameObjectWithTag("GUI");
-            if (!GUI)
+
+            equirect = new RenderTexture(exportSettings.resolution.x * 2, exportSettings.resolution.y, 16);
+        }
+
+        protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
+        {
+            shaderTags = new ShaderTagId[]
             {
-                Debug.LogWarning("GUI not found while linking buttons");
-                return;
-            }
-            var UIDoc = GUI.GetComponent<UIDocument>();
-            if (!UIDoc)
-            {
-                Debug.LogWarning("UIDocument not found in the GUI while linking buttons");
-                return;
-            }
-            UIDoc.panelSettings.clearColor = true;
-            var item = new Image();
-            item.image = equirect;
-            UIDoc.rootVisualElement.Q<VisualElement>("RenderDisplay").Add(item);*/
+                new ShaderTagId("RayTracing"),
+            };
 
         }
 
@@ -165,7 +146,7 @@ namespace UnityEngine.Rendering.HighDefinition
 
             ctx.cmd.DispatchRays(lidarRaySpawner, "MainRayGenShader", (uint)depth360Texture.width, (uint)depth360Texture.height, 1);
 
-            //cubemap.ConvertToEquirect(equirect);
+            cubemap.ConvertToEquirect(equirect);
         }
 
         /// <inheritdoc />
