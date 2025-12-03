@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
 [AddComponentMenu("Cad2Render/Object Randomize Handler")]
@@ -33,7 +33,7 @@ public class ObjectRandomizeHandler : RandomizerInterface
         randomizerType = MainRandomizerData.RandomizerTypes.Object;
         LinkGui();
 
-        models = ResourceManager.LoadAll<GameObject>(objectData.modelsPath);
+        models = MyResourceManager.LoadAll<GameObject>(objectData.modelsPath);
         if (objectData.seperateSubmodels)
         {
             foreach (GameObject model in models)

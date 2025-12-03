@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
 [AddComponentMenu("Cad2Render/MaterialRandomizers/Dent generation")]
@@ -21,7 +21,7 @@ public class DentGenerationHandler : MaterialRandomizerInterface
 
     public void Awake()
     {
-        DentedNormalGenerator = ResourceManager.loadShader("DentedNormalGenerator");
+        DentedNormalGenerator = MyResourceManager.loadComputeShader("DentedNormalGenerator");
     }
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)

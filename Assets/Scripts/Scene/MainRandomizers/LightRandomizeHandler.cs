@@ -21,8 +21,6 @@ public class LightRandomizeHandler : RandomizerInterface
     private UnityEngine.Object[] projectorMaps;
 
     private List<Light> instantiatedLights;
-    GameObject renderSettings = null;
-    GameObject postProcesingSettings = null;
 
     private int LightIndex = 0;
 
@@ -41,13 +39,6 @@ public class LightRandomizeHandler : RandomizerInterface
         if (cubeMaps.Length == 0 && dataset.environmentsPath != "")
         {
             Debug.LogWarning("No environment maps found in " + dataset.environmentsPath);
-        }
-        var temp = GameObject.FindGameObjectWithTag("EnvironmentSettings");
-        if (temp != null)
-        {
-            renderSettings = (GameObject)temp.transform.Find("Rendering Settings")?.gameObject;
-            //raytracingSettings = temp.transform.Find("Ray Tracing Settings")?.gameObject;
-            postProcesingSettings = temp.transform.Find("PostProcessing")?.gameObject;
         }
 
         instantiatedLights = new List<Light>();
@@ -107,8 +98,8 @@ public class LightRandomizeHandler : RandomizerInterface
     private void RandomizeEnvironment(ref RandomNumberGenerator rng)
     {
         HDRISky sky = null;
-        if (renderSettings != null)
-            renderSettings.GetComponent<Volume>()?.profile.TryGet<HDRISky>(out sky);
+        if (MainRandomizer.renderSettings != null)
+            MainRandomizer.renderSettings.TryGet<HDRISky>(out sky);
         if (sky == null)
         {
             Debug.LogWarning("No sky found in the light randomizer");
@@ -140,8 +131,8 @@ public class LightRandomizeHandler : RandomizerInterface
         if (dataset.randomExposuresEnvironment)
         {
             Exposure exposureCorrection = null;
-            if (postProcesingSettings != null)
-                postProcesingSettings.GetComponent<Volume>()?.profile.TryGet<Exposure>(out exposureCorrection);
+            if (MainRandomizer.postProcesingSettings != null)
+                MainRandomizer.postProcesingSettings.TryGet<Exposure>(out exposureCorrection);
             if (exposureCorrection == null)
             {
                 Debug.LogWarning("No exposure found in the post processing gameobject");

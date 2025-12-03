@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
 [AddComponentMenu("Cad2Render/MaterialRandomizers/Rust generation")]
@@ -26,7 +26,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
 
     public void Awake()
     {
-        rustmapGenerationShader = ResourceManager.loadShader("rustMapGenerator");
+        rustmapGenerationShader = MyResourceManager.loadComputeShader("rustMapGenerator");
         changeNormalMap = new LocalKeyword(rustmapGenerationShader, "changeNormalMap");
         changeMaskmap = new LocalKeyword(rustmapGenerationShader, "changeMaskMap");
         changeColor = new LocalKeyword(rustmapGenerationShader, "changeColor");
@@ -82,6 +82,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         rustmapGenerationShader.SetFloat("xSkew", dataset.xSkew);
         rustmapGenerationShader.SetFloat("rustCoMin", dataset.rustCoeficient.x);
         rustmapGenerationShader.SetFloat("rustCoMax", dataset.rustCoeficient.y);
+        rustmapGenerationShader.SetFloat("sharpness", dataset.sharpness);
         rustmapGenerationShader.SetInt("nrOfOctaves", (int)dataset.nrOfOctaves);
 
         //execute shader

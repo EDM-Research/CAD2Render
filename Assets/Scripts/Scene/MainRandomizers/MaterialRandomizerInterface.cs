@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-//[RequireComponent(typeof(MaterialTextureData))]
 public abstract class MaterialRandomizerInterface : MonoBehaviour
 {
     //this methode is called on every material for every renderer of the game object and its children.

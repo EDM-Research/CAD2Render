@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
 [AddComponentMenu("Cad2Render/MaterialRandomizers/Scratch Generation")]
@@ -21,7 +21,7 @@ public class ScratchGenerationHandler : MaterialRandomizerInterface
 
     public void Awake()
     {
-        ScratchGenerator = ResourceManager.loadShader("ScratchGenerator");
+        ScratchGenerator = MyResourceManager.loadComputeShader("ScratchGenerator");
     }
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)

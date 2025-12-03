@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using Microsoft.Win32;
 using System;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 public class TextureResampler
 {
@@ -23,7 +23,7 @@ public class TextureResampler
     public TextureResampler(TextureResamplerData dataset)
     {
         this.dataset = dataset;
-        TextureSynthesizer = ResourceManager.loadShader("TextureSynthesizer");
+        TextureSynthesizer = MyResourceManager.loadComputeShader("TextureSynthesizer");
 
         if (TdrDelay_registerWarningSend)
             return;

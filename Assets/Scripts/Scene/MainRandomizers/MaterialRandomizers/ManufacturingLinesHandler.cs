@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
 [AddComponentMenu("Cad2Render/MaterialRandomizers/ManufacturingLines")]
@@ -20,7 +20,7 @@ public class ManufacturingLinesHandler : MaterialRandomizerInterface
 
     public void Awake()
     {
-        LineTextureGenerationShader = ResourceManager.loadShader("LineTextureGenerator");
+        LineTextureGenerationShader = MyResourceManager.loadComputeShader("LineTextureGenerator");
     }
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)

@@ -1,0 +1,124 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+//struct to represent scratches
+struct lineSegment
+{
+    float2 a;
+    float2 b;
+};
+
+//cpu input data
+//detail map that is produced
+RWTexture2D<float4> Result;
+//list of all the scratches
+StructuredBuffer<lineSegment> scratchLines;
+//width of a scratch
+float scratchWidth;
+//list of all the spots that need to be darkend
+StructuredBuffer<float2> spotLocations;
+//size in pixels of dark spots
+float spotSize;
+//seed to be used as random (every thread changes this one a litle for thread random numbers)
+uint nrAASamples;
+
+//forward declarations
+#include "RandomGPU.compute"
+float2 getProjectionPoint(float2 lineSeg1, float2 lineSeg2, float2 p);
+float mexicanHatWavelet(float x);
+float mexicanHatWaveletDerivative(float x);
+float plateauFunction(float x);
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint threadRandSeed = randSeed + id.x * 4517 + id.y * 123185; //random seed for each thread
+    float2 idCoord = float2(id.xy);
+    uint count, size;//neded to perform get dimensions on buffers
+    
+    //albedo for surface imperfections
+    float albedo = 1;
+    scratchLines.GetDimensions(count, size);
+    spotSize *= 0.9 + 0.2 * nextRand(threadRandSeed);
+    for (uint i = 0; i < count; ++i)
+    {
+        float spotDistance = distance(idCoord, spotLocations[i]);
+        albedo -= plateauFunction(spotDistance / spotSize);
+    }
+    clamp(albedo, 0, 1);
+    
+    
+    //normals for surface imperfections
+    float2 xyNormalVector = float2(0.0f, 0.0f);
+    scratchLines.GetDimensions(count, size);
+    scratchWidth *= 0.9 + 0.2 * nextRand(threadRandSeed);//add a bit of random to the size of a scratch
+    for (uint u = 0; u < count * nrAASamples; ++u)
+    {
+        float2 aaCoord = idCoord + float2(nextRand(randSeed) - 0.5f, nextRand(randSeed) - 0.5f);
+        float2 projectionPoint = getProjectionPoint(scratchLines[u % count].a, scratchLines[u % count].b, aaCoord);
+        float scratchDistance = distance(projectionPoint, aaCoord);
+        xyNormalVector += 0.5 * normalize(projectionPoint - aaCoord) * mexicanHatWavelet(scratchDistance / scratchWidth);
+    }
+    xyNormalVector /= nrAASamples;
+    xyNormalVector += float2(0.5f, 0.5f);
+    clamp(xyNormalVector, float2(0, 0), float2(1, 1));
+    
+    float smoothness = 1 - nextRand(threadRandSeed) * 0.3;
+    
+    Result[id.xy] = float4(albedo, xyNormalVector.y, smoothness, xyNormalVector.x);
+    
+}
+
+float2 getProjectionPoint(float2 lineSeg1, float2 lineSeg2, float2 p)
+{
+  // Return minimum distance between the line segment and point p
+    const float l2 = dot(lineSeg1 - lineSeg2, lineSeg1 - lineSeg2);
+    if (l2 == 0.0)
+        return lineSeg1; // lineSeg1 == w case
+  // Consider the line extending the segment, parameterized as lineSeg1 + t (lineSeg2 - lineSeg1).
+  // We find projection of point p onto the line. 
+  // It falls where t = [(p-lineSeg1) . (lineSeg2-lineSeg1)] / |lineSeg2-lineSeg1|^2
+  // We clamp t from [0,1] to handle points outside the line segment.
+    const float t = max(0, min(1, dot(p - lineSeg1, lineSeg2 - lineSeg1) / l2));
+    const float2 projection = lineSeg1 + t * (lineSeg2 - lineSeg1); // Projection falls on the segment
+    return projection;
+}
+
+
+//returns 1 if x is around 0 (+-0.7). falls off quicly to 0 further away (+-1.5)
+// https://www.desmos.com/calculator/kw5urolrgr
+float plateauFunction(float x)
+{
+    const float sigma = 3;
+    
+    return exp(-pow(x, sigma * 2)) * (1 + pow(x, sigma * 2));
+}
+
+// return value between [-0.5;1]
+// positive when x is [+-0.3]
+// negative when x is [-1;-0.3] and [0.3;1]
+// https://www.desmos.com/calculator/kyzso7pbv4
+float mexicanHatWavelet(float x)
+{
+    const float sigma = 0.3;//wavelet width
+    
+    //float a = 2 / sqrt(3 * sigma) * pow(PI, 0.25f);
+    float b = 1 - pow(x / sigma, 2);
+    float c = exp(-(x * x) / (2 * sigma * sigma));
+    //return a * b * c;
+    return b * c;
+}
+
+float mexicanHatWaveletDerivative(float x)
+{
+    const float sigma = 0.3; //wavelet width
+    
+    //float a = 2 / sqrt(3 * sigma) * pow(PI, 0.25f);
+    float b = 1 - pow(x / sigma, 2);
+    float DerB = (-2 * x) / pow(sigma, 2);
+    
+    float c = exp(-pow(x / sigma, 2)/2);
+    float DerC = c * (-2 * x / pow(sigma, 2));
+    
+    return b * DerC + DerB * c;
+}

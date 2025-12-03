@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-using ResourceManager = Assets.Scripts.io.ResourceManager;
+using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
 [AddComponentMenu("Cad2Render/MaterialRandomizers/Material Model")]
@@ -19,7 +19,7 @@ public class MaterialModelRandomizeHandler : MaterialRandomizerInterface
     private Material[] materials = new Material[0];
     public void Awake()
     {
-        materials = ResourceManager.LoadAll<Material>(dataset.materialsPath);
+        materials = MyResourceManager.LoadAll<Material>(dataset.materialsPath);
         
         if (materials.Length == 0)
             Debug.LogWarning("No materials found in " + dataset.materialsPath);
