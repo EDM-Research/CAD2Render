@@ -25,5 +25,7 @@ namespace Assets.Scripts.io.BOP
 
         [Tooltip("Format of depth map export")]
         public ImageSaver.Extension depthMapExt = ImageSaver.Extension.png;
+        [Tooltip("The max distance the depth in mm texture displays correctly, further away objects wil be sturated. Lower values mean more detailed depth texture")]
+        public float maxDepthDistance = 1000.0f;
     }
 }

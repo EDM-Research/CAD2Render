@@ -38,6 +38,8 @@ namespace Assets.Scripts.io.MISC
             }
         }
 
+        protected override void setupCustomPasses(Camera mainCamera){}
+
         protected override void setupExportPath()
         {
             datasetPrefixPath = "Materials/";

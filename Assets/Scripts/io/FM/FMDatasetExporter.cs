@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.io.BOP;
+using GLTFast;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 using static Assets.Scripts.io.FM.FMDataset;
 
 namespace Assets.Scripts.io.FM
@@ -21,6 +23,10 @@ namespace Assets.Scripts.io.FM
         {
             RandomizerInterface.CloneDataset(ref dataset);
         }
+
+        RenderTexture renderTexture;
+        RenderTexture segmentationTexture;
+        RenderTexture depthTexture;
 
         public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
         {
@@ -51,8 +57,53 @@ namespace Assets.Scripts.io.FM
             if (dataset.exportDepth)
                 ensureDir(getFullPath() + "depth/");
         }
+        protected override void setupCustomPasses(Camera mainCamera)
+        {
+            DrawSegmentationObjectsCustomPass segmentationMaskRenderer = (DrawSegmentationObjectsCustomPass)customPassVolume.customPasses.Find(pass => pass.name == "SegmentationPass");
+            if (segmentationMaskRenderer == null)
+            {
+                segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24);
+                segmentationMaskRenderer = new DrawSegmentationObjectsCustomPass(mainCamera, segmentationTexture);
+                segmentationMaskRenderer.name = "SegmentationPass";
+                customPassVolume.customPasses.Add(segmentationMaskRenderer);
+            }
+            segmentationMaskRenderer.enabled = true;
+            segmentationTexture = segmentationMaskRenderer.targetTexture;
 
+            CustomShaderRenderToTexturePass DepthRenderer = (CustomShaderRenderToTexturePass)customPassVolume.customPasses.Find(pass => pass.name == "DepthPass");
+            if(DepthRenderer == null)
+            {
+                depthTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGBFloat);
+                depthTexture.enableRandomWrite = true;
+                depthTexture.Create();
 
+                var depthMat = new Material(Shader.Find("Unlit/Depth"));
+                depthMat.SetFloat("_DepthMaxDistance", GeometryUtils.convertMmToUnity(Math.Max(dataset.maxDepthDistance, 1.0f)));
+
+                DepthRenderer = new CustomShaderRenderToTexturePass(depthMat, Color.black, mainCamera, depthTexture);
+                DepthRenderer.name = "DepthPass";
+                customPassVolume.customPasses.Add(DepthRenderer);
+            }
+            else
+            {
+                if (DepthRenderer.overrideMaterial.GetFloat("_DepthMaxDistance") != GeometryUtils.convertMmToUnity(dataset.maxDepthDistance))
+                    Debug.LogWarning("Max depth distance for depth renderer is different between exporters. " + DepthRenderer.overrideMaterial.GetFloat("_DepthMaxDistance").ToString() + " is used.");
+            }
+            DepthRenderer.enabled = true;
+            depthTexture = DepthRenderer.targetTexture;
+
+            renderTexture = mainCamera.targetTexture;
+        }
+        public override List<(string, RenderTexture)> getTextureOutputs()
+        {
+            var list = new List<(string, RenderTexture)>();
+            list.Add((datasetPrefixPath + "Main", renderTexture));
+            list.Add((datasetPrefixPath + "Segmentation", segmentationTexture));
+            if (dataset.exportDepth)
+                list.Add((datasetPrefixPath + "Depth", depthTexture));
+
+            return list;
+        }
 
         private void exportDepthTexture(RenderTexture depthTexture, int fileID)
         {

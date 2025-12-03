@@ -13,15 +13,23 @@ namespace UnityEngine.Rendering.HighDefinition
     class DrawSegmentationObjectsCustomPass : CustomPass
     {
         // Override material
-        public Material overrideMaterial = null;
+        private Material overrideMaterial = null;
+        private Color backgroundColor;
 
         public Camera bakingCamera = null;
         public RenderTexture targetTexture = null;
         public RenderTexture targetTextureArray = null;
 
         static ShaderTagId[] shaderTags;
-        Color backgroundColor;
 
+        public DrawSegmentationObjectsCustomPass(Camera bakingCamera, RenderTexture targetTexture, RenderTexture targetTextureArray = null) : base()
+        {
+            this.overrideMaterial = new Material(Shader.Find("Unlit/FalseColor"));
+            this.backgroundColor = Color.black;
+            this.bakingCamera = bakingCamera;
+            this.targetTexture = targetTexture;
+            this.targetTextureArray = targetTextureArray;
+        }
 
         protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
         {

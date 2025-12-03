@@ -20,8 +20,8 @@ MonoBehaviour:
   minEnvironmentAngle: 0
   maxEnvironmentAngle: 360
   randomExposuresEnvironment: 1
-  minExposure: 6.17
-  maxExposure: 10.1
+  minExposure: 10.71
+  maxExposure: 15.97
   lightsourceVariatons: 0
   numLightsources: 2
   minIntensityModifier: 0

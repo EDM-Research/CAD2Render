@@ -27,10 +27,15 @@ namespace Assets.Scripts.io.BOP
             RandomizerInterface.CloneDataset(ref dataset);
         }
 
+        protected RenderTexture renderTexture;
+        protected RenderTexture segmentationTexture;
+        protected RenderTexture segmentationTextureArray;
+        protected RenderTexture depthTexture; 
+
         public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
         {
             yield return new WaitForEndOfFrame();
-            if(imageSaver == null) { imageSaver = new ImageSaver(camera.targetTexture.width, camera.targetTexture.height); }
+            if(imageSaver == null) { imageSaver = new ImageSaver(renderTexture.width, renderTexture.height); }
             fileID += 1;//bop starts indexing from 1
 
             if (dataset.exportRender)
@@ -59,10 +64,82 @@ namespace Assets.Scripts.io.BOP
             ensureDir(getFullPath()+ "mask_defect_visib/");
                                   
             ensureDir(getFullPath()+ "depth/");
-            /*
-            ensureDir(baseOutputPath + String.Format("bop/train_PBR/{0:000000}/albedo", sceneId));
-            ensureDir(baseOutputPath + String.Format("bop/train_PBR/{0:000000}/normal", sceneId));
-            */
+        }
+
+        public override void onRenderStart(Camera camera, int fileID)
+        {
+            var exportObjects = GameObject.FindGameObjectsWithTag("ExportInstanceInfo");
+            int count = exportObjects.Length;
+
+            if(count > dataset.maxSegmentationObjects)
+            {
+                segmentationMaskRenderer.targetTextureArray = null;
+                return;
+            }
+            if (segmentationTextureArray != null && segmentationTextureArray.volumeDepth != count)
+            {
+                segmentationTextureArray.Release();
+                segmentationTextureArray = null;
+            }
+            if (segmentationTextureArray == null)
+            {
+                segmentationTextureArray = new RenderTexture(segmentationTexture.width, segmentationTexture.height, 24);
+                segmentationTextureArray.dimension = TextureDimension.Tex2DArray;
+                segmentationTextureArray.volumeDepth = count;
+                segmentationTextureArray.enableRandomWrite = true;
+                segmentationTextureArray.Create();
+            }
+
+            segmentationMaskRenderer.targetTextureArray = segmentationTextureArray;
+        }
+
+        private DrawSegmentationObjectsCustomPass segmentationMaskRenderer;
+        protected override void setupCustomPasses(Camera mainCamera)
+        {
+            segmentationMaskRenderer = (DrawSegmentationObjectsCustomPass)customPassVolume.customPasses.Find(pass => pass.name == "SegmentationPass");
+            if (segmentationMaskRenderer == null)
+            {
+                segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24);
+                segmentationMaskRenderer = new DrawSegmentationObjectsCustomPass(mainCamera, segmentationTexture);
+                segmentationMaskRenderer.name = "SegmentationPass";
+                customPassVolume.customPasses.Add(segmentationMaskRenderer);
+            }
+            segmentationMaskRenderer.enabled = true;
+            segmentationTexture = segmentationMaskRenderer.targetTexture;
+            
+            CustomShaderRenderToTexturePass DepthRenderer = (CustomShaderRenderToTexturePass)customPassVolume.customPasses.Find(pass => pass.name == "DepthPass");
+            if (DepthRenderer == null)
+            {
+                depthTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGBFloat);
+                depthTexture.enableRandomWrite = true;
+                depthTexture.Create();
+
+                var depthMat = new Material(Shader.Find("Unlit/Depth"));
+                depthMat.SetFloat("_DepthMaxDistance", GeometryUtils.convertMmToUnity(Math.Max(dataset.maxDepthDistance, 1.0f)));
+
+                DepthRenderer = new CustomShaderRenderToTexturePass(depthMat, Color.black, mainCamera, depthTexture);
+                DepthRenderer.name = "DepthPass";
+                customPassVolume.customPasses.Add(DepthRenderer);
+            }
+            else
+            {
+                if (DepthRenderer.overrideMaterial.GetFloat("_DepthMaxDistance") != GeometryUtils.convertMmToUnity(dataset.maxDepthDistance))
+                    Debug.LogWarning("Max depth distance for depth renderer is different between exporters. " + DepthRenderer.overrideMaterial.GetFloat("_DepthMaxDistance").ToString() + " is used.");
+            }
+            DepthRenderer.enabled = true;
+            depthTexture = DepthRenderer.targetTexture;
+
+            renderTexture = mainCamera.targetTexture;
+        }
+        public override List<(string, RenderTexture)> getTextureOutputs()
+        {
+            var list = new List<(string, RenderTexture)>();
+            list.Add((datasetPrefixPath + "Main", renderTexture));
+            list.Add((datasetPrefixPath + "Segmentation", segmentationTexture));
+            if (dataset.exportDepth)
+                list.Add((datasetPrefixPath + "Depth", depthTexture));
+
+            return list;
         }
 
         struct idExportPair { public int id; public bool exported; }
@@ -153,7 +230,7 @@ namespace Assets.Scripts.io.BOP
                 ++i;
             }
 
-            ComputeShader SegmentationShader = (ComputeShader)Resources.Load("ComputeShaders/VisualMaskShader");
+            ComputeShader SegmentationShader = MyResourceManager.loadComputeShader("VisualMaskShader");
             int kernelHandle = SegmentationShader.FindKernel("CSMain");
             //upload the collor array to the gpu
             ComputeBuffer ColorBuffer = new ComputeBuffer(colorData.Length, sizeof(float) * 3);
@@ -215,8 +292,6 @@ namespace Assets.Scripts.io.BOP
             return cam_K;
         }
 
-        private float depthScale = 1.0f;
-        public void setDepthScale(float newDepthScale) { depthScale = newDepthScale; }
         public void exportCameraData(Camera camera, int fileID)
         {
             UnityEngine.Matrix4x4 worldToCam = ConvertUnityToOpenCV(camera.transform.rotation, camera.transform.position);
@@ -226,12 +301,12 @@ namespace Assets.Scripts.io.BOP
 
             CameraObject camera_gt = new CameraObject();
             camera_gt.cam_K = new Matrix3x3Object();
-            camera_gt.cam_K.mat = constructCameraMatrix(camera.targetTexture.width, camera.targetTexture.height, camera.fieldOfView, camera);
+            camera_gt.cam_K.mat = constructCameraMatrix(renderTexture.width, renderTexture.height, camera.fieldOfView, camera);
             camera_gt.cam_R_w2c = new Matrix3x3Object();
             camera_gt.cam_R_w2c.mat = worldToCam;
             camera_gt.cam_t_w2c = new VectorObject();
             camera_gt.cam_t_w2c.vector = GeometryUtils.convertUnityToMm(new UnityEngine.Vector3(worldToCam[0, 3], worldToCam[1, 3], worldToCam[2, 3]));
-            camera_gt.depth_scale = depthScale;
+            camera_gt.depth_scale = dataset.maxDepthDistance;
 
             scene_camera_obj.camera_gt[fileID.ToString()] = camera_gt;
             string text_scene_camera = scene_camera_obj.Serialize().ToString();
@@ -270,7 +345,7 @@ namespace Assets.Scripts.io.BOP
                     if (keypoint.screen_co.x >= 0 && keypoint.screen_co.x < depthText.width
                         && keypoint.screen_co.y >= 0 && keypoint.screen_co.y < depthText.height)
                     {
-                        var depthDistance = GeometryUtils.convertMmToUnity(depthText.GetPixel(keypoint.screen_co.x, keypoint.screen_co.y).linear.r * depthScale);
+                        var depthDistance = GeometryUtils.convertMmToUnity(depthText.GetPixel(keypoint.screen_co.x, keypoint.screen_co.y).linear.r * dataset.maxDepthDistance);
                         float delta = GeometryUtils.convertMmToUnity(0.5f);//use 0.5mm of error margin on visibility check with the depth test
                         keypoint.isVisible = depthDistance - Vector3.Distance(keypointObject.position, camera.transform.position) > -delta && translation.z > 0;
                     }

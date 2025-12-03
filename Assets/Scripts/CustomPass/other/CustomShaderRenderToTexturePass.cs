@@ -19,8 +19,15 @@ namespace UnityEngine.Rendering.HighDefinition
         public RenderTexture targetTexture = null;
 
         static ShaderTagId[] shaderTags;
-        public Color backgroundColor = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+        public Color backgroundColor;
 
+        public CustomShaderRenderToTexturePass(Material overrideMaterial, Color backgroundColor, Camera bakingCamera, RenderTexture targetTexture) : base()
+        {
+            this.overrideMaterial = overrideMaterial;
+            this.backgroundColor = backgroundColor;
+            this.bakingCamera = bakingCamera;
+            this.targetTexture = targetTexture;
+        }
 
         protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
         {

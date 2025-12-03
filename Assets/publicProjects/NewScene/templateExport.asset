@@ -9,18 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595b268c2df5b724e85867d7da315635, type: 3}
-  m_Name: FM_exportSettings
+  m_Script: {fileID: 11500000, guid: 65a410b52092d884f8682d632b87ef4b, type: 3}
+  m_Name: templateExport
   m_EditorClassIdentifier: 
-  exportRender: 1
-  outputExt: 0
-  exportSegmentationMasks: 1
-  exportCameraData: 1
-  exportSubModels: 0
-  exportWorldposition: 1
-  exportImagePosition: 0
-  exportKeypoints: 0
-  exportDepth: 1
-  depthMapExt: 0
+  outputPath: ../renderings/TemplateScene
+  sceneId: 1
+  startFileCounter: 0
+  numberOfImages: 1000
+  resolution: {x: 1920, y: 1080}
   applyGammaCorrection: 1
+  stopSimulationTimeCompletly: 1
+  numRenderFrames: 50
+  numPhysicsFrames: 50
+  mmToUnityDistanceScale: 0.01
   maxDepthDistance: 1000

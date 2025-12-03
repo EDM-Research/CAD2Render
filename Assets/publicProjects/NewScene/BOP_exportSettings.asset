@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: BOP_exportSettings
   m_EditorClassIdentifier: 
   outputExt: 1
-  sceneId: 2
   exportRender: 1
   exportSegmentationMasks: 1
   maxSegmentationObjects: 20
@@ -22,3 +21,4 @@ MonoBehaviour:
   exportKeypoints: 0
   exportDepth: 1
   depthMapExt: 0
+  maxDepthDistance: 1000

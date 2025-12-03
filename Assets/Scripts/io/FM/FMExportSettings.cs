@@ -18,5 +18,6 @@ namespace Assets.Scripts.io.FM
         public bool exportDepth = true;
         public ImageSaver.Extension depthMapExt = ImageSaver.Extension.png;
         public bool applyGammaCorrection = true;
+        public float maxDepthDistance;
     }
 }

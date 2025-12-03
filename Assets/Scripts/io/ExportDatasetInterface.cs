@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace Assets.Scripts.io
 {
@@ -16,23 +18,48 @@ namespace Assets.Scripts.io
         private string baseOutputPath;
         protected string datasetPrefixPath;
 
-        public void setupExportPath(string outputPath, int setSceneId) {
+        private void setupExportPath(string outputPath, int setSceneId) {
             baseOutputPath = outputPath; 
             sceneId = setSceneId; 
             setupExportPath(); 
         }
-        public void incrementOutputPath() { 
+        public void incrementSceneId() { 
             sceneId++;  
             setupExportPath(); 
         }
+
+        public void setup(Camera mainCamera, string outputPath, int setSceneId)
+        {
+            setupExportPath(outputPath, setSceneId);
+            setCustomVolume();
+            setupCustomPasses(mainCamera);
+        }
+        protected static CustomPassVolume customPassVolume;
+        private void setCustomVolume()
+        {
+            if (customPassVolume != null)
+                return;
+
+            var customPasses = GameObject.FindGameObjectWithTag("CustomPass");
+            customPassVolume = customPasses?.GetComponent<CustomPassVolume>();
+            if (customPassVolume != null)
+                return;
+
+            if (customPasses == null)
+            {
+                customPasses = new GameObject();
+                customPasses.name = "CustomPasses";
+                customPasses.tag = "CustomPass";
+            }
+            customPassVolume = customPasses.AddComponent<CustomPassVolume>();
+        }
         protected abstract void setupExportPath();
-        public RenderTexture renderTexture { get; set; }
-        public RenderTexture segmentationTexture { get; set; }
-        public RenderTexture segmentationTextureArray { get; set; }
-        public RenderTexture depthTexture { get; set;}
-        public RenderTexture normalTexture { get; set;}
-        public RenderTexture albedoTexture { get; set; }
-        public abstract IEnumerator exportFrame(List<UnityEngine.GameObject> instantiated_models, Camera camera, int fileID);
+        protected abstract void setupCustomPasses(Camera mainCamera);
+
+        public virtual List<(string, RenderTexture)> getTextureOutputs() { return new List<(string, RenderTexture)>(); }
+
+        public abstract IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID);
+        public virtual void onRenderStart(Camera camera, int fileID) { }
 
         protected string getFullPath()
         {

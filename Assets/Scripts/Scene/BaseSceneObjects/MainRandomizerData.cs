@@ -21,40 +21,20 @@ public class MainRandomizerData : ScriptableObject {
     //public enum Parametersource { Forced, AutoDetect, TextFile }
     //public DatasetInformation.Parametersource parametersource = DatasetInformation.Parametersource.Forced;
 
-
-    [Header("Input/output paths")]
-    [Tooltip("Location where the exported datasets are saved.")]
-    public string outputPath = "";
-    [Tooltip("The scene id")]
-    public int sceneId = 1;
     [Tooltip("Location of the bop file to import.")]
     public string BOPInputPath = "";
 
     [Header("Render settings")]
-    [Tooltip("Resolution of generated images.")]
-    public Vector2Int resolution = new Vector2Int(1024, 1024);
     [Tooltip("Change the default render settings if set.")]
     public VolumeProfile renderProfile = null;
     [Tooltip("Change the default raytracing settings if set.")]
     public VolumeProfile rayTracingProfile = null;
     [Tooltip("Change the default post procesing settings if set.")]
     public VolumeProfile postProcesingProfile = null;
-    [Tooltip("Enable gamma correction. Required to map linear scale rendered texture to gamma scale.")]
-    public bool applyGammaCorrection = true;
     [Tooltip("Enable auto exposure of camera. Avoids too bright or too dark images.")]
     public bool autoCameraExposure = false;
-    [Tooltip("Stop simumation time when rendering.")]
-    public bool stopSimulationTimeCompletly = true;
-    [Tooltip("Number of intermediate frames that are renderd before saving the image.")]
-    public int numRenderFrames = 50;
-    [Tooltip("Number of frames that the scene is renderd on a lower resolution to let newly spawned objects settle.")]
-    public int numPhysicsFrames = 50;
 
     [Header("Generation settings")]
-    [Tooltip("Start id of first generated image.")]
-    public int startFileCounter = 0;
-    [Tooltip("Number of samples to generate (-1 for indefinite).")]
-    public int numberOfImages = -1;
     [Tooltip("Seed for random number generator.")]
     public int seed = 42;
     [Tooltip("Update the randomizers on diferent intervals.")]
@@ -70,14 +50,5 @@ public class MainRandomizerData : ScriptableObject {
     [Tooltip("Intervals to update the randomizers.")]
     public RandomizerUpdateIntervals[] updateIntervals = new RandomizerUpdateIntervals[0];//a dictionary would be better but the unity editor doesnt support this
 
-
-    [Header("Export settings")]
-
-    [Tooltip("With which value the unity units need to be multiplied to get mm.")]
-    [Range(0.001f, 10)]
-    public float mmToUnityDistanceScale = 0.01f;
-    [Space(5)]
-    [Tooltip("The max distance the depth in mm texture displays correctly, further away objects wil be sturated. Lower values mean more detailed depth texture")]
-    public float maxDepthDistance = 1000.0f;
 
 }

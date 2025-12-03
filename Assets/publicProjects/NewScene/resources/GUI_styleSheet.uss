@@ -63,15 +63,21 @@
     background-color: rgba(44, 62, 80, 0.3);
 }
 
+.MenuBar{
+    background-color: rgba(44, 62, 80, 0.38);
+    border-radius: 7px;
+    border-width: 2px;
+    border-color: rgb(44, 62, 80);
+    margin: -1px;
+    padding-bottom: 5px;
+}
+
 .RandomizeListView {
     width: 25%;
-    height: 38px;
+    height: 50px;
     font-size: 22px;
     color: rgb(236, 240, 241);
-    background-color: rgba(44, 62, 80, 0.38);
-    border-top-left-radius: 7px;
     border-bottom-left-radius: 0;
-    border-top-right-radius: 7px;
     border-bottom-right-radius: 0;
     padding-left: 3px;
     padding-right: 3px;
@@ -80,12 +86,13 @@
     bottom: 0;
     -unity-text-align: upper-center;
     max-height: 100%;
+    margin-left: -1px;
 }
 
 .RandomizeListView:hover {
     width: 25%;
     height: auto;
-    max-height: 100%;
+    max-height: 600px;
 }
 
 #unity-high-button {
@@ -130,24 +137,28 @@
     border-right-color: rgba(255, 255, 255, 0.16);
     border-top-color: rgba(255, 255, 255, 0.16);
     border-bottom-color: rgba(255, 255, 255, 0.16);
-    scale: 1 0.95;
 }
 
 #unity-slider {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
 }
 
-.CustomPassTexture {
-    border-left-color: rgba(255, 255, 255, 255);
-    border-right-color: rgba(255, 255, 255, 255);
-    border-top-color: rgba(255, 255, 255, 255);
-    border-bottom-color: rgba(255, 255, 255, 255);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    margin-top: 15px;
+.previewListElement{
+    padding: 5px;
+    padding-top:0px;
+    border-width: 1px;
+    border-color: rgb(44, 62, 80);
+    border-radius: 5px;
+    margin: 4px;
+    margin-top: -1px;
+    margin-bottom: 5px;
+}
+
+.previewImage{
+    margin: 5px;
+    margin-bottom: 2px;
+}
+.previewButton{
+    margin: 5px;
+    margin-top: 2px;
 }
