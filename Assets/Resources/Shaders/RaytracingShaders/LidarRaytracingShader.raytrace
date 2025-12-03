@@ -1,0 +1,69 @@
+#include "HLSLSupport.cginc"
+#include "UnityShaderVariables.cginc"
+#include "RayPayload.hlsl"
+
+#pragma max_recursion_depth 10
+//#pragma enable_ray_tracing_shader_debug_symbols
+
+// Input
+RaytracingAccelerationStructure _RaytracingAccelerationStructure;
+float4 originPos;
+float4x4 g_InvViewMatrix;
+TextureCube<float4> g_EnvTex;
+SamplerState sampler_Linear_Repeat;
+float4 lidarAngles;
+
+// Output
+RWTexture2D<float4> worldPosTexture;
+RWTexture2D<float4> worldColorTexture;
+
+[shader("miss")]
+void MainMissShader1_Primary(inout RayPayload payload : SV_RayPayload)
+{
+    //payload.color = float4(0,0,0,1);
+    payload.worldPos.w = 0;
+}
+
+
+[shader("raygeneration")]
+void MainRayGenShader()
+{ 
+	uint2 LaunchIndex = DispatchRaysIndex().xy;
+    uint2 LaunchDim = DispatchRaysDimensions().xy;
+    //float2 screenCo = float2(LaunchIndex.x, LaunchDim.y - LaunchIndex.y - 1) - float2(0.5,0.5);
+    
+    float3 viewDirection;
+    float2 uv = ((float2)LaunchIndex) / ((float2)LaunchDim);
+    float PI = 3.1415;
+    
+    //*
+    float theta = lerp(lidarAngles.x, lidarAngles.y, uv.y); // latitude
+    float phi   = lerp(lidarAngles.z, lidarAngles.w, uv.x); // longitude
+    /*/
+    float theta = uv.y * PI; // latitude (0 -> pi)
+    float phi = uv.x * 2.0 * PI; // longitude (0 -> 2pi)
+    //*/
+    viewDirection.x = cos(theta) * cos(phi);
+    viewDirection.y = sin(theta);
+    viewDirection.z = cos(theta) * sin(phi);
+
+    // Rotate the ray from view space to world space.
+    float3 rayDirection = normalize(mul((float3x3)g_InvViewMatrix, viewDirection));
+    rayDirection = viewDirection;
+
+    RayDesc ray;
+    ray.Origin = originPos.xyz;
+    ray.Direction = rayDirection;
+    ray.TMin = 0;
+    ray.TMax = 1e10f;
+    
+    RayPayload payload;        
+	payload.color = g_EnvTex.SampleLevel(sampler_Linear_Repeat, rayDirection, 0);
+    payload.worldPos = originPos;
+	payload.bounceIndex = 0;
+    
+    TraceRay(_RaytracingAccelerationStructure, 0, 0xFF, 0, 1, 0, ray, payload);
+
+	worldPosTexture[LaunchIndex] = payload.worldPos;
+    worldColorTexture[LaunchIndex] = payload.color ;
+}
