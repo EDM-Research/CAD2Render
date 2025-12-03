@@ -44,7 +44,7 @@ public class ScratchGenerationHandler : MaterialRandomizerInterface
         ScratchGenerator.SetInt("nrAASamples", 8);
 
         //execute shader
-        ScratchGenerator.Dispatch(kernelHandle, textures.resolutionX / 8, textures.resolutionY / 8, 1);
+        ScratchGenerator.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
 
         textures.linkTexture(MaterialTextures.MapTypes.normalMap);
         textures.linkTexture(MaterialTextures.MapTypes.defectMap);

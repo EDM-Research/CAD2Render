@@ -43,7 +43,7 @@ public class DentGenerationHandler : MaterialRandomizerInterface
         DentedNormalGenerator.SetFloat("dentSize", dataset.dentSize);
 
         //execute shader
-        DentedNormalGenerator.Dispatch(kernelHandle, textures.resolutionX / 8, textures.resolutionY / 8, 1);
+        DentedNormalGenerator.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
 
         textures.get(MaterialTextures.MapTypes.colorMap).wrapMode = TextureWrapMode.Repeat;
         textures.linkTexture(MaterialTextures.MapTypes.colorMap);

@@ -92,14 +92,15 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     rustCoMin = rustCoMax - ((rustCoMax - rustCoMin) / 2) * rustMask[id.xy].b;
     float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, randSeed, id.xy, resolution);
     float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, xSkew, randSeed, id.xy, resolution);
-    float stepRustValue = step(rustValue, rustCoMax);
-    stepRustValue *= step(rustCoMin, rustValue);
-    float easedRustValue = easeFunction(rustValue);
+    //float stepRustValue = step(rustValue, rustCoMax);
+    //stepRustValue *= step(rustCoMin, rustValue);
+    float easeRustValue = easeFunction(rustValue);
+    float stepRustValue = step(0.5, easeRustValue);
     
     #if changeColor 
         float4 oldColor = ColorMapInOut[id.xy];
         float4 newColor = lerp(colorRust1, colorRust2, saturate(rustAge));
-        ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a * easedRustValue).rgb, 1);
+        ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a * easeRustValue).rgb, 1);
     #endif
     
     // 1 = no defect; 0 = defect
@@ -109,8 +110,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     
     #if changeMaskMap 
         float4 oldMask = MaskMapInOut[id.xy];
-        oldMask.r += easedRustValue * metalicnessOffset; //metalicness
-        oldMask.a *= 1 - easedRustValue * 0.4; //reduce smoothness
+        oldMask.r += easeRustValue * metalicnessOffset; //metalicness
+        oldMask.a *= 1 - easeRustValue * 0.4; //reduce smoothness
         MaskMapInOut[id.xy] = saturate(oldMask);
 #endif
     
@@ -118,13 +119,13 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         randSeed = startRandSeed;
         float3 rustNormal = float3(noiseDerivatives(id.xy, resolution) * 2, 0) * dentModifier;
         float normalNoiseModifier = 0.01f;
-        //rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalNoiseModifier * easedRustValue;
+        //rustNormal.xy += (float2(nextRand(threadRandSeed), nextRand(threadRandSeed)) - 0.5f) * normalNoiseModifier * easeRustValue;
         rustNormal.z = 0.0f;
      
         float3 oldNormal = unpackNormal(NormalMapInOut[id.xy]);
         float3 newNormal = normalize(rustNormal + oldNormal);
         NormalMapInOut[id.xy] = packNormal(newNormal);
-#endif
+    #endif
 }
 
 

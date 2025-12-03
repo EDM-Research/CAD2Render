@@ -14,8 +14,8 @@ public class MaterialTextures
 
     public MaterialPropertyBlock newProperties { get; private set; } = new MaterialPropertyBlock();
 
-    public int resolutionX { get; private set; }
-    public int resolutionY { get; private set; }
+    public Vector2Int _resolution;
+    public Vector2Int resolution { get => _resolution;}
 
     ~MaterialTextures()
     {
@@ -28,8 +28,9 @@ public class MaterialTextures
 
     public MaterialTextures(Vector2Int resolution, Renderer rend, int materialIndex)
     {
-        resolutionX = Math.Max(0, resolution.x);
-        resolutionY = Math.Max(0, resolution.y);
+        _resolution = new Vector2Int();
+        _resolution.x = Math.Max(0, resolution.x);
+        _resolution.y = Math.Max(0, resolution.y);
         UpdateLinkedRenderer(rend, materialIndex);
     }
     public void UpdateLinkedRenderer(Renderer rend, int materialIndex)
@@ -97,11 +98,11 @@ public class MaterialTextures
     public RenderTexture getResamplelocations()
     {
         //return get(MapTypes.resampleLocationMap);
-        if (resampleLocations == null || resampleLocations.width != this.resolutionX || resampleLocations.height != this.resolutionY)
+        if (resampleLocations == null || resampleLocations.width != this.resolution.x || resampleLocations.height != this.resolution.y)
         {
             if (resampleLocations != null)
                 resampleLocations.Release();
-            resampleLocations = new RenderTexture(resolutionX, resolutionY, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
+            resampleLocations = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
             resampleLocations.enableRandomWrite = true;
             resampleLocations.wrapMode = TextureWrapMode.Mirror;
             resampleLocations.Create();
@@ -167,15 +168,15 @@ public class MaterialTextures
     {
         if (destination == null)
         {
-            if (resolutionX == 0)
-                resolutionX = (source != null ? source.width : 2048);
-            if (resolutionY == 0)
-                resolutionY = (source != null ? source.height : 2048);
+            if (resolution.x == 0)
+                _resolution.x = (source != null ? source.width : 2048);
+            if (resolution.y == 0)
+                _resolution.y = (source != null ? source.height : 2048);
 
             if (liniearColorSpace)
-                destination = new RenderTexture(resolutionX, resolutionY, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
+                destination = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
             else
-                destination = new RenderTexture(resolutionX, resolutionY, 0, UnityEngine.Experimental.Rendering.DefaultFormat.HDR);
+                destination = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.HDR);
             destination.enableRandomWrite = true;
             destination.wrapMode = TextureWrapMode.Mirror;
             destination.Create();

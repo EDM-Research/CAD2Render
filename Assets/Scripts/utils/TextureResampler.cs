@@ -75,7 +75,7 @@ public class TextureResampler
         TextureSynthesizer.SetTexture(kernelHandle, "InputLocation", textures.getResamplelocations());
         TextureSynthesizer.SetTexture(kernelHandle, "Resampled", textures.get(type));
 
-        TextureSynthesizer.Dispatch(kernelHandle, textures.resolutionX / 8, textures.resolutionY / 8, 1);
+        TextureSynthesizer.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
     }
 
     private void BlendPatchBorders(ref RandomNumberGenerator rng, RenderTexture subjectTexture, RenderTexture locationTexture, int repeatedUpdates = 1)

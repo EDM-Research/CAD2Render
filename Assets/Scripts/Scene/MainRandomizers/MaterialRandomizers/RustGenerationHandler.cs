@@ -38,7 +38,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         int kernelHandle = rustmapGenerationShader.FindKernel("CSMain");
         rustmapGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
         rustmapGenerationShader.SetFloat("sharpness", dataset.sharpness);
-
+        
         textures.set(MaterialTextures.MapTypes.maskMap, textures.GetCurrentLinkedTexture(MaterialTextures.MapTypes.maskMap), new Color(textures.GetCurrentLinkedFloat("_Metallic"), 1, 0,
                                                                                                                    textures.GetCurrentLinkedFloat("_Smoothness")));
         if (dataset.changeColor)
@@ -71,14 +71,14 @@ public class RustGenerationHandler : MaterialRandomizerInterface
             rustmapGenerationShader.DisableKeyword(changeNormalMap);
         
 
-        textures.set(MaterialTextures.MapTypes.defectMap, textures.get(MaterialTextures.MapTypes.defectMap), textures.falseColor.falseColor);
+        textures.set(MaterialTextures.MapTypes.defectMap, textures.get(MaterialTextures.MapTypes.defectMap), textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
         rustmapGenerationShader.SetTexture(kernelHandle, "DefectMapInOut", textures.get(MaterialTextures.MapTypes.defectMap));
-        updateRustZoneTexture(textures.resolutionX, textures.resolutionY);
+        updateRustZoneTexture(textures.resolution.x, textures.resolution.y);
         rustmapGenerationShader.SetTexture(kernelHandle, "rustMask", RustZoneTexture);
 
 
-        rustmapGenerationShader.SetFloat("maskZoom", dataset.rustMaskZoom / textures.resolutionX * 100);
-        rustmapGenerationShader.SetFloat("rustPaternZoom", dataset.rustPaternZoom / textures.resolutionY * 100);
+        rustmapGenerationShader.SetFloat("maskZoom", dataset.rustMaskZoom / textures.resolution.x * 100);
+        rustmapGenerationShader.SetFloat("rustPaternZoom", dataset.rustPaternZoom / textures.resolution.y * 100);
         rustmapGenerationShader.SetFloat("xSkew", dataset.xSkew);
         rustmapGenerationShader.SetFloat("rustCoMin", dataset.rustCoeficient.x);
         rustmapGenerationShader.SetFloat("rustCoMax", dataset.rustCoeficient.y);
@@ -86,7 +86,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         rustmapGenerationShader.SetInt("nrOfOctaves", (int)dataset.nrOfOctaves);
 
         //execute shader
-        rustmapGenerationShader.Dispatch(kernelHandle, textures.resolutionX / 8, textures.resolutionY / 8, 1);
+        rustmapGenerationShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
 
         //set new calculated values
         textures.linkTexture(MaterialTextures.MapTypes.colorMap);
