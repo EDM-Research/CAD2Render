@@ -1,0 +1,188 @@
+﻿/*
+This file is a substantial portion from the software taken from https://github.com/sugi-cho/CCL-GPU under the MIT license.
+With some minor changes to make it compatibel with CAD2Render.
+
+MIT License
+Copyright (c) 2018 Hironori Sugino
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#pragma kernel init
+#pragma kernel columnWiseLabel
+#pragma kernel mergeLabels
+#pragma kernel clearLabelFlag
+#pragma kernel setRootLabel
+#pragma kernel countLabel
+#pragma kernel maskEachLabelSequential
+
+RWTexture2D<float4> inTex;
+RWTexture2D<float> labelTex;
+uint texWidth;
+uint texHeight;
+uint div;
+uint labelIdx;
+uint numLabels;
+
+RWStructuredBuffer<uint> labelFlg;
+AppendStructuredBuffer<uint> labelAppend;
+RWStructuredBuffer<uint> labelBuffer;
+
+
+uint2 label2Idx(uint label)
+{
+    label = label - 1;
+    return uint2(label % texWidth, label / texWidth);
+}
+uint idx2Label(uint2 id)
+{
+    return id.x + (id.y * texWidth) + 1;
+}
+uint getRootLabel(uint2 idx)
+{
+    uint label = labelTex[idx];
+    if (idx.x < 0 || texWidth < idx.x || idx.y < 0 || texHeight < idx.y)
+        return label;
+    uint label2 = idx2Label(idx);
+
+    uint count = 0;
+    while (label != label2 && count < texHeight)
+    {
+        idx = label2Idx(label);
+        label = labelTex[idx];
+        label2 = idx2Label(idx);
+        count++;
+    }
+    return label;
+}
+
+[numthreads(8, 8, 1)]
+void init(uint3 id : SV_DispatchThreadID)
+{
+    float4 input = inTex[id.xy];
+    uint labelIdx = idx2Label(id.xy);
+    labelTex[id.xy] = 0.9 > input.a ? labelIdx : 0;
+}
+
+[numthreads(8, 1, 1)]
+void columnWiseLabel(uint3 id : SV_DispatchThreadID)
+{
+    uint idx = id.x;
+    for (uint i = 1; i < texHeight; i++)
+    {
+        uint2 id = uint2(idx, i);
+        uint label = labelTex[id];
+
+        uint connectedLabel = labelTex[id - uint2(0, 1)];
+        if (label != 0 && connectedLabel != 0)
+            labelTex[id] = connectedLabel;
+    }
+}
+
+[numthreads(8, 1, 1)]
+void mergeLabels(uint3 id : SV_DispatchThreadID)
+{
+    uint nBoundary = texWidth / div;
+    uint idx = (id.x % nBoundary) * div + div * 0.5 - 1;
+    if (idx < texWidth - 1)
+    {
+        for (uint i = 0; i < texHeight; i++)
+        {
+            uint2 xy = uint2(idx, i);
+            uint label = labelTex[xy];
+
+            uint2 xy2 = uint2(idx + 1, i);
+            uint label2 = labelTex[xy2];
+        
+            if (label != 0 && label2 != 0)
+            {
+                label = getRootLabel(xy);
+                label2 = getRootLabel(xy2);
+                uint2 rootIdx = label2Idx(label);
+                uint2 rootIdx2 = label2Idx(label2);
+
+                uint merged = min(label, label2);
+                labelTex[rootIdx] = merged;
+                labelTex[rootIdx2] = merged;
+                labelTex[xy] = merged;
+                labelTex[xy2] = merged;
+            }
+        }
+    }
+}
+
+[numthreads(8, 8, 1)]
+void clearLabelFlag(uint3 id : SV_DispatchThreadID)
+{
+    uint idx = idx2Label(id.xy) - 1;
+    labelFlg[idx] = 0;
+    labelBuffer[idx] = -1;
+}
+
+[numthreads(8, 8, 1)]
+void setRootLabel(uint3 id : SV_DispatchThreadID)
+{
+    uint2 xy = id.xy;
+    
+    uint label = labelTex[xy];
+
+    if (label != 0 && (uint) label < texWidth * texHeight + 1)
+    {
+        label = getRootLabel(xy);
+        labelTex[xy] = label;
+        labelFlg[label - 1] = 1;
+    }
+}
+
+[numthreads(8, 8, 1)]
+void countLabel(uint3 id : SV_DispatchThreadID)
+{
+    uint label = idx2Label(id.xy);
+    uint flg = labelFlg[label - 1];
+    if (0 < flg)
+        labelAppend.Append(label);
+}
+
+[numthreads(8, 8, 1)]
+void maskEachLabelSequential(uint3 id : SV_DispatchThreadID)
+{
+    uint label = labelTex[id.xy];
+    float4 currentValue = inTex[id.xy];
+    
+    if (label > 0)
+    {
+        for (uint i = 0; i < numLabels; i++)
+        {
+            if (labelBuffer[i] == label)
+            {
+                currentValue.a = ((float) (i % 125)) / 255.0f;
+                inTex[id.xy] = currentValue;
+                return;
+            }
+        }
+        currentValue.a = 0;
+        inTex[id.xy] = currentValue;
+    }
+    else
+    {
+        currentValue.a = 1;
+        inTex[id.xy] = currentValue;
+    }
+}
+
