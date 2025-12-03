@@ -99,7 +99,7 @@ public class LightRandomizeHandler : RandomizerInterface
     {
         HDRISky sky = null;
         if (MainRandomizer.renderSettings != null)
-            MainRandomizer.renderSettings.TryGet<HDRISky>(out sky);
+            MainRandomizer.renderSettings.profile.TryGet<HDRISky>(out sky);
         if (sky == null)
         {
             Debug.LogWarning("No sky found in the light randomizer");
@@ -132,7 +132,7 @@ public class LightRandomizeHandler : RandomizerInterface
         {
             Exposure exposureCorrection = null;
             if (MainRandomizer.postProcesingSettings != null)
-                MainRandomizer.postProcesingSettings.TryGet<Exposure>(out exposureCorrection);
+                MainRandomizer.postProcesingSettings.profile.TryGet<Exposure>(out exposureCorrection);
             if (exposureCorrection == null)
             {
                 Debug.LogWarning("No exposure found in the post processing gameobject");

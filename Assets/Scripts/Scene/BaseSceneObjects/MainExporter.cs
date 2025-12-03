@@ -109,7 +109,7 @@ public class MainExporter : MonoBehaviour
                 mainCamera.enabled = true;
                 
                 PathTracing raytraceSettings;
-                MainRandomizer.raytracingSettings.TryGet<PathTracing>(out raytraceSettings);
+                MainRandomizer.raytracingSettings.profile.TryGet<PathTracing>(out raytraceSettings);
                 if (raytraceSettings != null)
                 {
                     raytraceSettings.maximumSamples.overrideState = true;

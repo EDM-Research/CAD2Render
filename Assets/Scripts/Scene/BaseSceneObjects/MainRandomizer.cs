@@ -39,9 +39,9 @@ public class MainRandomizer : MonoBehaviour
 
     private RandomNumberGenerator rng;
 
-    static public VolumeProfile renderSettings { get; private set; }
-    static public VolumeProfile raytracingSettings { get; private set; }
-    static public VolumeProfile postProcesingSettings { get; private set; }
+    static public Volume renderSettings { get; private set; }
+    static public Volume raytracingSettings { get; private set; }
+    static public Volume postProcesingSettings { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -51,22 +51,22 @@ public class MainRandomizer : MonoBehaviour
         var temp = GameObject.FindGameObjectWithTag("EnvironmentSettings");
         if (temp != null)
         {
-            renderSettings = temp.transform.Find("Rendering Settings")?.gameObject?.GetComponent<Volume>()?.profile;
-            raytracingSettings = temp.transform.Find("Ray Tracing Settings")?.gameObject?.GetComponent<Volume>()?.profile;
-            postProcesingSettings = temp.transform.Find("PostProcessing")?.gameObject?.GetComponent<Volume>()?.profile;
+            renderSettings = temp.transform.Find("Rendering Settings")?.gameObject?.GetComponent<Volume>();
+            raytracingSettings = temp.transform.Find("Ray Tracing Settings")?.gameObject?.GetComponent<Volume>();
+            postProcesingSettings = temp.transform.Find("PostProcessing")?.gameObject?.GetComponent<Volume>();
         }
         if (renderSettings != null && dataset.renderProfile != null)
-            renderSettings = dataset.renderProfile;
+            renderSettings.profile = dataset.renderProfile;
 
         if (raytracingSettings != null && dataset.rayTracingProfile != null)
-            raytracingSettings = dataset.rayTracingProfile;
+            raytracingSettings.profile = dataset.rayTracingProfile;
 
         if (postProcesingSettings != null && dataset.postProcesingProfile != null)
         {
-            postProcesingSettings = dataset.postProcesingProfile;
+            postProcesingSettings.profile = dataset.postProcesingProfile;
 
             Exposure exp = null;
-            postProcesingSettings.TryGet<Exposure>(out exp);
+            postProcesingSettings.profile.TryGet<Exposure>(out exp);
             if (exp != null)
                 exp.active = dataset.autoCameraExposure;
             else
