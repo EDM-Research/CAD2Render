@@ -52,6 +52,7 @@ namespace Assets.Scripts.io
                 customPasses.tag = "CustomPass";
             }
             customPassVolume = customPasses.AddComponent<CustomPassVolume>();
+            customPassVolume.injectionPoint = CustomPassInjectionPoint.BeforeRendering;
         }
         protected abstract void setupExportPath();
         protected abstract void setupCustomPasses(Camera mainCamera);
