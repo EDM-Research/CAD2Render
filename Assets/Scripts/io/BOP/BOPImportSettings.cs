@@ -8,6 +8,8 @@ using static Assets.Scripts.io.ExportDatasetInterface;
 
 namespace Assets.Scripts.io.BOP
 {
+    [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Import settings/New BOP import settings")]
+
     public class BOPImportSettings : ScriptableObject
     {
 

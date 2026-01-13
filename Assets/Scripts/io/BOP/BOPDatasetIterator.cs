@@ -20,11 +20,7 @@ namespace Assets.Scripts.io.BOP
         private List<String> bopSceneDirectorys = new List<String>();
         private int bopSceneDirIndex = 0;
 
-        public BOPSceneIterator(BOPScene s)
-        {
-            scene = s;
-        }
-        public BOPSceneIterator(string inputPath)
+        void Awake()
         {
             var dirInfo = new DirectoryInfo(dataset.inputPath);
             if (Regex.IsMatch(dirInfo.Name, @"[0-9][0-9][0-9][0-9][0-9][0-9]"))
@@ -66,6 +62,7 @@ namespace Assets.Scripts.io.BOP
             if (bopSceneDirIndex >= bopSceneDirectorys.Count)
             {
                 bopSceneDirIndex = 0;
+                id = 0;
                 Debug.LogWarning("End of BOP dataset reached. Starting over from first scene.");
                 raiseLastSceneEnded();
             }
@@ -108,12 +105,12 @@ namespace Assets.Scripts.io.BOP
 
                 pose.worldToCam = UnityEngine.Matrix4x4.identity;
                 //load the rotation matrix of the camera
-                var rotation = v.Value["cam_R_w2c"];
+                var rotation = v.Value["cam_R_c2w"];
                 for (int row = 0; row < 3; ++row)
                     for (int col = 0; col < 3; ++col)
                         pose.worldToCam[row, col] = rotation[row * 3 + col];
                 //add transtalions to the camera transformation matrix
-                var translation = v.Value["cam_t_w2c"];
+                var translation = v.Value["cam_t_c2w"];
                 for (int row = 0; row < 3; ++row)
                     pose.worldToCam[row, 3] = GeometryUtils.convertMmToUnity((float)translation[row]);
 
