@@ -1,0 +1,24 @@
+#pragma kernel CSMain
+
+Texture2D<float4> DefectMaskIn;
+RWTexture2D<float4> LayerMaskInOut;
+
+int layerCount;
+
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int layerIndex = layerCount - 1;
+    
+    float4 mask = LayerMaskInOut[id.xy];
+    if (layerIndex == 0)
+        mask.a = 1 - DefectMaskIn[id.xy].a;
+    else if (layerIndex == 1)
+        mask.r = 1 - DefectMaskIn[id.xy].a;
+    else if (layerIndex == 2)
+        mask.g = 1 - DefectMaskIn[id.xy].a;
+    else if (layerIndex == 3)
+        mask.b = 1 - DefectMaskIn[id.xy].a;
+    LayerMaskInOut[id.xy] = mask;
+}

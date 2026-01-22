@@ -58,7 +58,7 @@ public class MaterialTextures
         detailMap,
         normalMap,
         defectMap,
-        //resampleLocationMap// this is a static map to save ram memory.
+        layerMask,
     }
     public RenderTexture set(MapTypes type, Texture baseTexture, Color backupColor)
     {
@@ -112,18 +112,40 @@ public class MaterialTextures
 
     public string getTextureName(MapTypes type)
     {
+        if (rend.material.shader.name != "HDRP/LayeredLit")
+            switch (type)
+            {
+                case MapTypes.colorMap:
+                    return "_BaseColorMap";
+                case MapTypes.maskMap:
+                    return "_MaskMap";
+                case MapTypes.detailMap:
+                    return "_DetailMap";
+                case MapTypes.normalMap:
+                    return "_NormalMap";
+                case MapTypes.defectMap:
+                    return "_FalseColorTex";
+                case MapTypes.layerMask:
+                    return "_LayerMaskMap";
+                default:
+                    return "";
+            }
+
+        int lastLayer = this.GetCurrentLinkedInt("_LayerCount") - 1;
         switch (type)
         {
             case MapTypes.colorMap:
-                return "_BaseColorMap";
+                return "_BaseColorMap" + lastLayer;
             case MapTypes.maskMap:
-                return "_MaskMap";
+                return "_MaskMap" + lastLayer;
             case MapTypes.detailMap:
-                return "_DetailMap";
+                return "_DetailMap" + lastLayer;
             case MapTypes.normalMap:
-                return "_NormalMap";
+                return "_NormalMap" + lastLayer;
             case MapTypes.defectMap:
                 return "_FalseColorTex";
+            case MapTypes.layerMask:
+                return "_LayerMaskMap";
             default:
                 return "";
         }
@@ -131,7 +153,7 @@ public class MaterialTextures
 
     public void linkpropertyBlock()
     {
-        //texture asseignment
+        //texture assignment
         foreach (var keyValue in this.textures)
         {
             if (keyValue.Value == null || textureDisabled.ContainsKey(keyValue.Key))
@@ -143,7 +165,11 @@ public class MaterialTextures
         if (falseColor != null)
         {
             falseColor.falseColorTex = get(MapTypes.defectMap);
-            Vector4 scaleOffsetVector = GetCurrentLinkedVector("_BaseColorMap_ST");
+            Vector4 scaleOffsetVector;
+            if (rend.material.shader.name == "HDRP/LayeredLit")
+                scaleOffsetVector = GetCurrentLinkedVector("_BaseColorMap_ST" + (this.GetCurrentLinkedInt("_LayerCount") - 1));
+            else
+                scaleOffsetVector = GetCurrentLinkedVector("_BaseColorMap_ST");
             if (scaleOffsetVector == new Vector4(0, 0, 0, 0))
                 scaleOffsetVector = new Vector4(1, 1, 0, 0);
             falseColor.scaleOffset = scaleOffsetVector;
@@ -250,5 +276,18 @@ public class MaterialTextures
         Debug.LogWarning("Error occured while requesting a property of a material. Probably an unsuported material shader is used. <br>Shader: <b>" + rend.material.shader.name + "</b> has no attribute: <b>" + propertyName + "</b>");
         return 0.0f;
         
+    }
+
+    public int GetCurrentLinkedInt(string propertyName)
+    {
+        if (newProperties.HasInt(propertyName))
+            return newProperties.GetInt(propertyName);
+
+        else if (rend.materials[materialIndex].HasInt(propertyName))
+            return rend.materials[materialIndex].GetInt(propertyName);
+
+        Debug.LogWarning("Error occured while requesting a property of a material. Probably an unsuported material shader is used. <br>Shader: <b>" + rend.material.shader.name + "</b> has no attribute: <b>" + propertyName + "</b>");
+        return 0;
+
     }
 }
