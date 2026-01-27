@@ -206,7 +206,7 @@ namespace Assets.Scripts.io.BOP
             }
             if (instantiated_models.Count > dataset.maxSegmentationObjects)
             {
-                imageSaver.Save(segmentationTexture, getFullPath()+ "mask_visib/" + fileID.ToString("D6"), ImageSaver.Extension.png, true, false);
+                imageSaver.Save(segmentationTexture, getFullPath()+ "mask_visib/" + fileID.ToString("D6"), dataset.outputExt, true, false);
                 return;
             }
 

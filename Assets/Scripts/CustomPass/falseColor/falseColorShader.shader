@@ -35,9 +35,11 @@
                 float2 screenPos : TEXCOORD2;
             };
 
-
-            sampler2D _FalseColorTex;
+            
+            Texture2D _FalseColorTex;
             float4 _FalseColorTex_ST;
+            SamplerState my_point_mirror_sampler;
+
             int _useFalseColorTex;
             float4 _FalseColor;
             int _objectId;
@@ -61,7 +63,8 @@
                 fixed4 chosenColor;
                 if (_useFalseColorTex > 0) {
                     // sample the texture
-                    fixed4 col = tex2D(_FalseColorTex, i.uv);
+                    //fixed4 col = tex2D(_FalseColorTex, i.uv);
+                    fixed4 col = _FalseColorTex.Sample(my_point_mirror_sampler, i.uv);
                     chosenColor = col;
                 }
                 else {
