@@ -24,12 +24,12 @@ TagManager:
   - 
   - PostProcessing
   - RaytracingFiltering
-  - FalseColor
-  - Color
+  - DefectMissingPart
+  - 
   - Prefabs
-  - PSP_VirtualContent
-  - PSP_LeftEye
-  - PSP_RightEye
+  - 
+  - 
+  - 
   - 
   - 
   - 
