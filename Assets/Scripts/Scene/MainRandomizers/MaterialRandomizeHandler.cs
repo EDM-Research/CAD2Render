@@ -82,7 +82,7 @@ public class MaterialRandomizeHandler : RandomizerInterface
                     if (instance != this.gameObject)
                         combinedMaterialRandomizers = linkedMaterialRandomizers.Concat(instance.GetComponentsInParent<MaterialRandomizerInterface>()).ToArray();
                     else
-                        combinedMaterialRandomizers = instance.GetComponentsInParent<MaterialRandomizerInterface>();//linkedMaterialRandomizers contain all randomizers from the children but only parent randomizers need to be used
+                        combinedMaterialRandomizers = rend.gameObject.GetComponentsInParent<MaterialRandomizerInterface>();//linkedMaterialRandomizers contain all randomizers from the children but only parent randomizers need to be used
 
                     //Run all RandomizeSingleMaterial functions
                     foreach (MaterialRandomizerInterface randomizer in combinedMaterialRandomizers.OrderByDescending(o => o.getPriority()))
