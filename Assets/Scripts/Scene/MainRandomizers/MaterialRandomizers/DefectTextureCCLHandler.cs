@@ -129,12 +129,11 @@ public class DefectTextureCCLHandler : MaterialRandomizerInterface
         cclCompute.SetTexture(kernel, "inTex", textures.get(MaterialTextures.MapTypes.defectMap));
         cclCompute.Dispatch(kernel, width / 8, height / 8, 1);
 
-        textures.linkTexture(MaterialTextures.MapTypes.defectMap);
         return;
     }
     public override int getPriority()
     {
-        return -1;//execute after rust generator
+        return -50;//execute after rust generator
     }
 
     private void OnDestroy()

@@ -1,6 +1,8 @@
 #pragma kernel CSMain
 
 Texture2D<float4> DefectMaskIn;
+SamplerState sampler_DefectMaskIn;
+
 RWTexture2D<float4> LayerMaskInOut;
 
 int layerCount;
@@ -11,14 +13,24 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 {
     int layerIndex = layerCount - 1;
     
+    int2 resolution;
+    LayerMaskInOut.GetDimensions(resolution.x, resolution.y);
+    float2 uv = (id.xy + 0.5) / resolution;
+    
+    float layerContribution = 1 - DefectMaskIn.SampleLevel(
+        sampler_DefectMaskIn,
+        uv,
+        2.0f
+    ).a * 1;
+    
     float4 mask = LayerMaskInOut[id.xy];
     if (layerIndex == 0)
-        mask.a = 1 - DefectMaskIn[id.xy].a;
+        mask.a = layerContribution;
     else if (layerIndex == 1)
-        mask.r = 1 - DefectMaskIn[id.xy].a;
+        mask.r = layerContribution;
     else if (layerIndex == 2)
-        mask.g = 1 - DefectMaskIn[id.xy].a;
+        mask.g = layerContribution;
     else if (layerIndex == 3)
-        mask.b = 1 - DefectMaskIn[id.xy].a;
+        mask.b = layerContribution;
     LayerMaskInOut[id.xy] = mask;
 }

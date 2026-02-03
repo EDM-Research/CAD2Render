@@ -1,0 +1,43 @@
+#pragma kernel CSMain
+
+#include "RandomGPU.compute"
+
+RWTexture2D<float4> DefectMapInOut;
+float reduceRatio;
+
+RWTexture2D<float4> LayerMaskInOut;
+int layerCount;
+
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int layerIndex = layerCount - 1;
+    
+    uint2 resolution;
+    LayerMaskInOut.GetDimensions(resolution.x, resolution.y);
+    float2 uv = (id.xy + 0.5) / resolution;
+    
+    float seed = DefectMapInOut[id.xy].a;
+    if(seed >=1)
+        return;//ignore non defect regions
+    
+    uint uintSeed = asuint(seed);
+    //0 needs to be culled, so remove the defect. 1 remains a defect
+    float cull = step(reduceRatio, nextRand(uintSeed));
+    
+    float4 defectMapValue = DefectMapInOut[id.xy];
+    defectMapValue.a = 1 - cull; // 1 is no defect, 0 is defect
+    DefectMapInOut[id.xy] = defectMapValue;
+    
+    float4 mask = LayerMaskInOut[id.xy];
+    if (layerIndex == 0)
+        mask.a = cull;
+    else if (layerIndex == 1)
+        mask.r = cull;
+    else if (layerIndex == 2)
+        mask.g = cull;
+    else if (layerIndex == 3)
+        mask.b = cull;
+    LayerMaskInOut[id.xy] = mask;
+}
