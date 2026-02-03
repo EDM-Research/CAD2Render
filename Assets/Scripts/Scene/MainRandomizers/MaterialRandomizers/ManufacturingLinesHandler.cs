@@ -25,7 +25,7 @@ public class ManufacturingLinesHandler : MaterialRandomizerInterface
 
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
-        var ColorTexture = textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture("_BaseColorMap"), textures.GetCurrentLinkedColor("_Color"));
+        var ColorTexture = textures.ensureExistence(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedColor("_Color"));
         int texSizeX = ColorTexture.width;
         int texSizeY = ColorTexture.height;
         updateLineZoneTexture(texSizeX, texSizeY);
@@ -38,8 +38,6 @@ public class ManufacturingLinesHandler : MaterialRandomizerInterface
         LineTextureGenerationShader.SetTexture(kernelHandle, "parameterTexture", LineZoneTexture);
 
         LineTextureGenerationShader.Dispatch(kernelHandle, texSizeX / 8, texSizeY / 8, 1);
-
-        textures.linkTexture(MaterialTextures.MapTypes.colorMap);
     }
 
     private void updateLineZoneTexture(int resolutionX, int resolutionY)

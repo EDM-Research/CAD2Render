@@ -68,12 +68,12 @@ public class TextureResampler
 
     public void applyPreviousResample(MaterialTextures textures, MaterialTextures.MapTypes type)
     {
-        textures.set(type, textures.get(type), new Color(0, 0, 0));
+        var currentText = textures.ensureExistence(type, new Color(0, 0, 0));
         int kernelHandle = TextureSynthesizer.FindKernel("ApplyResampleLocations");
 
         TextureSynthesizer.SetTexture(kernelHandle, "Input", sampleTexture);
         TextureSynthesizer.SetTexture(kernelHandle, "InputLocation", textures.getResamplelocations());
-        TextureSynthesizer.SetTexture(kernelHandle, "Resampled", textures.get(type));
+        TextureSynthesizer.SetTexture(kernelHandle, "Resampled", currentText);
 
         TextureSynthesizer.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
     }
@@ -106,13 +106,9 @@ public class TextureResampler
     {
         int kernelHandle = TextureSynthesizer.FindKernel("Randomize");
         TextureSynthesizer.SetInt("randSeed", rng.IntRange(0, int.MaxValue));
-        var currentLinkedTexture = textures.GetCurrentLinkedTexture(textures.getTextureName(type));
-        if(currentLinkedTexture != null)
-            textures.set(type, textures.GetCurrentLinkedTexture(textures.getTextureName(type)), new Color(0, 0, 0));
-        else
-            textures.set(type, textures.get(type), new Color(0, 0, 0));
+        var currentLinkedTexture = textures.ensureExistence(type, new Color(0, 0, 0));
 
-        TextureSynthesizer.SetTexture(kernelHandle, "Resampled", textures.get(type));
+        TextureSynthesizer.SetTexture(kernelHandle, "Resampled", currentLinkedTexture);
         TextureSynthesizer.SetTexture(kernelHandle, "InputLocation", textures.getResamplelocations());
         TextureSynthesizer.SetTexture(kernelHandle, "Input", sampleTexture);
 
@@ -121,6 +117,6 @@ public class TextureResampler
         //int[] OutputResolution = { textures.get(type).width, textures.get(type).height };
         //TextureSynthesizer.SetInts("resolutionOutput", OutputResolution);
 
-        TextureSynthesizer.Dispatch(kernelHandle, textures.get(type).width / 8, textures.get(type).height / 8, 1);
+        TextureSynthesizer.Dispatch(kernelHandle, currentLinkedTexture.width / 8, currentLinkedTexture.height / 8, 1);
     }
 }

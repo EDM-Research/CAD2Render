@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine;
 
 public class MaterialTextures
@@ -60,6 +61,11 @@ public class MaterialTextures
         defectMap,
         layerMask,
     }
+
+    public RenderTexture ensureExistence(MapTypes type, Color backupColor)
+    {
+        return this.set(type, this.GetCurrentLinkedTexture(type), backupColor);
+    }
     public RenderTexture set(MapTypes type, Texture baseTexture, Color backupColor)
     {
         if (!textures.ContainsKey(type))
@@ -109,8 +115,8 @@ public class MaterialTextures
         }
         return resampleLocations;
     }
-
-    public string getTextureName(MapTypes type)
+    
+    public string getTextureName(MapTypes type, bool bottomLayer = true)
     {
         if (rend.material.shader.name != "HDRP/LayeredLit")
             switch (type)
@@ -131,17 +137,20 @@ public class MaterialTextures
                     return "";
             }
 
-        int lastLayer = this.GetCurrentLinkedInt("_LayerCount") - 1;
+        int layerIndex = this.GetCurrentLinkedInt("_LayerCount") - 1;
+        if (bottomLayer)
+            layerIndex = 0;
+
         switch (type)
         {
             case MapTypes.colorMap:
-                return "_BaseColorMap" + lastLayer;
+                return "_BaseColorMap" + layerIndex;
             case MapTypes.maskMap:
-                return "_MaskMap" + lastLayer;
+                return "_MaskMap" + layerIndex;
             case MapTypes.detailMap:
-                return "_DetailMap" + lastLayer;
+                return "_DetailMap" + layerIndex;
             case MapTypes.normalMap:
-                return "_NormalMap" + lastLayer;
+                return "_NormalMap" + layerIndex;
             case MapTypes.defectMap:
                 return "_FalseColorTex";
             case MapTypes.layerMask:
@@ -158,7 +167,7 @@ public class MaterialTextures
         {
             if (keyValue.Value == null || textureDisabled.ContainsKey(keyValue.Key))
                 continue;
-            string textureName = getTextureName(keyValue.Key);
+            string textureName = getTextureName(keyValue.Key, false);
             newProperties.SetTexture(textureName, keyValue.Value);
         }
 
@@ -167,7 +176,7 @@ public class MaterialTextures
             falseColor.falseColorTex = get(MapTypes.defectMap);
             Vector4 scaleOffsetVector;
             if (rend.material.shader.name == "HDRP/LayeredLit")
-                scaleOffsetVector = GetCurrentLinkedVector("_BaseColorMap_ST" + (this.GetCurrentLinkedInt("_LayerCount") - 1));
+                scaleOffsetVector = GetCurrentLinkedVector($"_BaseColorMap{this.GetCurrentLinkedInt("_LayerCount") - 1}_ST");
             else
                 scaleOffsetVector = GetCurrentLinkedVector("_BaseColorMap_ST");
             if (scaleOffsetVector == new Vector4(0, 0, 0, 0))
@@ -178,17 +187,6 @@ public class MaterialTextures
 
         rend.SetPropertyBlock(newProperties, materialIndex);
     }
-
-    public bool linkTexture(MapTypes type)
-    {
-        string textureName = getTextureName(type);
-        if (textureName == "" || !textures.ContainsKey(type) || textureDisabled.ContainsKey(type))
-            return false;
-
-        newProperties.SetTexture(textureName, textures[type]);
-        return true;
-    }
-
 
     private void setTexture(Texture source, Color backupColor, ref RenderTexture destination, bool liniearColorSpace = true)
     {
@@ -205,6 +203,7 @@ public class MaterialTextures
                 destination = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.HDR);
             destination.enableRandomWrite = true;
             destination.wrapMode = TextureWrapMode.Mirror;
+            destination.autoGenerateMips = true;
             destination.Create();
         }
 
@@ -250,17 +249,19 @@ public class MaterialTextures
 
     public Texture GetCurrentLinkedTexture(MapTypes map)
     {
-        return GetCurrentLinkedTexture(getTextureName(map));
+        if(get(map) != null)
+            return get(map);
+        return GetCurrentLinkedTexture(getTextureName(map), map == MapTypes.defectMap);
     }
-    public Texture GetCurrentLinkedTexture(string propertyName)
+    public Texture GetCurrentLinkedTexture(string propertyName, bool suppressWarning = false)
     {
         if (newProperties.HasTexture(propertyName))
             return newProperties.GetTexture(propertyName);
 
         else if (rend.materials[materialIndex].HasTexture(propertyName))
             return rend.materials[materialIndex].GetTexture(propertyName);
-
-        Debug.LogWarning("Error occured while requesting a property of a material. Probably an unsuported material shader is used. <br>Shader: <b>" + rend.material.shader.name + "</b> has no attribute: <b>" + propertyName + "</b>");
+        if(!suppressWarning)
+            Debug.LogWarning("Error occured while requesting a property of a material. Probably an unsuported material shader is used. <br>Shader: <b>" + rend.material.shader.name + "</b> has no attribute: <b>" + propertyName + "</b>");
         return null;
         
     }

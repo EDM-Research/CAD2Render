@@ -26,11 +26,10 @@ public class TextureResamplerHandler : MaterialRandomizerInterface
         foreach (MaterialTextures.MapTypes type in dataset.resampleTextures)
         {
             if (first)
-                texResampler.ResampleTexture(textures, textures.GetCurrentLinkedTexture(textures.getTextureName(type)), type, ref rng);
+                texResampler.ResampleTexture(textures, textures.get(type), type, ref rng);
             else
                 texResampler.applyPreviousResample(textures, type);
             first = false;
-            textures.linkTexture(type);
         }
     }
 

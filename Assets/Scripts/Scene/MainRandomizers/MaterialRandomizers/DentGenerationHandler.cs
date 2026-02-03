@@ -31,12 +31,11 @@ public class DentGenerationHandler : MaterialRandomizerInterface
         int kernelHandle = DentedNormalGenerator.FindKernel("CSMain");
         DentedNormalGenerator.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
 
-        var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
-        textures.set(MaterialTextures.MapTypes.normalMap, normalMap, new Color((float)Math.Sqrt(0.5), 0.5f, (float)Math.Sqrt(0.5), 0.5f));
-        DentedNormalGenerator.SetTexture(kernelHandle, "NormalMapInOut", textures.get(MaterialTextures.MapTypes.normalMap));
+        var normalMap = textures.ensureExistence(MaterialTextures.MapTypes.normalMap, new Color((float)Math.Sqrt(0.5), 0.5f, (float)Math.Sqrt(0.5), 0.5f));
+        DentedNormalGenerator.SetTexture(kernelHandle, "NormalMapInOut", normalMap);
 
-        textures.set(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedTexture("_BaseColorMap"), textures.GetCurrentLinkedColor("_Color"));
-        DentedNormalGenerator.SetTexture(kernelHandle, "ColorMapInOut", textures.get(MaterialTextures.MapTypes.colorMap));
+        var colorMap = textures.ensureExistence(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedColor("_Color"));
+        DentedNormalGenerator.SetTexture(kernelHandle, "ColorMapInOut", colorMap);
 
         DentedNormalGenerator.SetInt("useNormalMapInput", 1);
         DentedNormalGenerator.SetFloat("dentStrength", dataset.dentStrength);
@@ -46,10 +45,6 @@ public class DentGenerationHandler : MaterialRandomizerInterface
         DentedNormalGenerator.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
 
         textures.get(MaterialTextures.MapTypes.colorMap).wrapMode = TextureWrapMode.Repeat;
-        textures.linkTexture(MaterialTextures.MapTypes.colorMap);
-        textures.linkTexture(MaterialTextures.MapTypes.normalMap);
-
-
     }
 
     //public override ScriptableObject getDataset()

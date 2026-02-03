@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Rotation randomize Data")]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New Rotation randomize Data")]
 public class RotationData: ScriptableObject
 {
     [Tooltip("max random degree of rotations around x axis")]

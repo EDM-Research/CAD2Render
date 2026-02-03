@@ -31,12 +31,11 @@ public class ScratchGenerationHandler : MaterialRandomizerInterface
         int kernelHandle = ScratchGenerator.FindKernel("CSMain");
         ScratchGenerator.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
 
-        var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
-        textures.set(MaterialTextures.MapTypes.normalMap, normalMap, new Color((float)Math.Sqrt(0.5), 0.5f, (float)Math.Sqrt(0.5), 0.5f));
-        ScratchGenerator.SetTexture(kernelHandle, "NormalMapInOut", textures.get(MaterialTextures.MapTypes.normalMap));
+        var normalMap = textures.ensureExistence(MaterialTextures.MapTypes.normalMap, new Color((float)Math.Sqrt(0.5), 0.5f, (float)Math.Sqrt(0.5), 0.5f));
+        ScratchGenerator.SetTexture(kernelHandle, "NormalMapInOut", normalMap);
         
-        textures.set(MaterialTextures.MapTypes.defectMap, textures.get(MaterialTextures.MapTypes.defectMap), textures.falseColor.falseColor);
-        ScratchGenerator.SetTexture(kernelHandle, "DefectMapInOut", textures.get(MaterialTextures.MapTypes.defectMap));
+        var defectMap = textures.ensureExistence(MaterialTextures.MapTypes.defectMap, textures.falseColor.falseColor);
+        ScratchGenerator.SetTexture(kernelHandle, "DefectMapInOut", defectMap);
 
 
         ScratchGenerator.SetInt("nrScratches", 20);
@@ -46,12 +45,5 @@ public class ScratchGenerationHandler : MaterialRandomizerInterface
         //execute shader
         ScratchGenerator.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
 
-        textures.linkTexture(MaterialTextures.MapTypes.normalMap);
-        textures.linkTexture(MaterialTextures.MapTypes.defectMap);
     }
-
-    //public override ScriptableObject getDataset()
-    //{
-    //    return dataset;
-    //}
 }

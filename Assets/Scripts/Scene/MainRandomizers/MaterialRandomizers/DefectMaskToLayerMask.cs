@@ -20,17 +20,14 @@ public class DefectMaskToLayerMask : MaterialRandomizerInterface
     {
         int kernelHandle = DefectToLayerMaskShader.FindKernel("CSMain");
 
-        var layerMaskMap = textures.GetCurrentLinkedTexture("_LayerMaskMap");
-        textures.set(MaterialTextures.MapTypes.layerMask, layerMaskMap, Color.white);
-        DefectToLayerMaskShader.SetTexture(kernelHandle, "LayerMaskInOut", textures.get(MaterialTextures.MapTypes.layerMask));
+        var layerMaskMap = textures.ensureExistence(MaterialTextures.MapTypes.layerMask, Color.white);
+        DefectToLayerMaskShader.SetTexture(kernelHandle, "LayerMaskInOut", layerMaskMap);
 
-        textures.set(MaterialTextures.MapTypes.defectMap, textures.get(MaterialTextures.MapTypes.defectMap), textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
-        DefectToLayerMaskShader.SetTexture(kernelHandle, "DefectMaskIn", textures.get(MaterialTextures.MapTypes.defectMap));
+        var defectMap = textures.ensureExistence(MaterialTextures.MapTypes.defectMap, textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
+        DefectToLayerMaskShader.SetTexture(kernelHandle, "DefectMaskIn", defectMap);
 
         DefectToLayerMaskShader.SetInt("layerCount", textures.GetCurrentLinkedInt("_LayerCount"));
 
         DefectToLayerMaskShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
-
-        textures.linkTexture(MaterialTextures.MapTypes.layerMask);
     }
 }
