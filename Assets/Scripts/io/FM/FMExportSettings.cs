@@ -10,6 +10,7 @@ namespace Assets.Scripts.io.FM
         public bool exportRender = true;
         public ImageSaver.Extension outputExt = ImageSaver.Extension.png;
         public bool exportSegmentationMasks = true;
+        public bool exportColors = true;
         public bool exportCameraData = true ;
         public bool exportSubModels = false;
         public bool exportWorldposition = true;

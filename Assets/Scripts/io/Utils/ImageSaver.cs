@@ -43,17 +43,17 @@ public class ImageSaver
         }
     }
 
-    public void Save(RenderTexture renderTex, string filename, Extension outputExt, bool gammaCorrection, bool singleChannel = false)
+    public void Save(RenderTexture renderTex, string filename, Extension outputExt, bool gammaColorSpace, bool singleChannel = false)
     {
         if (renderTex == null)
             return;
         var oldRT = RenderTexture.active;
 
 
-        if (gammaCorrection != renderTex.sRGB)
+        if (gammaColorSpace != renderTex.sRGB)
         {
-            // Use blit to convert between linear and SRGB format
-            if (gammaCorrection) { 
+            if (gammaColorSpace)
+            {
                 Graphics.Blit(renderTex, renderTexSRGB);
                 RenderTexture.active = renderTexSRGB;
             }

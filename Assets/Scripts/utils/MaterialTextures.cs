@@ -108,7 +108,7 @@ public class MaterialTextures
         {
             if (resampleLocations != null)
                 resampleLocations.Release();
-            resampleLocations = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
+            resampleLocations = new RenderTexture(resolution.x, resolution.y, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             resampleLocations.enableRandomWrite = true;
             resampleLocations.wrapMode = TextureWrapMode.Mirror;
             resampleLocations.Create();
@@ -200,7 +200,9 @@ public class MaterialTextures
             if (liniearColorSpace)
                 destination = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
             else
-                destination = new RenderTexture(resolution.x, resolution.y, 0, UnityEngine.Experimental.Rendering.DefaultFormat.HDR);
+            {
+                destination = new RenderTexture(resolution.x, resolution.y, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            }
             destination.enableRandomWrite = true;
             destination.wrapMode = TextureWrapMode.Mirror;
             destination.autoGenerateMips = true;

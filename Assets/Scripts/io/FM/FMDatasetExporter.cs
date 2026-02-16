@@ -44,7 +44,8 @@ namespace Assets.Scripts.io.FM
                 exportCameraData(camera, fileID);
             if (dataset.exportWorldposition)
                 exportObjectData(instantiated_models, camera, fileID);
-
+            if (dataset.exportColors)
+                exportObjectColors(instantiated_models);
         }
 
         protected override void setupExportPath()
@@ -107,7 +108,7 @@ namespace Assets.Scripts.io.FM
 
         private void exportDepthTexture(RenderTexture depthTexture, int fileID)
         {
-            imageSaver.Save(depthTexture, getFullPath() + "depth/" + fileID + "_depth", dataset.depthMapExt, true, true);
+            imageSaver.Save(depthTexture, getFullPath() + "depth/" + fileID + "_depth", dataset.depthMapExt, false, true);
         }
 
 
@@ -233,7 +234,7 @@ namespace Assets.Scripts.io.FM
 
         private void exportSegmentationTexture(RenderTexture segmentationTexture, int fileID)
         {
-            imageSaver.Save(segmentationTexture, getFullPath() + "segmentation/" + fileID + "_seg", dataset.outputExt, true);
+            imageSaver.Save(segmentationTexture, getFullPath() + "segmentation/" + fileID + "_seg", dataset.outputExt, false);
         }
 
         private void exportRenderTexture(RenderTexture renderTexture, int fileID)
@@ -241,7 +242,7 @@ namespace Assets.Scripts.io.FM
             imageSaver.Save(renderTexture, getFullPath() + "images/" + fileID + "_img", dataset.outputExt, dataset.applyGammaCorrection);
         }
 
-        public void SaveObjectColors(List<GameObject> instantiatedModels)
+        public void exportObjectColors(List<GameObject> instantiatedModels)
         {
             StreamWriter writer = new StreamWriter(getFullPath() + "colors.json", true);
 
