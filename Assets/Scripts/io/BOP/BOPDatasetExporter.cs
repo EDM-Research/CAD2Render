@@ -1,4 +1,4 @@
-﻿using SimpleJSON;
+using SimpleJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -99,7 +99,8 @@ namespace Assets.Scripts.io.BOP
             segmentationMaskRenderer = (DrawSegmentationObjectsCustomPass)customPassVolume.customPasses.Find(pass => pass.name == "SegmentationPass");
             if (segmentationMaskRenderer == null)
             {
-                segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24);
+                segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                segmentationTexture.Create();
                 segmentationMaskRenderer = new DrawSegmentationObjectsCustomPass(mainCamera, segmentationTexture);
                 segmentationMaskRenderer.name = "SegmentationPass";
                 customPassVolume.customPasses.Add(segmentationMaskRenderer);
@@ -110,7 +111,7 @@ namespace Assets.Scripts.io.BOP
             CustomShaderRenderToTexturePass DepthRenderer = (CustomShaderRenderToTexturePass)customPassVolume.customPasses.Find(pass => pass.name == "DepthPass");
             if (DepthRenderer == null)
             {
-                depthTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGBFloat);
+                depthTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
                 depthTexture.enableRandomWrite = true;
                 depthTexture.Create();
 
@@ -163,19 +164,11 @@ namespace Assets.Scripts.io.BOP
 
         public void exportRenderTexture(int fileID)
         {
-            imageSaver.Save(renderTexture, getFullPath()+ "rgb/" + fileID.ToString("D6"), dataset.outputExt, true, false);
+            imageSaver.Save(renderTexture, getFullPath()+ "rgb/" + fileID.ToString("D6"), dataset.outputExt, true);
         }
         public void exportDepthTexture(int fileID)
         {
-            imageSaver.Save(depthTexture, getFullPath()+ "depth/" + fileID.ToString("D6"), dataset.outputExt, false, true);
-        }
-        public void exportAlbedoTexture(RenderTexture albedoTexture, int fileID)
-        {
-            imageSaver.Save(albedoTexture, getFullPath()+ "albedo/" + fileID.ToString("D6"), dataset.outputExt, true);
-        }
-        public void exportNormalTexture(RenderTexture normalTexture, int fileID)
-        {
-            imageSaver.Save(normalTexture, getFullPath()+ "normal/"  + fileID.ToString("D6"), dataset.outputExt, true);
+            imageSaver.Save(depthTexture, getFullPath()+ "depth/" + fileID.ToString("D6"), dataset.depthMapExt, false, true);
         }
 
         RenderTexture splitSegmentationTextures;
@@ -206,7 +199,7 @@ namespace Assets.Scripts.io.BOP
             }
             if (instantiated_models.Count > dataset.maxSegmentationObjects)
             {
-                imageSaver.Save(segmentationTexture, getFullPath()+ "mask_visib/" + fileID.ToString("D6"), dataset.outputExt, true, false);
+                imageSaver.Save(segmentationTexture, getFullPath()+ "mask_visib/" + fileID.ToString("D6"), dataset.outputExt, false, false);
                 return;
             }
 
@@ -401,7 +394,7 @@ namespace Assets.Scripts.io.BOP
                     //TODO fix bug for complex meshes: exportModel(model, outputPath + String.Format("bop/models/{0:000000}.ply", idExportData.id));
                     idExportData.exported = true;
                     obj_name_to_id[model.name] = idExportData;
-                    exportModelId(model.name, idExportData.id, fileID == 1);
+                    exportModelId(model.name, idExportData.id, fileID == 1 && model == instantiated_models[0]);
                 }
                 poses.Add(pose);
             }

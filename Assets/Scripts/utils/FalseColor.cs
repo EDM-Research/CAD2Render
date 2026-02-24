@@ -37,7 +37,7 @@ public class FalseColor : MonoBehaviour
 
     public void ApplyFalseColorProperties(MaterialPropertyBlock propertyBlock)
     {
-        propertyBlock.SetColor("_FalseColor", falseColor);
+        propertyBlock.SetVector("_FalseColor", falseColor);
         propertyBlock.SetInt("_objectId", objectId);
 
         if (falseColorTex == null)

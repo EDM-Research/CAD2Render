@@ -100,7 +100,7 @@ public class ColorEncoding {
             Debug.LogWarning("WARNING EncodeColorByIndex: index is negative");
             return Color.black; 
         }
-        if (index > 23)
+        if (index > 20)
             return getHighIdColor(index);
 
         //hue
