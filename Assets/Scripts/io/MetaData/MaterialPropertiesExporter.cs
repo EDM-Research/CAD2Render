@@ -10,14 +10,11 @@ namespace Assets.Scripts.io.MISC
 {
     class MaterialPropertiesExporter : ExportDatasetInterface
     {
-        public int resolutionX = 2048;
-        public int resolutionY = 2048;
         private ImageSaver imageSaverMaterials;
         GameObject generator;
         public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
         {
             yield return new WaitForEndOfFrame();
-            if (imageSaverMaterials == null) { imageSaverMaterials = new ImageSaver(resolutionX, resolutionY); }
             if(generator == null) { generator = GameObject.FindWithTag("Generator"); }
 
             int textureCounter = 0;
@@ -25,6 +22,7 @@ namespace Assets.Scripts.io.MISC
             {
                 int i = 0;
                 MaterialTextures textures = handler.getTextures(i);
+                if (imageSaverMaterials == null) { imageSaverMaterials = new ImageSaver(textures.resolution.x, textures.resolution.y); }
                 while (textures != null)
                 {
                     ++i;
