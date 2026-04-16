@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.IO;
+using static Substance.Game.NativeCallbacks;
 //using Pngcs.Unity;
 
 public class ImageSaver
@@ -41,6 +42,16 @@ public class ImageSaver
             Graphics.Blit(renderTex, arraySlice, i, 0);
             Save(arraySlice, filename + '_' + (i+1).ToString("D6"), outputExt, gammaCorrection, singleChannel);
         }
+    }
+
+    public void Save(Texture texture, string filename, Extension outputExt, bool gammaColorSpace, bool singleChannel = false)
+    {
+        if (texture == null)
+            return;
+
+        RenderTexture saveTexture = gammaColorSpace ? renderTexSRGB : renderTexLin;
+        Graphics.Blit(texture, saveTexture);
+        Save(saveTexture, filename, outputExt, gammaColorSpace, singleChannel);
     }
 
     public void Save(RenderTexture renderTex, string filename, Extension outputExt, bool gammaColorSpace, bool singleChannel = false)
