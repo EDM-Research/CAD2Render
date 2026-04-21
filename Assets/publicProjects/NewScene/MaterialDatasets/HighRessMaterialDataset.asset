@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8bbd60cca79ad744903c885ecf2cea4, type: 3}
   m_Name: HighRessMaterialDataset
   m_EditorClassIdentifier: 
-  generatedTextureResolution: {x: 4048, y: 4048}
+  generatedTextureResolution: {x: 4096, y: 4096}

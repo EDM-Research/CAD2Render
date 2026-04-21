@@ -111,7 +111,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         oldMask.r += easeRustValue * metalicnessOffset; //metalicness
         oldMask.a *= 1 - easeRustValue * 0.4; //reduce smoothness
         MaskMapInOut[id.xy] = saturate(oldMask);
-#endif
+    #endif
     
     #if changeNormalMap 
         randSeed = startRandSeed;

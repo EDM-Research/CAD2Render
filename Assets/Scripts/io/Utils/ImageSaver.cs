@@ -60,22 +60,14 @@ public class ImageSaver
             return;
         var oldRT = RenderTexture.active;
 
-
-        if (gammaColorSpace != renderTex.sRGB)
+        if (gammaColorSpace)
         {
-            if (gammaColorSpace)
-            {
-                Graphics.Blit(renderTex, renderTexSRGB);
-                RenderTexture.active = renderTexSRGB;
-            }
-            else { 
-                Graphics.Blit(renderTex, renderTexLin);
-                RenderTexture.active = renderTexLin;
-            }
+            Graphics.Blit(renderTex, renderTexSRGB);
+            RenderTexture.active = renderTexSRGB;
         }
-        else
-        {
-            RenderTexture.active = renderTex;
+        else { 
+            Graphics.Blit(renderTex, renderTexLin);
+            RenderTexture.active = renderTexLin;
         }
 
         Texture2D saveTextureReference = singleChannel ? saveSingleChannelTexture : saveTexture;

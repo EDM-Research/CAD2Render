@@ -3,6 +3,7 @@ using SimpleJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,10 +47,48 @@ namespace Assets.Scripts.io.MISC
             }
         }
 
+        RenderTexture unpackedNormalMap = null;
+        RenderTexture packedNormalMap = null;
+        ComputeShader normalUnpackShader = null;
+        private RenderTexture unpackNormal(Texture normalMap)
+        {
+            if(normalMap == null)
+                return null;
+
+            if(normalUnpackShader == null)
+                normalUnpackShader = MyResourceManager.loadComputeShader("NormalUnpackShader");
+            
+            if (unpackedNormalMap == null || normalMap.width!= unpackedNormalMap.width || normalMap.height != unpackedNormalMap.height)
+            {
+                unpackedNormalMap = new RenderTexture(normalMap.width, normalMap.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                unpackedNormalMap.enableRandomWrite = true;
+                unpackedNormalMap.wrapMode = TextureWrapMode.Mirror;
+                unpackedNormalMap.Create();
+
+                packedNormalMap = new RenderTexture(normalMap.width, normalMap.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                packedNormalMap.enableRandomWrite = true;
+                packedNormalMap.wrapMode = TextureWrapMode.Mirror;
+                packedNormalMap.Create();
+                Graphics.Blit(normalMap, packedNormalMap);
+            }
+
+            int kernelHandle;
+            if (normalMap.GetType() == typeof(RenderTexture))
+                kernelHandle = normalUnpackShader.FindKernel("unpack");
+            else
+                kernelHandle = normalUnpackShader.FindKernel("reorder");
+
+            normalUnpackShader.SetTexture(kernelHandle, "NormalMapIn", packedNormalMap);
+            normalUnpackShader.SetTexture(kernelHandle, "NormalMapOut", unpackedNormalMap);
+            normalUnpackShader.Dispatch(kernelHandle, packedNormalMap.width / 8, packedNormalMap.height / 8, 1);
+
+            return unpackedNormalMap;
+        }
+
         private void exportLayeredLitShader(MaterialTextures textures, int fileID, int textureCounter)
         {
             var materialparameters = new JSONObject();
-            string pathPrefix = getFullPath() + fileID.ToString() + "_" + textureCounter.ToString("D6") + "/";
+            string pathPrefix = getFullPath() + fileID.ToString("D6") + "_" + textureCounter.ToString("D6") + "/";
             ensureDir(pathPrefix);
             ensureDir(pathPrefix + "albedo/");
             ensureDir(pathPrefix + "normal/");
@@ -60,7 +99,7 @@ namespace Assets.Scripts.io.MISC
                 string filename = layerIndex.ToString();
 
                 imageSaverMaterials.Save(textures.GetCurrentLinkedTexture("_BaseColorMap" + layerIndex.ToString()), pathPrefix + "albedo/" + filename, ImageSaver.Extension.png, true);
-                imageSaverMaterials.Save(textures.GetCurrentLinkedTexture("_NormalMap" + layerIndex.ToString()), pathPrefix + "normal/" + filename, ImageSaver.Extension.png, false);
+                imageSaverMaterials.Save(unpackNormal(textures.GetCurrentLinkedTexture("_NormalMap" + layerIndex.ToString())), pathPrefix + "normal/" + filename, ImageSaver.Extension.png, false);
                 imageSaverMaterials.Save(textures.GetCurrentLinkedTexture("_MaskMap" + layerIndex.ToString()), pathPrefix + "maskMap/" + filename, ImageSaver.Extension.png, true);
 
                 materialparameters["_BaseColorMap" + layerIndex.ToString() + "_ST"] = textures.GetCurrentLinkedVector("_BaseColorMap" + layerIndex.ToString() + "_ST");
@@ -80,7 +119,7 @@ namespace Assets.Scripts.io.MISC
         private void exportLidShader(MaterialTextures textures, int fileID, int textureCounter)
         {
             imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.colorMap), getFullPath() + "albedo/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, true);
-            imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.normalMap), getFullPath() + "normal/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, false);
+            imageSaverMaterials.Save(unpackNormal(textures.get(MaterialTextures.MapTypes.normalMap)), getFullPath() + "normal/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, false);
             imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.defectMap), getFullPath() + "defectMask/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, true);
             imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.maskMap), getFullPath() + "maskMap/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, true);
         }

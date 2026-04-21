@@ -40,6 +40,7 @@ public class ConvertToLayeredLit : MaterialRandomizerInterface
         layered.SetTexture("_BentNormalMap0", textures.GetCurrentLinkedTexture("_BentNormalMap"));
 
         layered.SetTexture("_MaskMap0", textures.GetCurrentLinkedTexture("_MaskMap"));
+        layered.SetTexture("_MaskMap1", textures.GetCurrentLinkedTexture("_MaskMap"));
         layered.SetFloat("_Smoothness0", textures.GetCurrentLinkedFloat("_Smoothness"));
         layered.SetFloat("_Smoothness1", textures.GetCurrentLinkedFloat("_Smoothness"));
         layered.SetFloat("_Metallic0", textures.GetCurrentLinkedFloat("_Metallic"));

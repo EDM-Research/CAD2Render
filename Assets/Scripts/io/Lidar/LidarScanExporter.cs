@@ -23,8 +23,8 @@ public class LidarScanExporter : ExportDatasetInterface
     private LidarCustomPass LidarRenderer;
     NativeArray<Color32> colorData;
     NativeArray<Color> positionData;
-
-    public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
+    
+public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
     {
         yield return new WaitUntil(() => colorData == default && positionData == default);
         currentFileId = fileID;

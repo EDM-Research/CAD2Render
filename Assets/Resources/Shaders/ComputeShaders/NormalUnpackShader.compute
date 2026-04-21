@@ -1,0 +1,32 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel reorder
+#pragma kernel unpack
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> NormalMapOut;
+Texture2D<float4> NormalMapIn;
+
+float4 unpackNormal(float4 packedNormal)
+{
+    float4 normal;
+    normal.xy = packedNormal.wy * 2 - 1;
+    normal.z = sqrt(1 - (dot(normal.xy, normal.xy)));
+    
+    normal.xy = packedNormal.wy;
+    normal.w = 1;
+    
+    return normal;
+}
+
+[numthreads(8,8,1)]
+void reorder(uint3 id : SV_DispatchThreadID)
+{
+    NormalMapOut[id.xy] = float4(NormalMapIn[id.xy].gbr, 1);
+}
+
+[numthreads(8, 8, 1)]
+void unpack(uint3 id : SV_DispatchThreadID)
+{
+    NormalMapOut[id.xy] = unpackNormal(NormalMapIn[id.xy]);
+}
