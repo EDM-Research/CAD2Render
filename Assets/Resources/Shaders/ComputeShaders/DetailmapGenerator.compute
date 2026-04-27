@@ -23,7 +23,7 @@ float spotSize;
 uint nrAASamples;
 
 //forward declarations
-#include "RandomGPU.compute"
+#include "RandomGPU.hlsl"
 float2 getProjectionPoint(float2 lineSeg1, float2 lineSeg2, float2 p);
 float mexicanHatWavelet(float x);
 float mexicanHatWaveletDerivative(float x);

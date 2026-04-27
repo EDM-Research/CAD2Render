@@ -4,7 +4,7 @@
 #pragma kernel NeighbourSugestion
 #pragma kernel ApplyResampleLocations
 
-#include "RandomGPU.compute"
+#include "RandomGPU.hlsl"
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture

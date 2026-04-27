@@ -31,7 +31,7 @@ float sharpness;
 
 
 //forward declarations
-#include "RandomGPU.compute"
+#include "RandomGPU.hlsl"
 
 // function that makes a fast but smooth transition between 0 and 1
 // the function returns 1 when x is between rustCoMin and rustCoMax

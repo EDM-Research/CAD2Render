@@ -40,15 +40,24 @@ float FractalBrownianMotion(uint nrOfOctaves, float zoom, float xSkew, inout uin
 {
     float value = 0.0f;
     float totalAmplitute = 0;
+
+    float rotation = nextRand(seed) * PI;
+    float sinc = sin(rotation);
+    float cosc = cos(rotation);
+    float2 newCoord;
+    newCoord.x = (coord.x * cosc) - (coord.y * sinc);
+    newCoord.y = (coord.x * sinc) + (coord.y * cosc);
+
     for (uint i = 0; i < nrOfOctaves; ++i)
     {
-        float currentZoom = pow(2, i) * zoom; // * i + zoom;
-        float amplitute = pow(0.5f, i);
+        float currentZoom = pow(2, i) * zoom;
+        float amplitute = pow(0.5f, i+1);
         totalAmplitute += amplitute;
         
-        uint2 offset = uint2(nextRand(seed) * resolution.x, nextRand(seed) * resolution.y);
-        float2 newCoord = float2(offset + coord) * currentZoom;
+        float2 offset = float2(nextRand(seed) * resolution.x, nextRand(seed) * resolution.y);
+        newCoord = float2(offset + newCoord) * currentZoom;
         newCoord.x *= xSkew;
+
         
         value += (sNoise(newCoord) / 2 + 0.5) * amplitute;
     }

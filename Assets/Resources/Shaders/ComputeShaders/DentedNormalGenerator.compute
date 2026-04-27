@@ -13,7 +13,7 @@ RWTexture2D<float4> ColorMapInOut;
 float dentSize;
 float dentStrength;
 
-#include "RandomGPU.compute"
+#include "RandomGPU.hlsl"
 
 //unity uses DXT5nm format for normals
 // store in X in the A and Y in the G. ignore R and B

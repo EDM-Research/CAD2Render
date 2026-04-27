@@ -1,6 +1,6 @@
 ﻿#pragma kernel CSMain
 
-#include "RandomGPU.compute"
+#include "RandomGPU.hlsl"
 
 struct lineSegment
 {
