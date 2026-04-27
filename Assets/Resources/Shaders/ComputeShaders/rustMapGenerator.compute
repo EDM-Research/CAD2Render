@@ -46,15 +46,18 @@ float easeFunction(float x)
 
 float3 unpackNormal(float4 packedNormal){
     float3 normal;
-    normal.xy = packedNormal.wy * 2 - 1;
-    normal.z = sqrt(1 - (dot(normal.xy, normal.xy)));
+    normal.xy = packedNormal.ag * 2 - 1;
+    normal.z = sqrt(saturate(1 - (dot(normal.xy, normal.xy))));
     return normal;
 }
 float4 packNormal(float3 normal)
 {
-    float4 packedNormal;
-    packedNormal.xyzw = normal.zyzx * 0.5f + 0.5f;
-    return packedNormal;
+    float4 packed;
+    packed.r = 1 ;//magic number must be 1
+    packed.g = normal.y * 0.5 + 0.5;
+    packed.b = 0; //not used
+    packed.a = normal.x * 0.5 + 0.5;
+    return packed;
 }
 
 float2 noiseDerivatives(uint2 co, int2 resolution)

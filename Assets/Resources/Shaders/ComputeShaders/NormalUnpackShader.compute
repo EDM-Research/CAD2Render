@@ -10,10 +10,10 @@ Texture2D<float4> NormalMapIn;
 float4 unpackNormal(float4 packedNormal)
 {
     float4 normal;
-    normal.xy = packedNormal.wy * 2 - 1;
+    normal.xy = packedNormal.ag * 2 - 1;
     normal.z = sqrt(1 - (dot(normal.xy, normal.xy)));
     
-    normal.xy = packedNormal.wy;
+    normal.xy = packedNormal.ag;
     normal.w = 1;
     
     return normal;
