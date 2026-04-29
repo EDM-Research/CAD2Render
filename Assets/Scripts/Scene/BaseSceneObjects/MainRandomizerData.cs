@@ -44,8 +44,10 @@ public class MainRandomizerData : ScriptableObject {
     public class RandomizerUpdateIntervals
     {
         public RandomizerTypes randomizerType;
-        [Tooltip("0 and 1 act the same way, randomizing every update.")]
+        [Tooltip("Interval to update the randomizer. <=1 means every frame, 2 means every 2 frames, etc.")]
         public uint interval = 1;
+        [Tooltip("Offset the update of the randomizer.")]
+        public uint offset = 0;
     }
     [Tooltip("Intervals to update the randomizers.")]
     public RandomizerUpdateIntervals[] updateIntervals = new RandomizerUpdateIntervals[0];//a dictionary would be better but the unity editor doesnt support this

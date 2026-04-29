@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using MyResourceManager = Assets.Scripts.io.MyResourceManager;
+using UnityEngine.PlayerLoop;
 
 
 [AddComponentMenu("Cad2Render/Object Randomize Handler")]
@@ -27,6 +28,9 @@ public class ObjectRandomizeHandler : RandomizerInterface
     private List<GameObject> instantiatedModels = new List<GameObject>();
     private List<GameObject> instantiatedSubModels = new List<GameObject>();
     private MaterialRandomizeHandler materialRandomizeHandler;
+
+    private bool updateMaterialRandomize = true;
+    private bool updateObjectRandomize = true;
 
     public void Start()
     {
@@ -69,14 +73,17 @@ public class ObjectRandomizeHandler : RandomizerInterface
 
     public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
     {
-        DestroyModels();
         this.rng = rng;
-        CreateModels(sceneIterator);
 
-        if (materialRandomizeHandler != null)
+        if (updateObjectRandomize) { 
+            DestroyModels();
+            CreateModels(sceneIterator);
+        }
+
+        if (materialRandomizeHandler != null && updateMaterialRandomize)
             materialRandomizeHandler.Randomize(ref rng, sceneIterator);
-        else
-            resetFrameAccumulation();
+
+        resetFrameAccumulation();
     }
 
 
@@ -215,6 +222,8 @@ public class ObjectRandomizeHandler : RandomizerInterface
     private GameObject createInstance(GameObject prefab, Vector3 spawnPosition, Quaternion spawnRotation)
     {
         GameObject spawnObject = Instantiate(prefab, spawnPosition, spawnRotation);
+        if(!updateMaterialRandomize)
+            applyFalseColor(spawnObject);
 
         if (!objectData.avoidCollisions || objectData.importFromBOP == ObjectRandomizeData.BopImportType.ModelAndPose)
             return spawnObject;
@@ -237,6 +246,26 @@ public class ObjectRandomizeHandler : RandomizerInterface
         return spawnObject;
     }
 
+    /** Applies the false color properties of the instance to the material property block of all renderers in the instance. This is needed to make sure the false color is applied correctly when randomizing materials on different frames then spawning objects. */
+    private void applyFalseColor(GameObject instance)
+    {
+        FalseColor falseColor = instance.GetComponent<FalseColor>();
+        if (falseColor == null)
+            return;
+
+        Renderer[] renderers = instance.GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers)
+        {
+            for (int i = 0; i < renderer.materials.Length; ++i)
+            {
+                MaterialPropertyBlock tempPropertyBlock = new MaterialPropertyBlock();
+                renderer.GetPropertyBlock(tempPropertyBlock, i);
+                falseColor.ApplyFalseColorProperties(tempPropertyBlock);
+                renderer.SetPropertyBlock(tempPropertyBlock, i);
+            }
+        }
+    }
+
     private bool CheckIntersection(Collider[] colliders)
     {
         bool intersects = false;
@@ -255,5 +284,30 @@ public class ObjectRandomizeHandler : RandomizerInterface
             }
         }
         return intersects;
+    }
+
+    //this function can alter the behavior of Randomize by disabeling the object span or material randomize
+    public override bool updateCheck(uint currentUpdate, MainRandomizerData.RandomizerUpdateIntervals[] updateIntervals = null)
+    {
+        if (updateIntervals == null)
+            return true;
+        bool defaultTypeUpdate = true;//no default defined => randomize every update
+        int updateMaterial = 0;
+        int updateObject = 0;
+        foreach (var updateInterval in updateIntervals)
+        {
+            if (updateInterval.randomizerType == MainRandomizerData.RandomizerTypes.Material)
+                updateMaterial = 1 + ((currentUpdate + updateInterval.offset) % Math.Max(updateInterval.interval, 1) == 0 ? 1 : 0);
+            if (updateInterval.randomizerType == MainRandomizerData.RandomizerTypes.Object)
+                updateObject = 1 + ((currentUpdate + updateInterval.offset) % Math.Max(updateInterval.interval, 1) == 0 ? 1 : 0);
+
+            if (updateInterval.randomizerType == MainRandomizerData.RandomizerTypes.Default)
+                defaultTypeUpdate = (currentUpdate + updateInterval.offset) % Math.Max(updateInterval.interval, 1) == 0;
+        }
+
+        updateMaterialRandomize = updateMaterial == 2 || (updateMaterial == 0 && defaultTypeUpdate);
+        updateObjectRandomize = updateObject == 2 || (updateObject == 0 && defaultTypeUpdate);
+
+        return updateMaterialRandomize || updateObjectRandomize;
     }
 }

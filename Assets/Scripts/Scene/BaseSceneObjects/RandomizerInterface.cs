@@ -21,18 +21,18 @@ public abstract class RandomizerInterface : MonoBehaviour
     public bool addRandomizeButton = true;
 
     protected MainRandomizerData.RandomizerTypes randomizerType = MainRandomizerData.RandomizerTypes.Default;
-    public bool updateCheck(uint currentUpdate, MainRandomizerData.RandomizerUpdateIntervals[] updateIntervals = null)
+    public virtual bool updateCheck(uint currentUpdate, MainRandomizerData.RandomizerUpdateIntervals[] updateIntervals = null)
     {
         if (updateIntervals == null)
             return true;
         bool defaultTypeUpdate = true;//no default defined => randomize every update
-        foreach (var pair in updateIntervals)
+        foreach (var updateInterval in updateIntervals)
         {
-            if(pair.randomizerType == randomizerType)
-                return currentUpdate % Math.Max(pair.interval, 1) == 0;
+            if(updateInterval.randomizerType == randomizerType)
+                return (currentUpdate + updateInterval.offset) % Math.Max(updateInterval.interval, 1) == 0;
 
-            if (pair.randomizerType == MainRandomizerData.RandomizerTypes.Default)
-                defaultTypeUpdate = currentUpdate % Math.Max(pair.interval, 1) == 0;
+            if (updateInterval.randomizerType == MainRandomizerData.RandomizerTypes.Default)
+                defaultTypeUpdate = (currentUpdate + updateInterval.offset) % Math.Max(updateInterval.interval, 1) == 0;
         }
         return defaultTypeUpdate;
     }
