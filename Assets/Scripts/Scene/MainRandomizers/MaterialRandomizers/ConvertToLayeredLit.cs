@@ -23,24 +23,32 @@ public class ConvertToLayeredLit : MaterialRandomizerInterface
 
         Material layered = new Material(layeredShader);
 
-        // Copy Lit Layer 0
         layered.SetColor("_BaseColor0", textures.GetCurrentLinkedColor("_BaseColor"));
+        layered.SetColor("_BaseColor1", textures.GetCurrentLinkedColor("_BaseColor"));
         var baseColorMap = textures.GetCurrentLinkedTexture("_BaseColorMap");
         if (baseColorMap != null)
             baseColorMap.wrapMode = TextureWrapMode.Mirror;
         layered.SetTexture("_BaseColorMap0", baseColorMap);
+        layered.SetTexture("_BaseColorMap1", baseColorMap);
         layered.SetVector("_BaseColorMap0_ST", textures.GetCurrentLinkedVector("_BaseColorMap_ST")); 
         layered.SetVector("_BaseColorMap1_ST", textures.GetCurrentLinkedVector("_BaseColorMap_ST"));
+
         layered.SetVector("_LayerMaskMap_ST", textures.GetCurrentLinkedVector("_BaseColorMap_ST"));
 
-        layered.SetTexture("_NormalMap0", textures.GetCurrentLinkedTexture("_NormalMap"));
-        layered.SetTexture("_NormalMap1", textures.GetCurrentLinkedTexture("_NormalMap"));//normalmap in property block seems to be ingored if not set here first
+        var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
+        //if (normalMap != null)
+        //    normalMap.wrapMode = TextureWrapMode.Mirror;
+        layered.SetTexture("_NormalMap0", normalMap);
+        layered.SetTexture("_NormalMap1", normalMap);
         layered.SetFloat("_NormalScale0", textures.GetCurrentLinkedFloat("_NormalScale"));
         layered.SetFloat("_NormalScale1", textures.GetCurrentLinkedFloat("_NormalScale"));
         layered.SetTexture("_BentNormalMap0", textures.GetCurrentLinkedTexture("_BentNormalMap"));
 
-        layered.SetTexture("_MaskMap0", textures.GetCurrentLinkedTexture("_MaskMap"));
-        layered.SetTexture("_MaskMap1", textures.GetCurrentLinkedTexture("_MaskMap"));
+        var maskMap = textures.GetCurrentLinkedTexture("_MaskMap");
+        if (maskMap != null)
+            maskMap.wrapMode = TextureWrapMode.Mirror;
+        layered.SetTexture("_MaskMap0", maskMap);
+        layered.SetTexture("_MaskMap1", maskMap);
         layered.SetFloat("_Smoothness0", textures.GetCurrentLinkedFloat("_Smoothness"));
         layered.SetFloat("_Smoothness1", textures.GetCurrentLinkedFloat("_Smoothness"));
         layered.SetFloat("_Metallic0", textures.GetCurrentLinkedFloat("_Metallic"));

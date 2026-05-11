@@ -139,8 +139,8 @@ public class DefectTextureCCLHandler : MaterialRandomizerInterface
     private void OnDestroy()
     {
         new List<RenderTexture>(new[] { labelTex })
-            .ForEach(rt => rt.Release());
+            .ForEach(rt => rt?.Release());
         new List<ComputeBuffer>(new[] { labelFlgBuffer, labelAppendBuffer, countBuffer })
-            .ForEach(bf => bf.Dispose());
+            .ForEach(bf => bf?.Dispose());
     }
 }

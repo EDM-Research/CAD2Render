@@ -31,6 +31,7 @@ public class RustGenerationData : ScriptableObject
     public uint nrOfOctaves = 5;
     public Texture RustCreationZoneTexture;
 
+    [Space(10)]
     public Boolean changeColor = true;
     public Color rustColor1 = new Color(133.0f / 255, 60.0f / 255, 42.0f / 255, 1);
     public Color rustColor2 = new Color(65.0f / 255, 33.0f / 255, 15.0f / 255, 1);
@@ -39,6 +40,7 @@ public class RustGenerationData : ScriptableObject
     public Boolean changeMaskMap = true;
     [Range(-1.0f, 1.0f)]
     public float metalicnessOffset = -0.4f;
+
     [Space(10)]
     public Boolean changeNormalMap = true;
     [Range(-1.0f, 1.0f)]

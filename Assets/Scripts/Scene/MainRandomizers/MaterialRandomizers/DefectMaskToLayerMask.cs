@@ -2,13 +2,14 @@ using Assets.Scripts.io;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
+[RequireComponent(typeof(ConvertToLayeredLit))]
 [AddComponentMenu("Cad2Render/MaterialRandomizers/DefectMask To LayerMask")]
 public class DefectMaskToLayerMask : MaterialRandomizerInterface
 {
 
     private ComputeShader DefectToLayerMaskShader;
 
-    public override int getPriority() { return -25; }//run after defect generation but before CCL
+    public override int getPriority() { return -52; }//run after reduce defects
 
 
     public void Awake()

@@ -11,6 +11,60 @@ int layerCount;
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
+    int2 resolution;
+    LayerMaskInOut.GetDimensions(resolution.x, resolution.y);
+
+    float2 uv = (id.xy + 0.5) / resolution;
+    float2 texel = 1.0 / resolution;
+
+    // Radius in pixels
+    float radius = 6.0;
+
+    float nearest = 9999.0;
+
+    // Search nearby pixels
+    for (int y = -6; y <= 6; y++)
+    {
+        for (int x = -6; x <= 6; x++)
+        {
+            float2 offset = float2(x, y);
+
+            float sampleValue =
+                DefectMaskIn.SampleLevel(
+                    sampler_DefectMaskIn,
+                    uv + offset * texel,
+                    0
+                ).a;
+
+            // Find nearest "defect"
+            if (sampleValue < 0.5)
+            {
+                nearest = min(nearest, length(offset));
+            }
+        }
+    }
+
+    // Convert distance into soft falloff
+    float maskValue = 1.0 - saturate(nearest / radius);
+
+    // Optional smoother curve
+    maskValue = smoothstep(0.0, 1.0, maskValue);
+
+    float4 mask = LayerMaskInOut[id.xy];
+    
+    int layerIndex = layerCount - 1;
+    if (layerIndex == 0)
+        mask.a = maskValue;
+    else if (layerIndex == 1)
+        mask.r = maskValue;
+    else if (layerIndex == 2)
+        mask.g = maskValue;
+    else if (layerIndex == 3)
+        mask.b = maskValue;
+
+    LayerMaskInOut[id.xy] = mask;
+    
+    /*/
     int layerIndex = layerCount - 1;
     
     int2 resolution;
@@ -32,5 +86,5 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         mask.g = layerContribution;
     else if (layerIndex == 3)
         mask.b = layerContribution;
-    LayerMaskInOut[id.xy] = mask;
+    LayerMaskInOut[id.xy] = mask;//*/
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
+[RequireComponent(typeof(DefectTextureCCLHandler))]
 [AddComponentMenu("Cad2Render/MaterialRandomizers/ReduceDefects")]
 public class ReduceDefectHandler : MaterialRandomizerInterface
 {
@@ -28,13 +29,13 @@ public class ReduceDefectHandler : MaterialRandomizerInterface
 
         int kernelHandle = ReduceDefectShader.FindKernel("CSMain");
 
-        var layerMaskMap = textures.ensureExistence(MaterialTextures.MapTypes.layerMask, Color.white);
-        ReduceDefectShader.SetTexture(kernelHandle, "LayerMaskInOut", layerMaskMap);
+        //var layerMaskMap = textures.ensureExistence(MaterialTextures.MapTypes.layerMask, Color.white);
+        //ReduceDefectShader.SetTexture(kernelHandle, "LayerMaskInOut", layerMaskMap);
+        //ReduceDefectShader.SetInt("layerCount", textures.GetCurrentLinkedInt("_LayerCount"));
 
         var defectMap = textures.ensureExistence(MaterialTextures.MapTypes.defectMap, textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
         ReduceDefectShader.SetTexture(kernelHandle, "DefectMapInOut", defectMap);
 
-        ReduceDefectShader.SetInt("layerCount", textures.GetCurrentLinkedInt("_LayerCount"));
         ReduceDefectShader.SetFloat("reduceRatio", reduceRation);
 
         ReduceDefectShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
