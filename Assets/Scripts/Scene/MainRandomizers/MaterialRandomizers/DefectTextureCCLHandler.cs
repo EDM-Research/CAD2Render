@@ -35,7 +35,7 @@ public class DefectTextureCCLHandler : MaterialRandomizerInterface
 {
     int width;
     int height;
-    const int numMaxLabels = 255 * 2;
+    const int numMaxLabels = 10000;
 
     private ComputeShader cclCompute;
 
@@ -121,6 +121,8 @@ public class DefectTextureCCLHandler : MaterialRandomizerInterface
         int[] counter = new int[1] { 0 };
         countBuffer.GetData(counter);
         int nrOfLabels = counter[0];
+        if (nrOfLabels > numMaxLabels)
+            Debug.LogWarning("nrOfLabels, exceeds the label buffer count in CCL Handler. Certain defects will be labeled as 0 instead of an id.");
         cclCompute.SetInt("numLabels", nrOfLabels);
 
         kernel = cclCompute.FindKernel("maskEachLabelSequential");
