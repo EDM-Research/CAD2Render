@@ -12,6 +12,7 @@ public class FalseColor : MonoBehaviour
     public Texture falseColorTex { get; set; } = null;
     public Vector4 scaleOffset { get; set; } = new Vector4(1, 1, 0, 0);
     public int objectId  = -1;
+    public bool renderOnTop = false;
 
     [Obsolete("Use ApplyFalseColorProperties instead")]
     public void SetColor(Color newColor)
@@ -40,6 +41,8 @@ public class FalseColor : MonoBehaviour
         propertyBlock.SetVector("_FalseColor", falseColor);
         propertyBlock.SetInt("_objectId", objectId);
 
+        propertyBlock.SetFloat("_renderOnTop", renderOnTop ? 1.0f : 0.0f);
+
         if (falseColorTex == null)
             propertyBlock.SetFloat("_useFalseColorTex", -1.0f);
         else
@@ -47,6 +50,7 @@ public class FalseColor : MonoBehaviour
             propertyBlock.SetFloat("_useFalseColorTex", 1.0f);
             propertyBlock.SetTexture("_FalseColorTex", falseColorTex);
             propertyBlock.SetVector("_FalseColorTex_ST", scaleOffset);
+            
         }
     }
 }

@@ -5,7 +5,8 @@
 		_FalseColor("False Color", Color) = (0,0,0,1)
         _FalseColorTex ("False Color Texture", 2D) = "black" {}
         _useFalseColorTex("Use texture as false color", Float) = -1
-        _objectId("current object being renderd", Float) = -1
+        _renderOnTop("Renderd the object in front of others", Float) = -1
+        _objectId("Current object being renderd", Float) = -1
     }
     SubShader
     {
@@ -44,6 +45,7 @@
             float4 _FalseColor;
             int _objectId;
             int _currentObjectId;
+            int _renderOnTop;
 
             v2f vert (appdata v)
             {
@@ -51,6 +53,9 @@
                 o.vertex = UnityObjectToClipPos(v.vertex);
 
                 if (_objectId == _currentObjectId && _currentObjectId >= 0)
+                    o.vertex.z = 0.9999;
+
+                if (_renderOnTop > 0 && (_currentObjectId < 0 || _objectId == _currentObjectId))
                     o.vertex.z = 1;
 
                 o.uv = TRANSFORM_TEX(v.uv, _FalseColorTex);
