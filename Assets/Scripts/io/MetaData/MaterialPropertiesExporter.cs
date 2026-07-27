@@ -29,6 +29,11 @@ namespace Assets.Scripts.io.MISC
                 while (textures != null)
                 {
                     ++i;
+                    if (textures.rend.gameObject.tag != "ExportInstanceInfo")
+                    {
+                        textures = handler.getTextures(i);
+                        continue;
+                    }
                     ++textureCounter;
 
                     switch (textures.rend.material.shader.name)
