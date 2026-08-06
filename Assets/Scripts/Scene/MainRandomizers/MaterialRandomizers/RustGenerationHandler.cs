@@ -84,6 +84,7 @@ public class RustGenerationHandler : MaterialRandomizerInterface
         rustmapGenerationShader.SetFloat("rustCoMin", dataset.rustCoeficient.x);
         rustmapGenerationShader.SetFloat("rustCoMax", dataset.rustCoeficient.y);
         rustmapGenerationShader.SetFloat("sharpness", dataset.sharpness);
+        rustmapGenerationShader.SetFloat("defectCutoff", dataset.defectCutoff);
         rustmapGenerationShader.SetInt("nrOfOctaves", (int)dataset.nrOfOctaves);
 
         //execute shader

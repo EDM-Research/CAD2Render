@@ -17,8 +17,11 @@ public class RustGenerationData : ScriptableObject
     [MinMaxRange(0, 1,3)]
     [Tooltip("Amount of rust to be applied")]
     public Vector2 rustCoeficient = new Vector2(0.39f, 1.0f);
+    [Tooltip("determines the tresshold for the noise map to consider an area to be a defect.")]
+    [Range(0.0f, 1.0f)]
+    public float defectCutoff = 0.4f;
     [Tooltip("determines the size of rust spots")]
-    [Range(0.0151f, 0.1f)]
+    [Range(0.0151f, 1.5f)]
     public float rustMaskZoom = 0.009f;
     [Tooltip("determines the size of color variations in rust spots")]
     [Range(0.0021f, 0.49f)]
