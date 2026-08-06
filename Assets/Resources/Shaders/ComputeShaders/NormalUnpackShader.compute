@@ -7,17 +7,8 @@
 RWTexture2D<float4> NormalMapOut;
 Texture2D<float4> NormalMapIn;
 
-float4 unpackNormal(float4 packedNormal)
-{
-    float4 normal;
-    normal.xy = packedNormal.ag * 2 - 1;
-    normal.z = sqrt(1 - (dot(normal.xy, normal.xy)));
-    
-    normal.xy = packedNormal.ag;
-    normal.w = 1;
-    
-    return normal;
-}
+
+#include "UnityConvertFunctions.hlsl"
 
 [numthreads(8,8,1)]
 void reorder(uint3 id : SV_DispatchThreadID)

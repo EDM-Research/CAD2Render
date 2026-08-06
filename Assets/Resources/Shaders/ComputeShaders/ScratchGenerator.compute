@@ -18,19 +18,7 @@ RWTexture2D<float4> NormalMapInOut;
 RWTexture2D<float4> DefectMapInOut;
 Texture2D<float4> applyScratchMask;
 
-float3 unpackNormal(float4 packedNormal)
-{
-    float3 normal;
-    normal.xy = packedNormal.wy * 2 - 1;
-    normal.z = sqrt(1 - (dot(normal.xy, normal.xy)));
-    return normal;
-}
-float4 packNormal(float3 normal)
-{
-    float4 packedNormal;
-    packedNormal.xyzw = normal.zyzx * 0.5f + 0.5f;
-    return packedNormal;
-}
+#include "UnityConvertFunctions.hlsl"
 
 float2 getProjectionPoint(float2 lineSeg1, float2 lineSeg2, float2 p)
 {

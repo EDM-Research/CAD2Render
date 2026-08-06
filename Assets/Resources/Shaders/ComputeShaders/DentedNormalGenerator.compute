@@ -14,21 +14,7 @@ float dentSize;
 float dentStrength;
 
 #include "RandomGPU.hlsl"
-
-//unity uses DXT5nm format for normals
-// store in X in the A and Y in the G. ignore R and B
-float3 unpackNormal(float4 packedNormal){
-    float3 normal;
-    normal.xy = packedNormal.ag * 2 - 1;
-    normal.z = sqrt(1 - saturate(dot(normal.xy, normal.xy)));
-    return normal;
-}
-float4 packNormal(float3 normal){
-    float4 packedNormal;
-    packedNormal.rb = normal.z;
-    packedNormal.ag = normal.xy * 0.5f + 0.5f;
-    return packedNormal;
-}
+#include "UnityConvertFunctions.hlsl"
 
 float squareWrappedDistance(float2 point1, float2 point2)
 {

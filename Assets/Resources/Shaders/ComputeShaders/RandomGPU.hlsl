@@ -34,7 +34,7 @@ float nextRand(inout uint s, bool updateSeed = true)
     return float(seed & 0x00FFFFFF) / float(0x01000000);
 }
 
-float sNoise(float2 v);
+float sNoise(float2 v, uint noiseMapSeed);
 // return simplex noise sum between [0:1]
 float FractalBrownianMotion(uint nrOfOctaves, float zoom, float xSkew, inout uint seed, float2 coord, int2 resolution)
 {
@@ -47,11 +47,14 @@ float FractalBrownianMotion(uint nrOfOctaves, float zoom, float xSkew, inout uin
     float2 newCoord;
     newCoord.x = (coord.x * cosc) - (coord.y * sinc);
     newCoord.y = (coord.x * sinc) + (coord.y * cosc);
-
+    newCoord = coord;
+    float amplitute = 1;
     for (uint i = 0; i < nrOfOctaves; ++i)
     {
+        //if (i != nrOfOctaves - 1)
+        //    continue;
         float currentZoom = pow(2, i) * zoom;
-        float amplitute = pow(0.5f, i+1);
+        amplitute *= 0.5;
         totalAmplitute += amplitute;
         
         float2 offset = float2(nextRand(seed) * resolution.x, nextRand(seed) * resolution.y);
@@ -59,9 +62,9 @@ float FractalBrownianMotion(uint nrOfOctaves, float zoom, float xSkew, inout uin
         newCoord.x *= xSkew;
 
         
-        value += (sNoise(newCoord) / 2 + 0.5) * amplitute;
+        value += (sNoise(newCoord, (uint) nextRand(seed)*255) / 2 + 0.5) * amplitute;
     }
-    return value / totalAmplitute;
+    return value;// / totalAmplitute;
 }
 
 
@@ -96,7 +99,7 @@ float3 permute(float3 x)
  * produces 2d simplex noise with a persiod of 289
  * returns a float between [-1;1]
  */
-float sNoise(float2 v)//,uint seed)
+float sNoise(float2 v, uint noiseMapSeed)
 {
     const float4 C = float4(0.211324865405187, // (3.0-sqrt(3.0))/6.0
                       0.366025403784439, // 0.5*(sqrt(3.0)-1.0)
@@ -121,7 +124,7 @@ float sNoise(float2 v)//,uint seed)
     i = mod289(i); // Avoid truncation effects in permutation
     float3 p = permute(permute(i.y + float3(0.0, i1.y, 1.0))
 		+ i.x + float3(0.0, i1.x, 1.0));
-    //p = permute(mod289(p + float3(seed))); //add a seed as sugested in https://github.com/ashima/webgl-noise/issues/9#issuecomment-11991995 creates visable artefacts :(
+    p = permute(p + float3((float)noiseMapSeed, (float)noiseMapSeed, (float)noiseMapSeed)); //add a seed as sugested in https://github.com/ashima/webgl-noise/issues/9#issuecomment-11991995 creates visable artefacts :(
 
     float3 m = max(0.5 - float3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
     m = m * m;
