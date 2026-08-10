@@ -22,6 +22,7 @@ public class ConvertToLayeredLit : MaterialRandomizerInterface
             return;
 
         Material layered = new Material(layeredShader);
+        layered.SetFloat("_DoubleSidedEnable", 1.0f);
 
         layered.SetColor("_BaseColor0", textures.GetCurrentLinkedColor("_BaseColor"));
         layered.SetColor("_BaseColor1", textures.GetCurrentLinkedColor("_BaseColor"));

@@ -80,7 +80,7 @@ public class MaterialRandomizeHandler : RandomizerInterface
 
                     //Combine material randomizers linked to the instance and the randomizer (unless ransomizer and instance are the same)
                     if (instance != this.gameObject)
-                        combinedMaterialRandomizers = linkedMaterialRandomizers.Concat(instance.GetComponentsInParent<MaterialRandomizerInterface>()).ToArray();
+                        combinedMaterialRandomizers = linkedMaterialRandomizers.Concat(rend.gameObject.GetComponentsInParent<MaterialRandomizerInterface>()).ToArray();
                     else
                         combinedMaterialRandomizers = rend.gameObject.GetComponentsInParent<MaterialRandomizerInterface>();//linkedMaterialRandomizers contain all randomizers from the children but only parent randomizers need to be used
 
