@@ -78,10 +78,12 @@ public class ObjectRandomizeHandler : RandomizerInterface
         if (updateObjectRandomize) { 
             DestroyModels();
             CreateModels(sceneIterator);
+            if(materialRandomizeHandler != null)
+                materialRandomizeHandler.RandomizeInstances(ref rng);
         }
 
         if (materialRandomizeHandler != null && updateMaterialRandomize)
-            materialRandomizeHandler.Randomize(ref rng, sceneIterator);
+            materialRandomizeHandler.RandomizeMaterials(ref rng);
 
         resetFrameAccumulation();
     }

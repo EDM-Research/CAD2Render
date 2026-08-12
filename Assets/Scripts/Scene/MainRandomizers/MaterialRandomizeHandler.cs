@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,12 +45,8 @@ public class MaterialRandomizeHandler : RandomizerInterface
             return null;
     }
 
-    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
+    public void RandomizeInstances(ref RandomNumberGenerator rng)
     {
-        if (subjectInstances == null)
-            initialize(ref subjectInstances);
-        int index = 0;
-
         foreach (GameObject instance in subjectInstances)
         {
             MaterialRandomizerInterface[] combinedMaterialRandomizers;
@@ -60,14 +57,31 @@ public class MaterialRandomizeHandler : RandomizerInterface
             else
                 combinedMaterialRandomizers = linkedMaterialRandomizers;
 
-            foreach (MaterialRandomizerInterface randomizer in combinedMaterialRandomizers.OrderByDescending(o => o.getPriority())) { 
-                if (randomizer.isActiveAndEnabled) {
-                    if (randomizer.gameObject == this || randomizer.gameObject.transform.IsChildOf(this.transform))//should check for full desendants list.
+            foreach (MaterialRandomizerInterface randomizer in combinedMaterialRandomizers.OrderByDescending(o => o.getPriority()))
+            {
+                if (randomizer.isActiveAndEnabled)
+                {
+                    if (randomizer.gameObject == this.gameObject)
                         randomizer.RandomizeSingleInstance(instance, ref rng);
                     else
                         randomizer.RandomizeSingleInstance(randomizer.gameObject, ref rng);
                 }
             }
+        }
+    }
+    public void RandomizeMaterials(ref RandomNumberGenerator rng)
+    {
+        int index = 0;
+        foreach (GameObject instance in subjectInstances)
+        {
+            MaterialRandomizerInterface[] combinedMaterialRandomizers;
+
+            //Combine material randomizers linked to the instance and the randomizer (unless ransomizer and instance are the same)
+            if (instance != this.gameObject)
+                combinedMaterialRandomizers = linkedMaterialRandomizers.Concat(instance.GetComponentsInChildren<MaterialRandomizerInterface>()).ToArray();
+            else
+                combinedMaterialRandomizers = linkedMaterialRandomizers;
+
             foreach (Renderer rend in instance.GetComponentsInChildren<Renderer>())
             {
                 for (int materialIndex = 0; materialIndex < rend.materials.Length; ++materialIndex)
@@ -95,6 +109,14 @@ public class MaterialRandomizeHandler : RandomizerInterface
                 }
             }
         }
+    }
+
+    public override void Randomize(ref RandomNumberGenerator rng, SceneIteratorInterface sceneIterator = null)
+    {
+        if (subjectInstances == null)
+            initialize(ref subjectInstances);
+        RandomizeInstances(ref rng);
+        RandomizeMaterials(ref rng);
         resetFrameAccumulation();
     }
 
