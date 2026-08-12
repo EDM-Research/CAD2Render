@@ -1,4 +1,4 @@
-﻿
+
 using SneakySquirrelLabs.MinMaxRangeAttribute;
 using System;
 using System.Collections.Generic;

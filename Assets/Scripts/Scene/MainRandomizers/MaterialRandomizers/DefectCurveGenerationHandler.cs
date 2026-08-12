@@ -5,11 +5,11 @@ using UnityEngine.Rendering;
 using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 
 
-[AddComponentMenu("Cad2Render/MaterialRandomizers/Defect Line generation")]
+[AddComponentMenu("Cad2Render/MaterialRandomizers/Defect Curve generation")]
 public class DefectCurveGenerationHandler : MaterialRandomizerInterface
 {
     //private RandomNumberGenerator rng;
-    public RustGenerationData dataset;
+    public CurveDefectGenerationData dataset;
     [InspectorButton("TriggerCloneClicked")]
     public bool clone;
 
@@ -75,11 +75,10 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
         var defectMap = textures.ensureExistence(MaterialTextures.MapTypes.defectMap, textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
         defectCurveGenerationShader.SetTexture(kernelHandle, "DefectMapInOut", defectMap);
 
-        defectCurveGenerationShader.SetFloat("defectWidthModifier", dataset.rustCoeficient.x);
-        defectCurveGenerationShader.SetFloat("defectLength", dataset.rustCoeficient.y);
+        defectCurveGenerationShader.SetVector("defectWidthModifier", new Vector2(dataset.defectWidth.x * 0.1f, dataset.defectWidth.y * 0.1f));
+        defectCurveGenerationShader.SetVector("defectLength", new Vector2(dataset.defectLength.x, dataset.defectLength.y));
         defectCurveGenerationShader.SetFloat("sharpness", dataset.sharpness);
         defectCurveGenerationShader.SetFloat("defectCutoff", dataset.defectCutoff);
-        defectCurveGenerationShader.SetInt("nrOfOctaves", (int)dataset.nrOfOctaves);
 
         //execute shader
         defectCurveGenerationShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
