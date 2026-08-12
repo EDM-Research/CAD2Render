@@ -64,7 +64,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 overrideMaterialPassIndex = forwardOnlyPassIndex,
                 sortingCriteria = SortingCriteria.BackToFront,
                 excludeObjectMotionVectors = false,
-                layerMask = 1,
+                layerMask = ~0,
             };
 
             //loop renderIndex between [-1: targetTextureArray.volumeDepth[

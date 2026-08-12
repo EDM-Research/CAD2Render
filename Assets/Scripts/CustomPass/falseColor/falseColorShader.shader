@@ -57,6 +57,8 @@
 
                 if (_renderOnTop > 0 && (_currentObjectId < 0 || _objectId == _currentObjectId))
                     o.vertex.z = 1;
+                if (_renderOnTop < 0)
+                    o.vertex.z = -1;
 
                 o.uv = TRANSFORM_TEX(v.uv, _FalseColorTex);
                 o.screenPos = ComputeScreenPos(o.vertex);
@@ -65,6 +67,7 @@
 
             fixed4 frag(v2f i) : SV_Target
             {
+
                 fixed4 chosenColor;
                 if (_useFalseColorTex > 0) {
                     // sample the texture
