@@ -9,18 +9,14 @@ public class ConvertToLayeredLit : MaterialRandomizerInterface
 {
     Shader layeredShader;
 
-    public void Start()
-    {
-        layeredShader = Shader.Find("HDRP/LayeredLit");
-    }
-
-
     public override int getPriority() { return 99; } //right after the materialModelRandomizer
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
+        //TODO: fix bug when no texture is assigned on creation to: basecolor, normalMap or maskMap
         if (textures.rend.material.shader.name == "HDRP/LayeredLit")
             return;
-
+        if(layeredShader == null)
+            layeredShader = Shader.Find("HDRP/LayeredLit");
         Material layered = new Material(layeredShader);
         layered.SetFloat("_DoubleSidedEnable", 1.0f);
 
@@ -37,8 +33,8 @@ public class ConvertToLayeredLit : MaterialRandomizerInterface
         layered.SetVector("_LayerMaskMap_ST", textures.GetCurrentLinkedVector("_BaseColorMap_ST"));
 
         var normalMap = textures.GetCurrentLinkedTexture("_NormalMap");
-        //if (normalMap != null)
-        //    normalMap.wrapMode = TextureWrapMode.Mirror;
+        if (normalMap != null)
+            normalMap.wrapMode = TextureWrapMode.Mirror;
         layered.SetTexture("_NormalMap0", normalMap);
         layered.SetTexture("_NormalMap1", normalMap);
         layered.SetFloat("_NormalScale0", textures.GetCurrentLinkedFloat("_NormalScale"));
