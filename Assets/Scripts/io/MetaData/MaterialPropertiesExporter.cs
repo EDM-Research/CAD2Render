@@ -29,7 +29,7 @@ namespace Assets.Scripts.io.MISC
                 while (textures != null)
                 {
                     ++i;
-                    if (textures.rend.gameObject.tag != "ExportInstanceInfo")
+                    if (!HasParentWithTag(textures.rend.gameObject, "ExportInstanceInfo"))
                     {
                         textures = handler.getTextures(i);
                         continue;
@@ -137,6 +137,21 @@ namespace Assets.Scripts.io.MISC
             ensureDir(getFullPath() + "normal/");
             ensureDir(getFullPath() + "defectMask/");
             ensureDir(getFullPath() + "maskMap/");
+        }
+
+        public static bool HasParentWithTag(GameObject gameObject, string tag)
+        {
+            Transform current = gameObject.transform;
+
+            while (current != null)
+            {
+                if (current.CompareTag(tag))
+                    return true;
+
+                current = current.parent;
+            }
+
+            return false;
         }
     }
 }

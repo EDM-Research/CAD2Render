@@ -63,7 +63,7 @@ namespace Assets.Scripts.io.FM
             DrawSegmentationObjectsCustomPass segmentationMaskRenderer = (DrawSegmentationObjectsCustomPass)customPassVolume.customPasses.Find(pass => pass.name == "SegmentationPass");
             if (segmentationMaskRenderer == null)
             {
-                segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24);
+                segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
                 segmentationMaskRenderer = new DrawSegmentationObjectsCustomPass(mainCamera, segmentationTexture);
                 segmentationMaskRenderer.name = "SegmentationPass";
                 customPassVolume.customPasses.Add(segmentationMaskRenderer);
@@ -74,7 +74,7 @@ namespace Assets.Scripts.io.FM
             CustomShaderRenderToTexturePass DepthRenderer = (CustomShaderRenderToTexturePass)customPassVolume.customPasses.Find(pass => pass.name == "DepthPass");
             if(DepthRenderer == null)
             {
-                depthTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGBFloat);
+                depthTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
                 depthTexture.enableRandomWrite = true;
                 depthTexture.Create();
 

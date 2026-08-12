@@ -21,9 +21,6 @@ public class MainRandomizerData : ScriptableObject {
     //public enum Parametersource { Forced, AutoDetect, TextFile }
     //public DatasetInformation.Parametersource parametersource = DatasetInformation.Parametersource.Forced;
 
-    [Tooltip("Location of the bop file to import.")]
-    public string BOPInputPath = "";
-
     [Header("Render settings")]
     [Tooltip("Change the default render settings if set.")]
     public VolumeProfile renderProfile = null;
