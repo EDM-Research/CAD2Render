@@ -16,6 +16,12 @@ namespace Assets.Scripts.io.BOP
         private int id = 0;
         private BOPScene scene;
         public BOPImportSettings dataset;
+        [InspectorButton("TriggerCloneClicked")]
+        public bool clone;
+        private void TriggerCloneClicked()
+        {
+            RandomizerInterface.CloneDataset(ref dataset);
+        }
 
         private List<String> bopSceneDirectorys = new List<String>();
         private int bopSceneDirIndex = 0;
@@ -81,11 +87,18 @@ namespace Assets.Scripts.io.BOP
 
         private BOPScene Load(string inputPath)
         {
-            string scene_camera_text = File.ReadAllText(inputPath /*+ "bop/train_PBR/000001/" */+ "scene_camera.json");
+            string scene_camera_text = File.ReadAllText(inputPath + "scene_camera.json");
             JSONNode scene_camera = JSON.Parse(scene_camera_text);
 
-            string scene_gt_text = File.ReadAllText(inputPath /*+ "bop/train_PBR/000001/"*/ + "scene_gt.json");
+            string scene_gt_text = File.ReadAllText(inputPath + "scene_gt.json");
             JSONNode scene_gt = JSON.Parse(scene_gt_text);
+
+            JSONNode model_id = null;
+            if (File.Exists(inputPath + "model_id.json")) { 
+                string model_id_text = File.ReadAllText(inputPath + "model_id.json");
+                model_id = JSON.Parse(model_id_text);
+            }
+
 
             BOPScene scene = new BOPScene();
 
@@ -105,12 +118,12 @@ namespace Assets.Scripts.io.BOP
 
                 pose.worldToCam = UnityEngine.Matrix4x4.identity;
                 //load the rotation matrix of the camera
-                var rotation = v.Value["cam_R_c2w"];
+                var rotation = v.Value["cam_R_w2c"];//TODO check with bop format what w2c or c2w is supposed to contain (dimo uses c2w, c2r uses w2c) 
                 for (int row = 0; row < 3; ++row)
                     for (int col = 0; col < 3; ++col)
                         pose.worldToCam[row, col] = rotation[row * 3 + col];
                 //add transtalions to the camera transformation matrix
-                var translation = v.Value["cam_t_c2w"];
+                var translation = v.Value["cam_t_w2c"];
                 for (int row = 0; row < 3; ++row)
                     pose.worldToCam[row, 3] = GeometryUtils.convertMmToUnity((float)translation[row]);
 
@@ -146,6 +159,8 @@ namespace Assets.Scripts.io.BOP
                     model.localToWorld = pose.worldToCam * flipY * model.localToWorld;
 
                     model.obj_id = m["obj_id"];
+                    if (model_id != null)
+                        model.obj_name = model_id[m["obj_id"].ToString()];
                     pose.models.Add(model);
                 }
                 scene.poses.Add(pose);

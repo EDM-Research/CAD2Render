@@ -57,16 +57,18 @@ public class MainExporter : MonoBehaviour
             renderEnd += () => { StartCoroutine(exporter.exportFrame(randomizer.getExportObjects(), mainCamera, fileCounter)); };
         }
 
-        var sceneIterator = GetComponent<SceneIteratorInterface>();
-        if (sceneIterator != null)
+        var sceneIterator = this.GetComponent<SceneIteratorInterface>();
+        if (sceneIterator != null && sceneIterator.enabled)
         {
             dataset.numberOfImages = -1;
             sceneIterator.NewSceneLoaded += () => { fileCounter = 0; };
             foreach (var exporter in exporters)
                 sceneIterator.NewSceneLoaded += exporter.incrementSceneId;
             sceneIterator.LastSceneEnded += () => { endOfDatasetGeneration.Invoke(); };
+            sceneIterator.LastSceneEnded += () => { capturing = false; };
+
+            randomizer.setSceneIterator(sceneIterator);
         }
-        randomizer.setSceneIterator(sceneIterator);
     }
 
     private bool checkDatasetSettings()

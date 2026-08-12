@@ -11,6 +11,7 @@ public abstract class SceneIteratorInterface : MonoBehaviour
     {
         public UnityEngine.Matrix4x4 localToWorld;
         public int obj_id;
+        public string obj_name;
     }
 
     public struct C2RPose

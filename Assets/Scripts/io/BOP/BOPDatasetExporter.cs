@@ -71,7 +71,7 @@ namespace Assets.Scripts.io.BOP
             var exportObjects = GameObject.FindGameObjectsWithTag("ExportInstanceInfo");
             int count = exportObjects.Length;
 
-            if(count > dataset.maxSegmentationObjects)
+            if(count > dataset.maxSegmentationObjects || count == 0)
             {
                 segmentationMaskRenderer.targetTextureArray = null;
                 return;

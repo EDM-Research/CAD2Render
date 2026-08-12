@@ -87,9 +87,11 @@ public class ObjectRandomizeHandler : RandomizerInterface
     }
 
 
-    public GameObject FindModel(int id)
+    public GameObject FindModel(SceneIteratorInterface.C2RModel modelInfo)
     {
-        string name = string.Format("obj_{0:000000}", id);
+        string name = string.Format("obj_{0:000000}", modelInfo.obj_id);
+        if (modelInfo.obj_name != "")
+            name = modelInfo.obj_name;
         foreach (GameObject model in models)
         {
             //Debug.Log(model.name);
@@ -109,12 +111,13 @@ public class ObjectRandomizeHandler : RandomizerInterface
     }
     private void CreateModels(SceneIteratorInterface sceneIterator)
     {
+        bool onlyConsumeRNG = false;
         if (sceneIterator != null && objectData.importFromBOP != ObjectRandomizeData.BopImportType.NoImport)
         {
             List<SceneIteratorInterface.C2RModel> bopModels = sceneIterator.GetPose().models;
             for (int i = 0; i < bopModels.Count; ++i)
             {
-                GameObject model = FindModel(bopModels[i].obj_id);
+                GameObject model = FindModel(bopModels[i]);
                 if (model != null)
                 {
                     if (objectData.importFromBOP == ObjectRandomizeData.BopImportType.ModelAndPose)
@@ -123,13 +126,15 @@ public class ObjectRandomizeHandler : RandomizerInterface
                         SpawnModel(model, i);
                 }
             }
+            onlyConsumeRNG = true;
         }
-        else if (objectData.uniqueObjects)
+        
+        if (objectData.uniqueObjects)
         {
             for (int i = 0; i < models.Length; ++i)
             {
                 GameObject model = models[i];
-                SpawnModel(model, i);
+                SpawnModel(model, i, onlyConsumeRNG);
             }
         }
         else
@@ -139,7 +144,7 @@ public class ObjectRandomizeHandler : RandomizerInterface
                 if (models.Length > 0)
                 {
                     GameObject model = models[rng.IntRange(0, models.Length)];
-                    SpawnModel(model, i);
+                    SpawnModel(model, i, onlyConsumeRNG);
                 }
                 else
                 {
@@ -159,7 +164,7 @@ public class ObjectRandomizeHandler : RandomizerInterface
         foreach (Transform childTransform in clone.transform)
             instantiatedSubModels.Add(childTransform.gameObject);
     }
-    private void SpawnModel(GameObject model, int index)
+    private void SpawnModel(GameObject model, int index, bool onlyConsumeRNG = false)
     {
         Vector3 spawnPosition;
 
@@ -201,6 +206,11 @@ public class ObjectRandomizeHandler : RandomizerInterface
             }
         }
 
+        if (onlyConsumeRNG)
+        {
+            Destroy(clone);
+            return;
+        }
         instantiatedModels.Add(clone);
         foreach (Transform childTransform in clone.transform)
             instantiatedSubModels.Add(childTransform.gameObject);
