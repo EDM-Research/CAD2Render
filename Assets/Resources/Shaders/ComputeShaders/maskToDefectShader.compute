@@ -1,0 +1,27 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+
+Texture2D<float4> defectInTexture;
+SamplerState sampler_defectInTexture;
+
+RWTexture2D<float4> defectMask;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    
+    uint width, height;
+    defectMask.GetDimensions(width, height);
+    
+    float2 uv = (float2(id.xy) + 0.5) / float2(width, height);
+    float mask = defectInTexture.SampleLevel(
+        sampler_defectInTexture,
+        uv,
+        0
+    ).r;
+    
+    float4 falseColor = defectMask[id.xy];
+    falseColor.a -= mask;
+    defectMask[id.xy] = falseColor;
+}
