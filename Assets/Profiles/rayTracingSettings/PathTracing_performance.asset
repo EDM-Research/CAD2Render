@@ -70,10 +70,10 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   layerMask:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 4919
   maximumSamples:
     m_OverrideState: 1
     m_Value: 499

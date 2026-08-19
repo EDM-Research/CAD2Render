@@ -16,17 +16,15 @@ namespace UnityEngine.Rendering.HighDefinition
         private Material overrideMaterial = null;
         private Color backgroundColor;
 
-        public Camera bakingCamera = null;
         public RenderTexture targetTexture = null;
         public RenderTexture targetTextureArray = null;
 
         static ShaderTagId[] shaderTags;
 
-        public DrawSegmentationObjectsCustomPass(Camera bakingCamera, RenderTexture targetTexture, RenderTexture targetTextureArray = null) : base()
+        public DrawSegmentationObjectsCustomPass(RenderTexture targetTexture, RenderTexture targetTextureArray = null) : base()
         {
             this.overrideMaterial = new Material(Shader.Find("Unlit/FalseColor"));
             this.backgroundColor = Color.black;
-            this.bakingCamera = bakingCamera;
             this.targetTexture = targetTexture;
             this.targetTextureArray = targetTextureArray;
         }
@@ -55,7 +53,7 @@ namespace UnityEngine.Rendering.HighDefinition
         protected override void Execute(CustomPassContext ctx)
         {
             const int forwardOnlyPassIndex = 0;
-            var result = new RendererListDesc(shaderTags, ctx.cullingResults, bakingCamera)
+            var result = new RendererListDesc(shaderTags, ctx.cullingResults, ctx.hdCamera.camera)
             {
                 rendererConfiguration = PerObjectData.None,
                 renderQueueRange = RenderQueueRange.all,

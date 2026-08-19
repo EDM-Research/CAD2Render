@@ -8,6 +8,8 @@ using UnityEngine.Assertions.Must;
 public class MissingPartHandler : MaterialRandomizerInterface
 {
 
+    public override int getPriority() { return -10000; }
+
     public MissingPartData dataset;
     [InspectorButton("TriggerCloneClicked")]
     public bool clone;

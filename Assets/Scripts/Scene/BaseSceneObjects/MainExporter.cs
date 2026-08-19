@@ -16,8 +16,33 @@ public class MainExporter : MonoBehaviour
         RandomizerInterface.CloneDataset(ref dataset);
     }
 
+    private Camera _bakingCamera;
+    private Camera bakingCamera { 
+        get { if (_bakingCamera == null)
+            {
+                GameObject bakingCameraObject = new GameObject("BakingCamera");
+                bakingCameraObject.transform.SetParent(mainCamera.transform, false);
+
+                //bakingCameraObject.SetActive(false);
+                _bakingCamera = bakingCameraObject.gameObject.AddComponent<Camera>();
+                _bakingCamera.CopyFrom(mainCamera);
+                _bakingCamera.targetTexture = null;
+                //_bakingCamera.targetDisplay = 1;
+
+                int layerIndex = LayerMask.NameToLayer("DefectMissingPart");
+                _bakingCamera.cullingMask |= (1 << layerIndex);
+            }
+            return _bakingCamera;
+        }
+    }
     private Camera _mainCamera;
-    private Camera mainCamera { get { if (_mainCamera == null) _mainCamera = Camera.main; return _mainCamera; } }
+    private Camera mainCamera { get { 
+            if (_mainCamera == null) 
+                _mainCamera = Camera.main;
+            int layerIndex = LayerMask.NameToLayer("DefectMissingPart");
+            _mainCamera.cullingMask &= ~(1 << layerIndex); 
+            return _mainCamera; } 
+    }
     //texture Of the maincamera
     private RenderTexture renderTexture = null;
 
@@ -52,9 +77,9 @@ public class MainExporter : MonoBehaviour
         setupRenderTextures();
         foreach (ExportDatasetInterface exporter in exporters)
         {
-            exporter.setup(mainCamera, dataset.outputPath, dataset.sceneId);
-            renderStart += () => { exporter.onRenderStart(mainCamera, fileCounter); };
-            renderEnd += () => { StartCoroutine(exporter.exportFrame(randomizer.getExportObjects(), mainCamera, fileCounter)); };
+            exporter.setup(mainCamera, bakingCamera, dataset.outputPath, dataset.sceneId);
+            renderStart += () => { exporter.onRenderStart(bakingCamera, fileCounter); };
+            renderEnd += () => { StartCoroutine(exporter.exportFrame(randomizer.getExportObjects(), bakingCamera, fileCounter)); };
         }
 
         var sceneIterator = this.GetComponent<SceneIteratorInterface>();
