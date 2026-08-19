@@ -6,7 +6,6 @@ using MyResourceManager = Assets.Scripts.io.MyResourceManager;
 [AddComponentMenu("Cad2Render/MaterialRandomizers/Material Model")]
 public class MaterialModelRandomizeHandler : MaterialRandomizerInterface
 {
-    //private RandomNumberGenerator rng;
     public MaterialModelRandomizeData dataset;
     [InspectorButton("TriggerCloneClicked")]
     public bool clone;
