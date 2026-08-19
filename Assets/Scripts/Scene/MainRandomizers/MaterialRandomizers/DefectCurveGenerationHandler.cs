@@ -36,8 +36,6 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
     public override void RandomizeSingleMaterial(MaterialTextures textures, ref RandomNumberGenerator rng)
     {
         int kernelHandle = defectCurveGenerationShader.FindKernel("CSMain");
-        defectCurveGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
-        defectCurveGenerationShader.SetFloat("sharpness", dataset.sharpness);
         
         if (dataset.changeColor)
         {
@@ -72,12 +70,17 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
             defectCurveGenerationShader.DisableKeyword(changeNormalMap);
 
 
+        defectCurveGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
+
         var defectMap = textures.ensureExistence(MaterialTextures.MapTypes.defectMap, textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
         defectCurveGenerationShader.SetTexture(kernelHandle, "DefectMapInOut", defectMap);
 
-        defectCurveGenerationShader.SetVector("defectWidthModifier", new Vector2(dataset.defectWidth.x * 0.1f, dataset.defectWidth.y * 0.1f));
+        defectCurveGenerationShader.SetVector("defectWidth", new Vector2(dataset.defectWidth.x * 0.1f, dataset.defectWidth.y * 0.1f));
         defectCurveGenerationShader.SetVector("defectLength", new Vector2(dataset.defectLength.x, dataset.defectLength.y));
-        defectCurveGenerationShader.SetFloat("sharpness", dataset.sharpness);
+        defectCurveGenerationShader.SetVector("defectAngle", new Vector2(dataset.defectAngle.x, dataset.defectAngle.y));
+        defectCurveGenerationShader.SetVector("defectControlPointOffset", new Vector2(dataset.controlPointOffset.x, dataset.controlPointOffset.y));
+        defectCurveGenerationShader.SetFloat("sharpness1", dataset.sharpness1);
+        defectCurveGenerationShader.SetFloat("sharpness2", dataset.sharpness2);
         defectCurveGenerationShader.SetFloat("defectCutoff", dataset.defectCutoff);
 
         //execute shader

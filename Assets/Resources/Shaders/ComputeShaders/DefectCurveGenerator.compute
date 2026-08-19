@@ -20,11 +20,22 @@ RWTexture2D<float4> DefectMapInOut;
     float metalicnessOffset;
 #endif
 
-float defectWidthModifier;
-float2 defectLength;
-float sharpness;
+float sharpness1;
+float sharpness2;
 float defectCutoff;
 
+float2 defectWidth;
+float2 defectLength;
+float2 defectAngle;
+float2 defectControlPointOffset;
+
+struct curveGenerationSettings
+{
+    float2 width;
+    float2 length;
+    float2 angle;
+    float2 controlPointOffset;
+};
 
 //forward declarations
 #include "RandomGPU.hlsl"
@@ -34,19 +45,19 @@ float defectCutoff;
 float easeFunction(float distance, float defectWidth, float sharpness)
 {
     float dif = abs(2 * defectWidth);
-    if (dif < 0.01)
+    if (dif < 0.0001)
         return 0;
     float sharpnessBoundAware = sharpness / dif;
     float boundCompensation = 0.05f * dif;
     float lower_sigmoid = 1 / (1 + exp(-sharpnessBoundAware * (distance + defectWidth + boundCompensation)));
     float upper_sigmoid = 1 / (1 + exp( sharpnessBoundAware * (distance - defectWidth - boundCompensation)));
 
-    return lower_sigmoid * upper_sigmoid;
+    return saturate(sharpness*sharpness) * lower_sigmoid * upper_sigmoid;
 }
 float easeFunctionNormal(float distance, float defectWidth, float sharpness)
 {
     float dif = abs(2 * defectWidth);
-    if (dif < 0.01)
+    if (dif < 0.0001)
         return 0;
     float sharpnessBoundAware = sharpness / dif;
     float boundCompensation = 0.05f * dif;
@@ -68,43 +79,53 @@ float2 bezier(float2 p0, float2 p1, float2 p2, float2 p3, float t)
            tt * t * p3;
 }
 
+// derivative of cubic bezier: B'(t) = 3[(1-t)^2 (p1-p0) + 2(1-t)t (p2-p1) + t^2 (p3-p2)]
+float2 bezierTangent(float2 p0, float2 p1, float2 p2, float2 p3, float t)
+{
+    float u = 1.0 - t;
+    float a = u * u;
+    float b = 2.0 * u * t;
+    float c = t * t;
+
+    return 3.0 * (a * (p1 - p0) + b * (p2 - p1) + c * (p3 - p2));
+}
+
 struct CurveInfo
 {
     float distance;
     float t;
 
     float2 closestPoint;
-    float2 tangent;
-    float2 normal;
+    float2 toCurve;
+    float side;
 };
 
-CurveInfo getCurveInfo(float2 uv, uint seed)
+CurveInfo getCurveInfo(float2 uv, curveGenerationSettings settings, uint seed)
 {
     //generate points of a curve
     float2 center = float2(nextRand(seed), nextRand(seed));
 
-    float angle = nextRand(seed) * PI * 2;
+    float angle = lerp(settings.angle.x / 360.0, settings.angle.y / 360.0, nextRand(seed)) * PI * 2;
     float2 dir = float2(cos(angle), sin(angle));
     float2 perp = float2(-dir.y, dir.x);
 
-    float length = lerp(defectLength.x, defectLength.y, nextRand(seed));
+    float curveLength = lerp(settings.length.x, settings.length.y, nextRand(seed));
 
-    float2 p0 = center - dir * length * 0.5;
-    float2 p3 = center + dir * length * 0.5;
+    float2 p0 = center - dir * curveLength * 0.5;
+    float2 p3 = center + dir * curveLength * 0.5;
 
-    float2 p1 = lerp(p0, p3, 0.33) + perp * (nextRand(seed) - 0.5) * 0.3;
-    float2 p2 = lerp(p0, p3, 0.66) + perp * (nextRand(seed) - 0.5) * 0.3;
+    float2 p1 = lerp(p0, p3, 0.33) + perp * lerp(settings.controlPointOffset.x, settings.controlPointOffset.y, nextRand(seed)) * curveLength;
+    float2 p2 = lerp(p0, p3, 0.66) + perp * lerp(settings.controlPointOffset.x, settings.controlPointOffset.y, nextRand(seed)) * curveLength;
     
     CurveInfo info;
     info.distance = 1e10;
     info.t = 0.0;
     info.closestPoint = 0;
-    info.tangent = float2(1, 0);
-    info.normal = float2(0, 1);
+    info.toCurve = float2(0, 1);
 
     float2 prev = bezier(p0, p1, p2, p3, 0.0);
     
-    static const int STEPS = 48;
+    static const int STEPS = 200;
     [unroll]
     for (int i = 1; i <= STEPS; i++)
     {
@@ -124,14 +145,17 @@ CurveInfo getCurveInfo(float2 uv, uint seed)
             if (dist < info.distance)
             {
                 info.distance = dist;
-
                 info.closestPoint = closest;
-
-                info.tangent = normalize(segment);
-                info.normal = float2(-info.tangent.y, info.tangent.x);
+                info.toCurve = normalize(uv - closest);
 
                 // Approximate parameter on the Bezier
                 info.t = ((float) (i - 1) + h) / STEPS;
+
+                // compute local tangent and normal at the closest parameter
+                float2 tangent = normalize(bezierTangent(p0, p1, p2, p3, info.t));
+
+                float2 normal = float2(-tangent.y, tangent.x);
+                info.side = dot(info.toCurve, normal);
             }
         }
 
@@ -146,24 +170,32 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {   
     uint threadRandSeed = createThreadRandomSeed(id.xy, randSeed);
     uint startRandSeed = randSeed;
-    int2 resolution;
+    int2 resolution; 
     DefectMapInOut.GetDimensions(resolution.x, resolution.y);
     
-    CurveInfo curveInfo = getCurveInfo((float2) id.xy / (float2) resolution, startRandSeed);
-    float defectValue = easeFunction(curveInfo.distance, defectWidthModifier, sharpness);
+    curveGenerationSettings settings;
+    settings.width = defectWidth * 10;
+    settings.length = defectLength;
+    settings.angle = defectAngle;
+    settings.controlPointOffset = defectControlPointOffset;
+    CurveInfo curveInfo = getCurveInfo((float2) id.xy / (float2) resolution, settings, startRandSeed);
+    curveInfo.distance = curveInfo.distance * 10; // scale distance to pixel space
+    float defectWidth = lerp(settings.width.x, settings.width.y, nextRand(startRandSeed));
+    float sharpness = lerp(sharpness1, sharpness2, curveInfo.side/2 + 0.5f);
+    float defectValue = easeFunction(curveInfo.distance, defectWidth, sharpness);
 
     
     #if changeColor
-        float defectColorChange = FractalBrownianMotion(3, 0.1, 1, startRandSeed, CurveInfo.tangent, resolution);
+        float defectColorChange = FractalBrownianMotion(3, 0.1, 1.0, startRandSeed, id.xy, resolution);
         float4 oldColor = ColorMapInOut[id.xy];
         float4 newColor = lerp(defectColor1, defectColor2, saturate(defectColorChange));
-        ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a).rgb, oldColor.a);
+        ColorMapInOut[id.xy] = float4(lerp(oldColor, newColor, newColor.a * defectValue).rgb, oldColor.a);//float4(curveInfo.toCurve/2+0.5, 0, 1.0);//
     #endif
     
     // if a == 1 -> no defect; else defect
     float4 defectMapValue = DefectMapInOut[id.xy];
-    float defectCutoff = step(defectCutoff, defectValue);
-    defectMapValue.a = defectMapValue.a * (1 - defectCutoff);
+    float cutoff = step(defectCutoff, defectValue);
+    defectMapValue.a = defectMapValue.a * (1 - cutoff);
     DefectMapInOut[id.xy] = defectMapValue;
     
     #if changeMaskMap 
@@ -171,15 +203,16 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         oldMask.r += defectValue * metalicnessOffset; //metalicness
         oldMask.a *= 1 - defectValue * 0.4; //reduce smoothness
         MaskMapInOut[id.xy] = saturate(oldMask);
-#endif
+    #endif
     
     #if changeNormalMap 
         randSeed = startRandSeed;
-        float normal = easeFunctionNormal(curveInfo.distance, defectWidthModifier, sharpness);
-        float3 defectNormalModifier = float3(curveInfo.normal, 0) * normal * dentModifier;
+        float normal = easeFunctionNormal(curveInfo.distance, defectWidth, sharpness);
+        float3 defectNormalModifier = float3(curveInfo.toCurve, 0) * normal * dentModifier;
      
         float3 oldNormal = unpackNormal(NormalMapInOut[id.xy]);
         float3 newNormal = normalize(defectNormalModifier + oldNormal);
+        newNormal = lerp(oldNormal, newNormal, defectValue * 0.5);
         NormalMapInOut[id.xy] = packNormal(newNormal);
 #endif
 }

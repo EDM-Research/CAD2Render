@@ -12,11 +12,15 @@ using UnityEngine.Rendering;
 [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Material randomizer Data/New Curve Defect Generation data")]
 public class CurveDefectGenerationData : ScriptableObject
 {
-    [Header("Rust generation settings")]
+    [Header("Defect generation settings")]
     //[Range(0.0f, 1.0f)]
-    [MinMaxRange(0, 0.01f,3)]
+    [MinMaxRange(0.01f, 0.1f,3)]
     [Tooltip("")]
-    public Vector2 defectWidth = new Vector2(0.0039f, 0.005f);
+    public Vector2 defectWidth = new Vector2(0.03f, 0.05f);
+    [MinMaxRange(-2, 2, 2)]
+    public Vector2 controlPointOffset = new Vector2(-1, 1);
+    [MinMaxRange(-180, 180, 0)]
+    public Vector2 defectAngle = new Vector2(-180, 180);
     [MinMaxRange(0, 0.5f, 3)]
     [Tooltip("")]
     public Vector2 defectLength = new Vector2(0.01f, 0.05f);
@@ -39,5 +43,6 @@ public class CurveDefectGenerationData : ScriptableObject
     [Range(-1.0f, 1.0f)]
     public float dentModifier = 1.0f;
     [Tooltip("Sharpness transition between clean and rusty surface.")]
-    public float sharpness = 200.0f;
+    public float sharpness1 = 200.0f;
+    public float sharpness2 = 200.0f;
 }

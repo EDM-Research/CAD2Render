@@ -19,5 +19,5 @@ void reorder(uint3 id : SV_DispatchThreadID)
 [numthreads(8, 8, 1)]
 void unpack(uint3 id : SV_DispatchThreadID)
 {
-    NormalMapOut[id.xy] = unpackNormal(NormalMapIn[id.xy]);
+    NormalMapOut[id.xy] = float4(unpackNormal(NormalMapIn[id.xy]), 1);
 }
