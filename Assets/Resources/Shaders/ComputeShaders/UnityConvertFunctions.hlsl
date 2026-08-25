@@ -7,6 +7,15 @@ float3 unpackNormal(float4 packedNormal) {
     return normal;
 }
 
+float4 packNormalOpenGL(float3 normal)
+{
+    float4 packed;
+    packed.rg = normal.xy * 0.5 + 0.5;
+    packed.b = normal.z; //not used
+    packed.a = 1;
+    return packed;
+}
+
 float4 packNormal(float3 normal)
 {
     float4 packed;
