@@ -1,4 +1,4 @@
-﻿//Copyright (c) 2020 Nick Michiels <nick.michiels@uhasselt.be>, Hasselt University, Belgium, All rights reserved.
+//Copyright (c) 2020 Nick Michiels <nick.michiels@uhasselt.be>, Hasselt University, Belgium, All rights reserved.
 
 using SneakySquirrelLabs.MinMaxRangeAttribute;
 using System;
@@ -21,7 +21,7 @@ public class RustGenerationData : ScriptableObject
     [Range(0.0f, 1.0f)]
     public float defectCutoff = 0.4f;
     [Tooltip("determines the size of rust spots")]
-    [Range(0.0151f, 1.5f)]
+    [Range(0.0151f, 1f)]
     public float rustMaskZoom = 0.009f;
     [Tooltip("determines the size of color variations in rust spots")]
     [Range(0.0021f, 0.49f)]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -12,6 +12,10 @@ public class RustGenerationHandler : MaterialRandomizerInterface
     public RustGenerationData dataset;
     [InspectorButton("TriggerCloneClicked")]
     public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref dataset);
+    }
 
     private RenderTexture RustZoneTexture;
     private ComputeShader rustmapGenerationShader;
@@ -19,10 +23,6 @@ public class RustGenerationHandler : MaterialRandomizerInterface
     private LocalKeyword changeNormalMap;
     private LocalKeyword changeColor;
 
-    private void TriggerCloneClicked()
-    {
-        RandomizerInterface.CloneDataset(ref dataset);
-    }
 
     public void Awake()
     {
