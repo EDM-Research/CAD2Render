@@ -89,11 +89,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     rustCoMin = rustCoMean - rustCoWidth / 2;
     rustCoMax = rustCoMean + rustCoWidth / 2;
     float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, randSeed, id.xy, resolution);
-    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, xSkew, randSeed, id.xy, resolution);
+    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, 1, randSeed, id.xy, resolution);
     //float stepRustValue = step(rustValue, rustCoMax);
     //stepRustValue *= step(rustCoMin, rustValue);
     float easeRustValue = easeFunction(rustValue);
-    float stepRustValue = step(0.999f, easeRustValue);
+    float stepRustValue = step(defectCutoff, easeRustValue);
     
     #if changeColor 
         float4 oldColor = ColorMapInOut[id.xy];

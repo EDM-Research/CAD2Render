@@ -22,7 +22,7 @@ RWTexture2D<float4> DefectMapInOut;
 
 float sharpness1;
 float sharpness2;
-float defectCutoff;
+float defectAnnotationModifier;
 
 float2 defectWidth;
 float2 defectLength;
@@ -194,7 +194,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     
     // if a == 1 -> no defect; else defect
     float4 defectMapValue = DefectMapInOut[id.xy];
-    float cutoff = step(defectCutoff, defectValue);
+    float cutoff = easeFunction(curveInfo.distance, defectAnnotationModifier * defectWidth, sharpness);
+    cutoff = step(0.5, cutoff);
     defectMapValue.a = defectMapValue.a * (1 - cutoff);
     DefectMapInOut[id.xy] = defectMapValue;
     
@@ -212,8 +213,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
      
         float3 oldNormal = unpackNormal(NormalMapInOut[id.xy]);
         float3 newNormal = normalize(defectNormalModifier + oldNormal);
-        newNormal = lerp(oldNormal, newNormal, defectValue * 0.5);
-        NormalMapInOut[id.xy] = packNormal(newNormal);
+        newNormal = normalize(lerp(oldNormal, newNormal, defectValue * 0.5));
+        NormalMapInOut[id.xy] = packNormal( newNormal);
 #endif
 }
 

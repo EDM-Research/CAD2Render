@@ -13,6 +13,7 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
     [InspectorButton("TriggerCloneClicked")]
     public bool clone;
 
+    const float  LengthWidthModifier = 0.01f;
     private RenderTexture RustZoneTexture;
     private ComputeShader defectCurveGenerationShader;
     private LocalKeyword changeMaskmap;
@@ -42,8 +43,8 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
             defectCurveGenerationShader.EnableKeyword(changeColor);
             var colorMap = textures.ensureExistence(MaterialTextures.MapTypes.colorMap, textures.GetCurrentLinkedColor("_Color"));
             defectCurveGenerationShader.SetTexture(kernelHandle, "ColorMapInOut", colorMap);
-            defectCurveGenerationShader.SetVector("defectColor1", dataset.rustColor1);
-            defectCurveGenerationShader.SetVector("defectColor2", dataset.rustColor2);
+            defectCurveGenerationShader.SetVector("defectColor1", dataset.defectColor1);
+            defectCurveGenerationShader.SetVector("defectColor2", dataset.defectColor2);
         }
         else
             defectCurveGenerationShader.DisableKeyword(changeColor);
@@ -70,21 +71,24 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
             defectCurveGenerationShader.DisableKeyword(changeNormalMap);
 
 
-        defectCurveGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
 
         var defectMap = textures.ensureExistence(MaterialTextures.MapTypes.defectMap, textures.falseColor != null ? textures.falseColor.falseColor : Color.black);
         defectCurveGenerationShader.SetTexture(kernelHandle, "DefectMapInOut", defectMap);
 
-        defectCurveGenerationShader.SetVector("defectWidth", new Vector2(dataset.defectWidth.x * 0.1f, dataset.defectWidth.y * 0.1f));
-        defectCurveGenerationShader.SetVector("defectLength", new Vector2(dataset.defectLength.x, dataset.defectLength.y));
+        defectCurveGenerationShader.SetVector("defectWidth", new Vector2(dataset.defectWidth.x * LengthWidthModifier, dataset.defectWidth.y * LengthWidthModifier));
+        defectCurveGenerationShader.SetVector("defectLength", new Vector2(dataset.defectLength.x * LengthWidthModifier, dataset.defectLength.y * LengthWidthModifier));
         defectCurveGenerationShader.SetVector("defectAngle", new Vector2(dataset.defectAngle.x, dataset.defectAngle.y));
         defectCurveGenerationShader.SetVector("defectControlPointOffset", new Vector2(dataset.controlPointOffset.x, dataset.controlPointOffset.y));
         defectCurveGenerationShader.SetFloat("sharpness1", dataset.sharpness1);
         defectCurveGenerationShader.SetFloat("sharpness2", dataset.sharpness2);
-        defectCurveGenerationShader.SetFloat("defectCutoff", dataset.defectCutoff);
+        defectCurveGenerationShader.SetFloat("defectAnnotationModifier", dataset.defectAnnotationModifier);
 
+        for(int i = 0; i < dataset.nrOfDefects; i++)
+        {
+            defectCurveGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
+            defectCurveGenerationShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
+        }
         //execute shader
-        defectCurveGenerationShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
 
 
     }
