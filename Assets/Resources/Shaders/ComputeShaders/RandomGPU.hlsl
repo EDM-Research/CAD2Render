@@ -47,104 +47,102 @@ float FractalBrownianMotion(uint nrOfOctaves, float zoom, float xSkew, inout uin
     float2 newCoord;
     newCoord.x = (coord.x * cosc) - (coord.y * sinc);
     newCoord.y = (coord.x * sinc) + (coord.y * cosc);
-    newCoord = coord;
+    
     float amplitute = 1;
     for (uint i = 0; i < nrOfOctaves; ++i)
     {
         //if (i != nrOfOctaves - 1)
         //    continue;
-        float currentZoom = pow(2, i) * zoom;
+        float currentZoom = exp2(i) * zoom;
         amplitute *= 0.5;
         totalAmplitute += amplitute;
         
-        float2 offset = float2(nextRand(seed) * resolution.x, nextRand(seed) * resolution.y);
-        newCoord = float2(offset + newCoord) * currentZoom;
-        newCoord.x *= xSkew;
-
+        //float2 offset = float2(nextRand(seed) * resolution.x, nextRand(seed) * resolution.y);
+        float2 offset = float2(
+            nextRand(seed) * 289.0,
+            nextRand(seed) * 289.0
+        );
+        float2 octaveCoord = offset + newCoord * currentZoom;
+        octaveCoord.x *= xSkew;
         
-        value += (sNoise(newCoord, (uint) nextRand(seed)*255) / 2 + 0.5) * amplitute;
+        value += sNoise(octaveCoord, (uint) (nextRand(seed) * 289)) * amplitute;
     }
-    return value;// / totalAmplitute;
+    return value / totalAmplitute;
 }
 
 
 
-//
-// Description : Array and textureless GLSL 2D simplex noise function.
-//      Author : Ian McEwan, Ashima Arts.
-//  Maintainer : stegu
-//     Lastmod : 20110822 (ijm)
-//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-//               Distributed under the MIT License. See LICENSE file.
-//               https://github.com/ashima/webgl-noise
-//               https://github.com/stegu/webgl-noise
-// 
-float3 mod289(float3 x)
+
+float2 hash22(float2 p, uint seed)
 {
-    return x - floor(x * (1.0 / 289.0)) * 289.0;
+    p += float2(seed, seed * 0.713f);
+
+    float3 p3 = frac(float3(p.xyx) * 0.1031f);
+    p3 += dot(p3, p3.yzx + 33.33f);
+
+    return frac((p3.xx + p3.yz) * p3.zy);
 }
 
-float2 mod289(float2 x)
-{
-    return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
-
-float3 permute(float3 x)
-{
-    return mod289(((x * 34.0) + 1.0) * x);
-}
-
-
-/**
- * produces 2d simplex noise with a persiod of 289
- * returns a float between [-1;1]
- */
 float sNoise(float2 v, uint noiseMapSeed)
 {
-    const float4 C = float4(0.211324865405187, // (3.0-sqrt(3.0))/6.0
-                      0.366025403784439, // 0.5*(sqrt(3.0)-1.0)
-                     -0.577350269189626, // -1.0 + 2.0 * C.x
-                      0.024390243902439); // 1.0 / 41.0
-// First corner
-    float2 i = floor(v + dot(v, C.yy));
-    float2 x0 = v - i + dot(i, C.xx);
+    const float2 K1 = float2(
+        0.3660254038f, // (sqrt(3)-1)/2
+        0.3660254038f
+    );
 
-// Other corners
-    float2 i1;
-  //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
-  //i1.y = 1.0 - i1.x;
-    i1 = (x0.x > x0.y) ? float2(1.0, 0.0) : float2(0.0, 1.0);
-  // x0 = x0 - 0.0 + 0.0 * C.xx ;
-  // x1 = x0 - i1 + 1.0 * C.xx ;
-  // x2 = x0 - 1.0 + 2.0 * C.xx ;
-    float4 x12 = x0.xyxy + C.xxzz;
-    x12.xy -= i1;
+    const float2 K2 = float2(
+        0.2113248654f, // (3-sqrt(3))/6
+        0.2113248654f
+    );
 
-// Permutations
-    i = mod289(i); // Avoid truncation effects in permutation
-    float3 p = permute(permute(i.y + float3(0.0, i1.y, 1.0))
-		+ i.x + float3(0.0, i1.x, 1.0));
-    p = permute(p + float3((float)noiseMapSeed, (float)noiseMapSeed, (float)noiseMapSeed)); //add a seed as sugested in https://github.com/ashima/webgl-noise/issues/9#issuecomment-11991995 creates visable artefacts :(
+    // Skew into simplex grid
+    float2 i = floor(v + dot(v, K1));
+    float2 x0 = v - i + dot(i, K2);
 
-    float3 m = max(0.5 - float3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
-    m = m * m;
-    m = m * m;
+    // Determine simplex corner
+    float2 i1 = (x0.x > x0.y)
+        ? float2(1.0f, 0.0f)
+        : float2(0.0f, 1.0f);
 
-// Gradients: 41 points uniformly over a line, mapped onto a diamond.
-// The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
+    float2 x1 = x0 - i1 + K2;
+    float2 x2 = x0 - 1.0f + 2.0f * K2;
 
-    float3 x = 2.0 * frac(p * C.www) - 1.0;
-    float3 h = abs(x) - 0.5;
-    float3 ox = floor(x + 0.5);
-    float3 a0 = x - ox;
+    // Random gradients
+    float2 g0 = hash22(i, noiseMapSeed) * 2.0f - 1.0f;
+    float2 g1 = hash22(i + i1, noiseMapSeed) * 2.0f - 1.0f;
+    float2 g2 = hash22(i + 1.0f, noiseMapSeed) * 2.0f - 1.0f;
 
-// Normalise gradients implicitly by scaling m
-// Approximation of: m *= inversesqrt( a0*a0 + h*h );
-    m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+    g0 = normalize(g0);
+    g1 = normalize(g1);
+    g2 = normalize(g2);
 
-// Compute final noise value at P
-    float3 g;
-    g.x = a0.x * x0.x + h.x * x0.y;
-    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-    return 130.0 * dot(m, g);
+    // Contribution from each corner
+    float t0 = 0.5f - dot(x0, x0);
+    float t1 = 0.5f - dot(x1, x1);
+    float t2 = 0.5f - dot(x2, x2);
+
+    float n0 = 0.0f;
+    float n1 = 0.0f;
+    float n2 = 0.0f;
+
+    if (t0 > 0.0f)
+    {
+        t0 *= t0;
+        n0 = t0 * t0 * dot(g0, x0);
+    }
+
+    if (t1 > 0.0f)
+    {
+        t1 *= t1;
+        n1 = t1 * t1 * dot(g1, x1);
+    }
+
+    if (t2 > 0.0f)
+    {
+        t2 *= t2;
+        n2 = t2 * t2 * dot(g2, x2);
+    }
+
+    // Scale approximately to [0,1]
+    return saturate(0.5f + 35.0f * (n0 + n1 + n2));
 }
