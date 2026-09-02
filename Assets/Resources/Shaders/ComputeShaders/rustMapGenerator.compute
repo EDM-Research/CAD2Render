@@ -83,13 +83,13 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     int2 resolution;
     rustMask.GetDimensions(resolution.x, resolution.y);
     
-    float dif = abs(rustCoMax - rustCoMin) * rustMask[id.xy].b;
-    float mean = (rustCoMax + rustCoMin) / 2;
-    rustCoMin = mean - dif;
-    rustCoMax = mean + dif;
-    
+    float rustCoWidth = abs(rustCoMax - rustCoMin);// * rustMask[id.xy].b;
+    sharpness *= -9 + 10 * rustMask[id.xy].b;
+    float rustCoMean = (rustCoMax + rustCoMin) / 2;
+    rustCoMin = rustCoMean - rustCoWidth / 2;
+    rustCoMax = rustCoMean + rustCoWidth / 2;
     float rustValue = FractalBrownianMotion(nrOfOctaves, maskZoom, xSkew, randSeed, id.xy, resolution);
-    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, xSkew, randSeed, id.xy, resolution);
+    float rustAge = FractalBrownianMotion(nrOfOctaves, rustPaternZoom, 1, randSeed, id.xy, resolution);
     //float stepRustValue = step(rustValue, rustCoMax);
     //stepRustValue *= step(rustCoMin, rustValue);
     float easeRustValue = easeFunction(rustValue);

@@ -28,14 +28,15 @@ namespace Assets.Scripts.io
             setupExportPath(); 
         }
 
-        public void setup(Camera mainCamera, string outputPath, int setSceneId)
+        public void setup(Camera mainCamera, Camera bakingCamera, string outputPath, int setSceneId)
         {
             setupExportPath(outputPath, setSceneId);
-            setCustomVolume();
+            setCustomVolume(bakingCamera);
+
             setupCustomPasses(mainCamera);
         }
         protected static CustomPassVolume customPassVolume;
-        private void setCustomVolume()
+        private void setCustomVolume(Camera bakingCamera)
         {
             if (customPassVolume != null)
                 return;
@@ -53,6 +54,7 @@ namespace Assets.Scripts.io
             }
             customPassVolume = customPasses.AddComponent<CustomPassVolume>();
             customPassVolume.injectionPoint = CustomPassInjectionPoint.BeforeRendering;
+            customPassVolume.targetCamera = bakingCamera;
         }
         protected abstract void setupExportPath();
         protected abstract void setupCustomPasses(Camera mainCamera);

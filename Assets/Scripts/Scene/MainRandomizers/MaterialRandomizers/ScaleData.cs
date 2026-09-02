@@ -11,6 +11,8 @@ using UnityEngine;
 public class ScaleData: ScriptableObject
 {
 
+    [Tooltip("true = apply on instance, false = apply on material")]
+    public bool applyOnInstance = true;//
     [Tooltip("Keep Aspect Ratio when scaling. Only x scale is used when enabled.")]
     public bool keepAspectRatio = false;
 

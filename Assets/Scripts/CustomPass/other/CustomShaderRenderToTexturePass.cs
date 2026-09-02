@@ -15,17 +15,15 @@ namespace UnityEngine.Rendering.HighDefinition
         // Override material
         public Material overrideMaterial = null;
 
-        public Camera bakingCamera = null;
         public RenderTexture targetTexture = null;
 
         static ShaderTagId[] shaderTags;
         public Color backgroundColor;
 
-        public CustomShaderRenderToTexturePass(Material overrideMaterial, Color backgroundColor, Camera bakingCamera, RenderTexture targetTexture) : base()
+        public CustomShaderRenderToTexturePass(Material overrideMaterial, Color backgroundColor, RenderTexture targetTexture) : base()
         {
             this.overrideMaterial = overrideMaterial;
             this.backgroundColor = backgroundColor;
-            this.bakingCamera = bakingCamera;
             this.targetTexture = targetTexture;
         }
 
@@ -51,7 +49,7 @@ namespace UnityEngine.Rendering.HighDefinition
         protected override void Execute(CustomPassContext ctx)
         {
             const int forwardOnlyPassIndex = 0;
-            var result = new RendererListDesc(shaderTags, ctx.cullingResults, bakingCamera)
+            var result = new RendererListDesc(shaderTags, ctx.cullingResults, ctx.hdCamera.camera)
             {
                 rendererConfiguration = PerObjectData.None,
                 renderQueueRange = RenderQueueRange.all,

@@ -8,6 +8,8 @@ using UnityEngine.Assertions.Must;
 public class MissingPartHandler : MaterialRandomizerInterface
 {
 
+    public override int getPriority() { return -10000; }
+
     public MissingPartData dataset;
     [InspectorButton("TriggerCloneClicked")]
     public bool clone;
@@ -30,9 +32,9 @@ public class MissingPartHandler : MaterialRandomizerInterface
                 var previousFalseColor = textures.falseColor;
                 textures.falseColor = textures.rend.gameObject.AddComponent<FalseColor>();
                 textures.falseColor.objectId = previousFalseColor.objectId;
+                textures.falseColor.falseColor = previousFalseColor.falseColor;
             }
-            textures.falseColor.falseColor = Color.cyan;//previousFalseColor.falseColor;
-            //textures.falseColor.falseColor.a = 0;
+            textures.falseColor.falseColor.a = 0;
             if (textures.get(MaterialTextures.MapTypes.defectMap) != null)
                 textures.set(MaterialTextures.MapTypes.defectMap, null, textures.falseColor.falseColor);
         }

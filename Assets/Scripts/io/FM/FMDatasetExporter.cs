@@ -64,7 +64,7 @@ namespace Assets.Scripts.io.FM
             if (segmentationMaskRenderer == null)
             {
                 segmentationTexture = new RenderTexture(mainCamera.targetTexture.width, mainCamera.targetTexture.height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-                segmentationMaskRenderer = new DrawSegmentationObjectsCustomPass(mainCamera, segmentationTexture);
+                segmentationMaskRenderer = new DrawSegmentationObjectsCustomPass(segmentationTexture);
                 segmentationMaskRenderer.name = "SegmentationPass";
                 customPassVolume.customPasses.Add(segmentationMaskRenderer);
             }
@@ -81,7 +81,7 @@ namespace Assets.Scripts.io.FM
                 var depthMat = new Material(Shader.Find("Unlit/Depth"));
                 depthMat.SetFloat("_DepthMaxDistance", GeometryUtils.convertMmToUnity(Math.Max(dataset.maxDepthDistance, 1.0f)));
 
-                DepthRenderer = new CustomShaderRenderToTexturePass(depthMat, Color.black, mainCamera, depthTexture);
+                DepthRenderer = new CustomShaderRenderToTexturePass(depthMat, Color.black, depthTexture);
                 DepthRenderer.name = "DepthPass";
                 customPassVolume.customPasses.Add(DepthRenderer);
             }
