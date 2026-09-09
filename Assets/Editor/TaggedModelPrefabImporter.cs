@@ -47,15 +47,16 @@ public sealed class TaggedModelPrefabImporter : EditorWindow
         rotation = EditorGUILayout.Vector3Field("Rotation", rotation);
 
         string outputPath = AssetDatabase.GetAssetPath(outputRoot);
-        bool isObj = model != null
-            && string.Equals(
-                Path.GetExtension(AssetDatabase.GetAssetPath(model)),
-                ".obj",
-                StringComparison.OrdinalIgnoreCase);
-        if (model != null && !isObj)
-            EditorGUILayout.HelpBox("Select an OBJ model.", MessageType.Warning);
+        string extension = model == null
+            ? null
+            : Path.GetExtension(AssetDatabase.GetAssetPath(model));
+        bool isSupportedModel =
+            string.Equals(extension, ".obj", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(extension, ".fbx", StringComparison.OrdinalIgnoreCase);
+        if (model != null && !isSupportedModel)
+            EditorGUILayout.HelpBox("Select an OBJ or FBX model.", MessageType.Warning);
 
-        bool canImport = isObj
+        bool canImport = isSupportedModel
             && File.Exists(tagsJsonPath)
             && AssetDatabase.IsValidFolder(outputPath);
 
@@ -89,17 +90,19 @@ public sealed class TaggedModelPrefabImporter : EditorWindow
         float modelScale,
         Vector3 modelRotation)
     {
-        if (!string.Equals(
-                Path.GetExtension(AssetDatabase.GetAssetPath(modelAsset)),
-                ".obj",
-                StringComparison.OrdinalIgnoreCase))
-            throw new InvalidDataException("The selected model must be an OBJ file.");
+        string extension = Path.GetExtension(AssetDatabase.GetAssetPath(modelAsset));
+        bool isObj = string.Equals(extension, ".obj", StringComparison.OrdinalIgnoreCase);
+        bool isFbx = string.Equals(extension, ".fbx", StringComparison.OrdinalIgnoreCase);
+        if (!isObj && !isFbx)
+            throw new InvalidDataException("The selected model must be an OBJ or FBX file.");
 
         ParsedTags tags = Parse(File.ReadAllText(jsonPath));
         string prefabFolder = EnsureFolder(outputPath, "Prefabs");
         string dataFolder = EnsureFolder(outputPath, "ObjectTagData");
         var warnings = new List<string>();
-        GameObject importAsset = EnsureObjectGroups(modelAsset);
+        GameObject importAsset = isObj
+            ? EnsureObjectGroups(modelAsset)
+            : modelAsset;
         GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(importAsset);
 
         if (instance == null)
