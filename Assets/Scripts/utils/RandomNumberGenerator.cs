@@ -76,6 +76,31 @@ public class RandomNumberGenerator
         return this.Next() * 2.0f * Mathf.PI;
     }
 
+    public int Poisson(float mean)
+    {
+        if (float.IsNaN(mean) || float.IsInfinity(mean) || mean < 0f)
+            throw new System.ArgumentOutOfRangeException(nameof(mean));
+
+        int result = 0;
+        // Independent Poisson counts add to a Poisson count with the summed mean.
+        double remaining = mean;
+        while (remaining > 0.0)
+        {
+            double chunk = System.Math.Min(remaining, 20.0);
+            double limit = System.Math.Exp(-chunk);
+            double product = 1.0;
+            int count = -1;
+            do
+            {
+                ++count;
+                product *= NextDouble();
+            } while (product > limit);
+            result = checked(result + count);
+            remaining -= chunk;
+        }
+        return result;
+    }
+
 
     /***
      * returns a uniform sampled point on the unit sphere
