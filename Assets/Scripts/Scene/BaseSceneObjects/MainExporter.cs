@@ -77,6 +77,8 @@ public class MainExporter : MonoBehaviour
         setupRenderTextures();
         foreach (ExportDatasetInterface exporter in exporters)
         {
+            if (!exporter.enabled) continue;
+
             exporter.setup(mainCamera, bakingCamera, dataset.outputPath, dataset.sceneId);
             renderStart += () => { exporter.onRenderStart(bakingCamera, fileCounter); };
             renderEnd += () => { StartCoroutine(exporter.exportFrame(randomizer.getExportObjects(), bakingCamera, fileCounter)); };

@@ -17,7 +17,6 @@ namespace Assets.Scripts.io.MISC
         GameObject generator;
         public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
         {
-            yield return new WaitForEndOfFrame();
             if(generator == null) { generator = GameObject.FindWithTag("Generator"); }
 
             int textureCounter = 0;
@@ -25,7 +24,7 @@ namespace Assets.Scripts.io.MISC
             {
                 int i = 0;
                 MaterialTextures textures = handler.getTextures(i);
-                if (imageSaverMaterials == null) { imageSaverMaterials = new ImageSaver(textures.resolution.x, textures.resolution.y); }
+                if (imageSaverMaterials == null && textures != null) { imageSaverMaterials = new ImageSaver(textures.resolution.x, textures.resolution.y); }
                 while (textures != null)
                 {
                     ++i;
@@ -50,12 +49,13 @@ namespace Assets.Scripts.io.MISC
                     textures = handler.getTextures(i);
                 }
             }
+            yield return new WaitForEndOfFrame();
         }
 
-        RenderTexture unpackedNormalMap = null;
-        RenderTexture packedNormalMap = null;
+        RenderTexture packedNormalOpenGl = null;
+        RenderTexture packedNormalUnity = null;
         ComputeShader normalUnpackShader = null;
-        private RenderTexture unpackNormal(Texture normalMap)
+        private RenderTexture packNormalToOpenGL(Texture normalMap)
         {
             if(normalMap == null)
                 return null;
@@ -63,18 +63,18 @@ namespace Assets.Scripts.io.MISC
             if(normalUnpackShader == null)
                 normalUnpackShader = MyResourceManager.loadComputeShader("NormalUnpackShader");
             
-            if (unpackedNormalMap == null || normalMap.width!= unpackedNormalMap.width || normalMap.height != unpackedNormalMap.height)
+            if (packedNormalOpenGl == null || normalMap.width!= packedNormalOpenGl.width || normalMap.height != packedNormalOpenGl.height)
             {
-                unpackedNormalMap = new RenderTexture(normalMap.width, normalMap.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-                unpackedNormalMap.enableRandomWrite = true;
-                unpackedNormalMap.wrapMode = TextureWrapMode.Mirror;
-                unpackedNormalMap.Create();
+                packedNormalOpenGl = new RenderTexture(normalMap.width, normalMap.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                packedNormalOpenGl.enableRandomWrite = true;
+                packedNormalOpenGl.wrapMode = TextureWrapMode.Mirror;
+                packedNormalOpenGl.Create();
 
-                packedNormalMap = new RenderTexture(normalMap.width, normalMap.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-                packedNormalMap.enableRandomWrite = true;
-                packedNormalMap.wrapMode = TextureWrapMode.Mirror;
-                packedNormalMap.Create();
-                Graphics.Blit(normalMap, packedNormalMap);
+                packedNormalUnity = new RenderTexture(normalMap.width, normalMap.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                packedNormalUnity.enableRandomWrite = true;
+                packedNormalUnity.wrapMode = TextureWrapMode.Mirror;
+                packedNormalUnity.Create();
+                Graphics.Blit(normalMap, packedNormalUnity);
             }
 
             int kernelHandle;
@@ -83,11 +83,11 @@ namespace Assets.Scripts.io.MISC
             else
                 kernelHandle = normalUnpackShader.FindKernel("reorder");
 
-            normalUnpackShader.SetTexture(kernelHandle, "NormalMapIn", packedNormalMap);
-            normalUnpackShader.SetTexture(kernelHandle, "NormalMapOut", unpackedNormalMap);
-            normalUnpackShader.Dispatch(kernelHandle, packedNormalMap.width / 8, packedNormalMap.height / 8, 1);
+            normalUnpackShader.SetTexture(kernelHandle, "NormalMapIn", packedNormalUnity);
+            normalUnpackShader.SetTexture(kernelHandle, "NormalMapOut", packedNormalOpenGl);
+            normalUnpackShader.Dispatch(kernelHandle, packedNormalUnity.width / 8, packedNormalUnity.height / 8, 1);
 
-            return unpackedNormalMap;
+            return packedNormalOpenGl;
         }
 
         private void exportLayeredLitShader(MaterialTextures textures, int fileID, int textureCounter)
@@ -104,7 +104,7 @@ namespace Assets.Scripts.io.MISC
                 string filename = layerIndex.ToString();
 
                 imageSaverMaterials.Save(textures.GetCurrentLinkedTexture("_BaseColorMap" + layerIndex.ToString()), pathPrefix + "albedo/" + filename, ImageSaver.Extension.png, true);
-                imageSaverMaterials.Save(unpackNormal(textures.GetCurrentLinkedTexture("_NormalMap" + layerIndex.ToString())), pathPrefix + "normal/" + filename, ImageSaver.Extension.png, false);
+                imageSaverMaterials.Save(packNormalToOpenGL(textures.GetCurrentLinkedTexture("_NormalMap" + layerIndex.ToString())), pathPrefix + "normal/" + filename, ImageSaver.Extension.png, false);
                 imageSaverMaterials.Save(textures.GetCurrentLinkedTexture("_MaskMap" + layerIndex.ToString()), pathPrefix + "maskMap/" + filename, ImageSaver.Extension.png, true);
 
                 materialparameters["_BaseColorMap" + layerIndex.ToString() + "_ST"] = textures.GetCurrentLinkedVector("_BaseColorMap" + layerIndex.ToString() + "_ST");
@@ -124,7 +124,7 @@ namespace Assets.Scripts.io.MISC
         private void exportLidShader(MaterialTextures textures, int fileID, int textureCounter)
         {
             imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.colorMap), getFullPath() + "albedo/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, true);
-            imageSaverMaterials.Save(unpackNormal(textures.get(MaterialTextures.MapTypes.normalMap)), getFullPath() + "normal/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, false);
+            imageSaverMaterials.Save(packNormalToOpenGL(textures.get(MaterialTextures.MapTypes.normalMap)), getFullPath() + "normal/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, false);
             imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.defectMap), getFullPath() + "defectMask/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, true);
             imageSaverMaterials.Save(textures.get(MaterialTextures.MapTypes.maskMap), getFullPath() + "maskMap/" + fileID.ToString("D6") + "_" + textureCounter.ToString("D6"), ImageSaver.Extension.png, true);
         }
