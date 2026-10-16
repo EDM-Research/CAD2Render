@@ -15,9 +15,12 @@ namespace Assets.Scripts.io.MISC
     {
         private ImageSaver imageSaverMaterials;
         GameObject generator;
+
         public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
         {
-            if(generator == null) { generator = GameObject.FindWithTag("Generator"); }
+            yield return new WaitForEndOfFrame();
+
+            if (generator == null) { generator = GameObject.FindWithTag("Generator"); }
 
             int textureCounter = 0;
             foreach (MaterialRandomizeHandler handler in generator.GetComponentsInChildren<MaterialRandomizeHandler>())
@@ -49,7 +52,6 @@ namespace Assets.Scripts.io.MISC
                     textures = handler.getTextures(i);
                 }
             }
-            yield return new WaitForEndOfFrame();
         }
 
         RenderTexture packedNormalOpenGl = null;

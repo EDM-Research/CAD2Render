@@ -39,7 +39,7 @@ public class MaterialRandomizeHandler : RandomizerInterface
 
     public MaterialTextures getTextures(int index)
     {
-        if (index < materialTextureTable.Count)
+        if (index < materialTextureTable.Count && materialTextureTable[index].isActive)
             return materialTextureTable[index];
         else
             return null;
@@ -82,13 +82,17 @@ public class MaterialRandomizeHandler : RandomizerInterface
             else
                 combinedMaterialRandomizers = linkedMaterialRandomizers;
 
+            foreach (MaterialTextures currentTexture in materialTextureTable)
+                currentTexture.isActive = false;
             foreach (Renderer rend in instance.GetComponentsInChildren<Renderer>())
             {
                 for (int materialIndex = 0; materialIndex < rend.materials.Length; ++materialIndex)
                 {
                     //Reuse the MaterialTextures objects to limit the amount of textures that need to be created and destroyed
-                    if (index < materialTextureTable.Count)
+                    if (index < materialTextureTable.Count) { 
                         materialTextureTable[index].UpdateLinkedRenderer(rend, materialIndex);
+                        materialTextureTable[index].isActive = true;
+                    }
                     else
                         materialTextureTable.Add(new MaterialTextures(dataset.generatedTextureResolution, rend, materialIndex));
 

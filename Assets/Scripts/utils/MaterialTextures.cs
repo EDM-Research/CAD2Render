@@ -12,6 +12,7 @@ public class MaterialTextures
     public Renderer rend { get; private set; }
     public int materialIndex { get; private set; }
     public FalseColor falseColor { get; set; }
+    public bool isActive { get; set; }
 
     public MaterialPropertyBlock newProperties { get; private set; } = new MaterialPropertyBlock();
 
