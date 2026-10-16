@@ -138,7 +138,9 @@ public class LightRandomizeHandler : RandomizerInterface
                 Debug.LogWarning("No exposure found in the post processing gameobject");
                 return;
             }
-            exposureCorrection.fixedExposure.value = rng.Range(dataset.minExposure, dataset.maxExposure);
+            exposureCorrection.fixedExposure.value = rng.Range(dataset.minCameraExposure, dataset.maxCameraExposure);
+
+            sky.exposure.value = rng.Range(dataset.minEnvironmentExposure, dataset.maxEnvironmentExposure);
         }
     }
 }

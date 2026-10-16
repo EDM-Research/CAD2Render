@@ -42,11 +42,17 @@ public class LightRandomizeData : ScriptableObject {
     public bool randomExposuresEnvironment = false;
     [Tooltip("Min exposure")]
     [Range(-5.0f, 20.0f)]
-    public float minExposure = 6.0f;
+    public float minCameraExposure = 6.0f;
     [Tooltip("Max exposure")]
     [Range(-5.0f, 20.0f)]
-    public float maxExposure = 8.0f;
-    
+    public float maxCameraExposure = 8.0f;
+    [Tooltip("Min exposure")]
+    [Range(-5.0f, 20.0f)]
+    public float minEnvironmentExposure = 6.0f;
+    [Tooltip("Max exposure")]
+    [Range(-5.0f, 20.0f)]
+    public float maxEnvironmentExposure = 8.0f;
+
 
     [Header("Light sources Variations")]
     [Tooltip("Enable random spawn of light sources")]

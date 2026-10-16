@@ -23,7 +23,7 @@ public class CurveDefectGenerationData : ScriptableObject
     public Vector2 defectWidth = new Vector2(0.03f, 0.05f);
     [MinMaxRange(-180, 180, 0)]
     public Vector2 defectAngle = new Vector2(-180, 180);
-    [MinMaxRange(-2, 2, 2)]
+    [MinMaxRange(-4, 4, 2)]
     public Vector2 controlPointOffset = new Vector2(-1, 1);
     [Tooltip("Modifiers the defect width used for anotating the defect.")]
     [Range(0.5f, 5.0f)]

@@ -38,7 +38,7 @@ public class ConvertToLayeredLit : MaterialRandomizerInterface
         layered.SetTexture("_NormalMap0", normalMap);
         layered.SetTexture("_NormalMap1", normalMap);
         layered.SetFloat("_NormalScale0", textures.GetCurrentLinkedFloat("_NormalScale"));
-        layered.SetFloat("_NormalScale1", textures.GetCurrentLinkedFloat("_NormalScale"));
+        layered.SetFloat("_NormalScale1", 1);//make sure normal map changes are always fully visible when generating defects.
         layered.SetTexture("_BentNormalMap0", textures.GetCurrentLinkedTexture("_BentNormalMap"));
 
         var maskMap = textures.GetCurrentLinkedTexture("_MaskMap");
