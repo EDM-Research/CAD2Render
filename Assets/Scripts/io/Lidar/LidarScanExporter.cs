@@ -18,6 +18,12 @@ using static UnityEditor.Searcher.SearcherWindow.Alignment;
 public class LidarScanExporter : ExportDatasetInterface
 {
     public LidarExportSettings exportSettings;
+    [InspectorButton("TriggerCloneClicked")]
+    public bool clone;
+    private void TriggerCloneClicked()
+    {
+        RandomizerInterface.CloneDataset(ref exportSettings);
+    }
 
     private int currentFileId = 0;
     private LidarCustomPass LidarRenderer;
