@@ -51,7 +51,8 @@ namespace UnityEngine.Rendering.HighDefinition
             color360Texture.enableRandomWrite = true;
             color360Texture.Create();
 
-            cubemap = new RenderTexture(exportSettings.resolution.x, exportSettings.resolution.y, 16);
+            int res = Mathf.Max(exportSettings.resolution.x, exportSettings.resolution.y);
+            cubemap = new RenderTexture(res, res, 16);
             cubemap.enableRandomWrite = true;
             cubemap.dimension = TextureDimension.Cube;
             cubemap.useMipMap = false;
@@ -135,7 +136,7 @@ namespace UnityEngine.Rendering.HighDefinition
             Vector4 position = bakingCamera.transform.position;
             Vector4 lidarAngles = new Vector4(
                 Mathf.Deg2Rad * (exportSettings.minHorizonAngle - 90.0f), Mathf.Deg2Rad * (exportSettings.maxHorizonAngle - 90.0f)
-                , Mathf.Deg2Rad * exportSettings.minPhi, Mathf.Deg2Rad * exportSettings.maxHorizonAngle);
+                , Mathf.Deg2Rad * exportSettings.minPhi, Mathf.Deg2Rad * exportSettings.maxPhi);
 
             ctx.cmd.SetRayTracingVectorParam(lidarRaySpawner, Shader.PropertyToID("originPos"), position);
             ctx.cmd.SetRayTracingVectorParam(lidarRaySpawner, Shader.PropertyToID("lidarAngles"), lidarAngles);
