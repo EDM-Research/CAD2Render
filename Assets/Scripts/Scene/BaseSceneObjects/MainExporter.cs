@@ -91,8 +91,8 @@ public class MainExporter : MonoBehaviour
             sceneIterator.NewSceneLoaded += () => { fileCounter = 0; };
             foreach (var exporter in exporters)
                 sceneIterator.NewSceneLoaded += exporter.incrementSceneId;
-            sceneIterator.LastSceneEnded += () => { endOfDatasetGeneration.Invoke(); };
             sceneIterator.LastSceneEnded += () => { capturing = false; };
+            sceneIterator.LastSceneEnded += () => { endOfDatasetGeneration.Invoke(); };
 
             randomizer.setSceneIterator(sceneIterator);
         }
