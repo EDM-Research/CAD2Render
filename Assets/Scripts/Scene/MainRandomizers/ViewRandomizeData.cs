@@ -23,8 +23,9 @@ public class ViewRandomizeData : ScriptableObject {
     [Header("Viewpoint Variations")]
     [Tooltip("Enable viewpoint variations")]
     public bool viewpointVariatons = false;
-    [Tooltip("Use the bop import file to determine the camera pose")]
-    public bool importFromBOP = false;
+    [Tooltip("Use the scene iterator (e.g. a bop import) to determine the camera pose (use a Camera Parameters Handler for the intrinsics)")]
+    [UnityEngine.Serialization.FormerlySerializedAs("importFromBOP")]
+    public bool importFromSceneIterator = false;
     [Tooltip("Enable random y up vector between (0,1,0) and (0,-1,0). Required for changing viewpoint over poles, caused by limitations of spherical coordinates.")]
     public bool randomYUp = false;
     [Tooltip("Min theta")]
@@ -45,8 +46,4 @@ public class ViewRandomizeData : ScriptableObject {
     [Tooltip("Max radius in mm")]
     [Range(1.0f, 2000.0f)]
     public float maxRadius = 100.0f;
-
-    public bool useCameraMatrix = false;
-    public Matrix4x4 cameraMatrix = new Matrix4x4();
-    public Vector2 sensorSize = new Vector2(0.0f,0.0f);
 }
