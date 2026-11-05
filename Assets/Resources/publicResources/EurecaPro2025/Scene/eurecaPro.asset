@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65a410b52092d884f8682d632b87ef4b, type: 3}
+  m_Name: eurecaPro
+  m_EditorClassIdentifier: 
+  outputPath: ../renderings/eurecaPro2025
+  sceneId: 5
+  startFileCounter: 0
+  numberOfImages: 1000
+  resolution: {x: 1920, y: 1080}
+  applyGammaCorrection: 1
+  stopSimulationTimeCompletly: 1
+  numRenderFrames: 200
+  numPhysicsFrames: 50
+  mmToUnityDistanceScale: 0.01
+  maxDepthDistance: 1000

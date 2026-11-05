@@ -15,7 +15,7 @@ MonoBehaviour:
   modelsPath: publicResources/EurecaPro2025/Prefabs/potato/scans
   importFromBOP: 0
   uniqueObjects: 0
-  numRandomObjects: 50
+  numRandomObjects: 12
   randomModelTranslations: 1
   randomModelRotations: 1
   randomRotationOffset: 0

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   H_maxOffset: 360
   S_maxOffset: 18
-  V_maxOffset: 17.8
+  V_maxOffset: 18

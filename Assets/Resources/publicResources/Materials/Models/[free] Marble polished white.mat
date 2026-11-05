@@ -221,6 +221,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _TransmissionMaskMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TransmittanceColorMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -250,6 +254,8 @@ Material:
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 0
+    - _AlphaRemapMax: 1
+    - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
@@ -314,6 +320,7 @@ Material:
     - _DropletsAnimSpeed: 10
     - _DropletsTiling: 1
     - _DstBlend: 0
+    - _DstBlend2: 0
     - _EmissionPulsateSpeed: 0
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1
@@ -370,6 +377,8 @@ Material:
     - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
+    - _ObjectSpaceUVMapping: 0
+    - _ObjectSpaceUVMappingEmissive: 0
     - _OcclusionStrength: 1
     - _OcclusionStrength2: 0
     - _Occlusion_from_albedo_alpha: 1
@@ -392,6 +401,7 @@ Material:
     - _PanVSpeed: 0
     - _Parallax: 0.02
     - _Parallax2: 0.04
+    - _PerPixelSorting: 0
     - _Phong: 0
     - _Pierceable: 0
     - _PresetsShown: 0
@@ -457,10 +467,10 @@ Material:
     - _StencilRefGBuffer: 10
     - _StencilRefMV: 40
     - _StencilWriteMask: 6
-    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDepth: 9
     - _StencilWriteMaskDistortionVec: 4
-    - _StencilWriteMaskGBuffer: 14
-    - _StencilWriteMaskMV: 40
+    - _StencilWriteMaskGBuffer: 15
+    - _StencilWriteMaskMV: 41
     - _Stiffness: 1
     - _SubsurfaceMask: 1
     - _SupportDecals: 1
@@ -489,6 +499,7 @@ Material:
     - _TranslucencyStrength: 4
     - _TranslucencySuppressRealtimeShadows: 0.5
     - _TransmissionEnable: 1
+    - _TransmissionMask: 1
     - _TransparentBackfaceEnable: 0
     - _TransparentCullMode: 2
     - _TransparentDepthPostpassEnable: 0

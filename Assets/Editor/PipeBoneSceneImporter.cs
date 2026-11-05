@@ -100,6 +100,8 @@ public sealed class PipeBoneSceneImporter : EditorWindow
         importer.preserveHierarchy = true;
         importer.globalScale = 1f;
         importer.useFileScale = true;
+        // The LiDAR export bakes skinned meshes on the CPU (SkinnedMeshRenderer.BakeMesh), which needs Read/Write.
+        importer.isReadable = true;
         importer.SaveAndReimport();
     }
 
