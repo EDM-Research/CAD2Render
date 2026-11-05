@@ -23,10 +23,11 @@ public class ObjectRandomizeData : ScriptableObject
     [Tooltip("Path to prefabs of models (relative to Resources dir)")]
     public string modelsPath;
 
-    public enum BopImportType { NoImport, ModelAndPose, ModelOnly }
+    public enum SceneIteratorImportType { NoImport, ModelAndPose, ModelOnly }
     [Header("Model Variations")]
-    [Tooltip("Use the bop import file to spawn objects")]
-    public BopImportType importFromBOP = BopImportType.NoImport;
+    [Tooltip("Use the scene iterator (e.g. a bop import) to spawn objects")]
+    [UnityEngine.Serialization.FormerlySerializedAs("importFromBOP")]
+    public SceneIteratorImportType importFromSceneIterator = SceneIteratorImportType.NoImport;
     [Tooltip("Generate one model per unique prefab in modelsPath")]
     public bool uniqueObjects = false;
     [Tooltip("Number of random objects to create. Multiple objects of same class are possible.")]

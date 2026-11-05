@@ -114,7 +114,7 @@ public class ObjectRandomizeHandler : RandomizerInterface
     private void CreateModels(SceneIteratorInterface sceneIterator)
     {
         bool onlyConsumeRNG = false;
-        if (sceneIterator != null && objectData.importFromBOP != ObjectRandomizeData.BopImportType.NoImport)
+        if (sceneIterator != null && objectData.importFromSceneIterator != ObjectRandomizeData.SceneIteratorImportType.NoImport)
         {
             List<SceneIteratorInterface.C2RModel> bopModels = sceneIterator.GetPose().models;
             for (int i = 0; i < bopModels.Count; ++i)
@@ -122,9 +122,9 @@ public class ObjectRandomizeHandler : RandomizerInterface
                 GameObject model = FindModel(bopModels[i]);
                 if (model != null)
                 {
-                    if (objectData.importFromBOP == ObjectRandomizeData.BopImportType.ModelAndPose)
+                    if (objectData.importFromSceneIterator == ObjectRandomizeData.SceneIteratorImportType.ModelAndPose)
                         SpawnModelAtExactPosition(model, i, bopModels[i].localToWorld.GetTranslation(), bopModels[i].localToWorld.GetRotation());
-                    else // objectData.importFromBOP == ObjectRandomizeData.BopImportType.ModelOnly
+                    else // objectData.importFromSceneIterator == ObjectRandomizeData.SceneIteratorImportType.ModelOnly
                         SpawnModel(model, i);
                 }
             }
@@ -237,7 +237,7 @@ public class ObjectRandomizeHandler : RandomizerInterface
         if(!updateMaterialRandomize)
             applyFalseColor(spawnObject);
 
-        if (!objectData.avoidCollisions || objectData.importFromBOP == ObjectRandomizeData.BopImportType.ModelAndPose)
+        if (!objectData.avoidCollisions || objectData.importFromSceneIterator == ObjectRandomizeData.SceneIteratorImportType.ModelAndPose)
             return spawnObject;
 
         Collider[] colliders = spawnObject.GetComponentsInChildren<Collider>();
