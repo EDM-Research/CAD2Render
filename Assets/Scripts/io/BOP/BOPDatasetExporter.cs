@@ -260,7 +260,7 @@ namespace Assets.Scripts.io.BOP
             //float cx = 0.5f * width;
             //float cy = 0.5f * height;
 
-            // Updated calculation, inverse of ViewRandomizeHandler.cs code
+            // Updated calculation, inverse of CameraParametersHandler.cs code
             float Fx, Fy, Cx, Cy;
             float f, pWidth, pHeight, sizeX, sizeY, shiftX, shiftY;
             f = mainCamera.focalLength;

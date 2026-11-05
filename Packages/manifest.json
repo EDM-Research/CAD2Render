@@ -1,12 +1,12 @@
 {
   "dependencies": {
-    "com.atteneder.gltfast": "https://github.com/atteneder/glTFast.git",
     "com.sneakysquirrellabs.minmaxrangeattribute": "https://github.com/matheusamazonas/min_max_range_attribute.git?path=Assets/Libraries/MinMaxRangeAttribute#latest",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "4.4.2",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.analytics": "3.8.1",
+    "com.unity.cloud.gltfast": "6.20.0",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.ext.nunit": "2.0.5",
     "com.unity.formats.fbx": "5.1.4",
