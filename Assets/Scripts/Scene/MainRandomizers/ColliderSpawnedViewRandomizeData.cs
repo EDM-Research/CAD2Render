@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 [HelpURL("Documentation/DatasetInformation.html")]
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Collider Spawned View Randomize Data", order = 3)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Camera settings/New Collider Spawned View Randomize Data", order = 5)]
 public class ColliderSpawnedViewRandomizeData : ScriptableObject
 {
     [Header("Viewpoint Variations")]
