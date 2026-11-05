@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.io.FM
 {
-    [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Export settings/New FM export settings")]
+    [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Export settings/New FM export settings", order = 3)]
 
     public class FMExportSettings : ScriptableObject
     {

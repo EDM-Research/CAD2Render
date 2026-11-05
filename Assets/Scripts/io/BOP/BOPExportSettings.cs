@@ -8,7 +8,7 @@ using static Assets.Scripts.io.ExportDatasetInterface;
 
 namespace Assets.Scripts.io.BOP
 {
-    [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Export settings/New BOP export settings")]
+    [CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Export settings/New BOP export settings", order = 3)]
     public class BOPExportSettings : ScriptableObject
     {
         [Tooltip("Extension of generated images and masks.")]

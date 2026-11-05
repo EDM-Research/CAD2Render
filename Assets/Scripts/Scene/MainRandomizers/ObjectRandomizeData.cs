@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 //[HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Object randomize Data", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Base settings/New Object randomize Data", order = 1)]
 public class ObjectRandomizeData : ScriptableObject
 {
     [Header("Input/output paths")]

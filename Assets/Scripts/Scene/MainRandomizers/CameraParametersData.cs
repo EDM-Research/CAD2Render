@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [HelpURL("Documentation/DatasetInformation.html")]
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New Camera Parameters Data", order = 4)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Camera settings/New Camera Parameters Data", order = 5)]
 public class CameraParametersData : ScriptableObject
 {
     [Tooltip("Use the intrinsics (projection matrix) from the scene iterator (e.g. a bop import)")]

@@ -16,7 +16,7 @@ using UnityEngine.Rendering;
 //}
 
 [HelpURL("Documentation/DatasetInformation.html")] // TODO
-[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/New export Settings", order = 2)]
+[CreateAssetMenu(fileName = "Untitled Dataset", menuName = "Cad2Render/Export settings/New export Settings", order = 2)]
 public class MainExportData : ScriptableObject {
     //public enum Parametersource { Forced, AutoDetect, TextFile }
     //public DatasetInformation.Parametersource parametersource = DatasetInformation.Parametersource.Forced;
