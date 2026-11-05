@@ -76,7 +76,7 @@ namespace Assets.Scripts.io.BOP
                 segmentationMaskRenderer.targetTextureArray = null;
                 return;
             }
-            if (segmentationTextureArray != null && segmentationTextureArray.volumeDepth != count)
+            if (segmentationTextureArray != null && segmentationTextureArray.volumeDepth < count)
             {
                 segmentationTextureArray.Release();
                 segmentationTextureArray = null;
