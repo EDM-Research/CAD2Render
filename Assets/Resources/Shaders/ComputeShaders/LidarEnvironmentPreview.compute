@@ -1,0 +1,22 @@
+// Builds a world-space equirectangular preview of the 6 LiDAR face cameras (for the GUI preview list).
+#pragma kernel CSMain
+
+#include "Assets/Resources/Shaders/RaytracingShaders/LidarEnvironment.hlsl"
+
+RWTexture2D<float4> previewTexture;
+uint2 previewSize;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= previewSize.x || id.y >= previewSize.y)
+        return;
+
+    const float PI = 3.14159265;
+    float2 uv = (float2(id.xy) + 0.5) / float2(previewSize);
+    float lon = (uv.x * 2.0 - 1.0) * PI;   // -180..180 degrees, 0 = world +Z
+    float lat = (uv.y - 0.5) * PI;         // -90 (down) .. 90 (up)
+    float3 dir = float3(cos(lat) * sin(lon), sin(lat), cos(lat) * cos(lon));
+
+    previewTexture[id.xy] = SampleEnvironment(dir);
+}

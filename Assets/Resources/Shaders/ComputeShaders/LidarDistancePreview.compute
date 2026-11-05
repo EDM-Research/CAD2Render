@@ -1,0 +1,30 @@
+// Greyscale distance image of a LiDAR scan (for the GUI preview list): near = black, far = white, misses = dark red.
+#pragma kernel CSMain
+
+// Scan result: xyz = hit position in the export frame (Unity world, or camera in mm), w = 1 for a hit, 0 for a miss
+Texture2D<float4> positionTexture;
+RWTexture2D<float4> distancePreviewTexture;
+uint2 previewSize;
+
+float3 scannerPosition;    // scanner position in the export frame
+float exportUnitsToMm;     // scale from export units to mm
+float2 distanceRangeMm;    // black at x (near), white at y (far)
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= previewSize.x || id.y >= previewSize.y)
+        return;
+
+    float4 position = positionTexture[id.xy];
+    if (position.w < 0.5)
+    {
+        distancePreviewTexture[id.xy] = float4(0.3, 0.0, 0.0, 1.0);
+        return;
+    }
+
+    float distanceMm = length(position.xyz - scannerPosition) * exportUnitsToMm;
+    float range = max(distanceRangeMm.y - distanceRangeMm.x, 1e-6);
+    float grey = saturate((distanceMm - distanceRangeMm.x) / range);
+    distancePreviewTexture[id.xy] = float4(grey, grey, grey, 1.0);
+}

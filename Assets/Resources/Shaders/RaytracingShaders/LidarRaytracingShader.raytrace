@@ -1,6 +1,7 @@
 #include "HLSLSupport.cginc"
 #include "UnityShaderVariables.cginc"
-#include "RayPayload.hlsl"
+#include "Assets/Scripts/CustomPass/Lidar/RayPayload.hlsl"
+#include "Assets/Resources/Shaders/RaytracingShaders/LidarEnvironment.hlsl"
 
 #pragma max_recursion_depth 10
 //#pragma enable_ray_tracing_shader_debug_symbols
@@ -9,9 +10,9 @@
 RaytracingAccelerationStructure _RaytracingAccelerationStructure;
 float4 originPos;
 float4x4 g_InvViewMatrix;
-TextureCube<float4> g_EnvTex;
-SamplerState sampler_Linear_Repeat;
-float4 lidarAngles;
+float4 lidarAngles; // x/y = min/max vertical angle, z/w = min/max horizontal angle (radians, 0 = look direction)
+float projectionMode; // 0 = spherical (LiDAR), 1 = pinhole (depth camera)
+float4x4 g_ExportMatrix; // world -> exported coordinates (identity for world, or the camera frame)
 
 // Output
 RWTexture2D<float4> worldPosTexture;
@@ -33,23 +34,30 @@ void MainRayGenShader()
     //float2 screenCo = float2(LaunchIndex.x, LaunchDim.y - LaunchIndex.y - 1) - float2(0.5,0.5);
     
     float3 viewDirection;
-    float2 uv = ((float2)LaunchIndex) / ((float2)LaunchDim);
-    float PI = 3.1415;
-    
-    //*
-    float theta = lerp(lidarAngles.x, lidarAngles.y, uv.y); // latitude
-    float phi   = lerp(lidarAngles.z, lidarAngles.w, uv.x); // longitude
-    /*/
-    float theta = uv.y * PI; // latitude (0 -> pi)
-    float phi = uv.x * 2.0 * PI; // longitude (0 -> 2pi)
-    //*/
-    viewDirection.x = cos(theta) * cos(phi);
-    viewDirection.y = sin(theta);
-    viewDirection.z = cos(theta) * sin(phi);
+    // Sample at pixel centres so min and max angles are the outer edges of the field of view
+    float2 uv = ((float2)LaunchIndex + 0.5) / ((float2)LaunchDim);
+
+    // Camera (view) space: the camera looks along -Z, +Y is up, +X is right.
+    if (projectionMode > 0.5)
+    {
+        // Pinhole: even grid on the image plane at distance 1 (like the pixels of a depth camera)
+        float x = lerp(tan(lidarAngles.z), tan(lidarAngles.w), uv.x);
+        float y = lerp(tan(lidarAngles.x), tan(lidarAngles.y), uv.y);
+        viewDirection = float3(x, y, -1.0);
+    }
+    else
+    {
+        // Spherical: equal angle steps (like a spinning LiDAR)
+        // theta = elevation above the camera's forward plane, phi = angle to the right of the look direction.
+        float theta = lerp(lidarAngles.x, lidarAngles.y, uv.y);
+        float phi   = lerp(lidarAngles.z, lidarAngles.w, uv.x);
+        viewDirection.x = cos(theta) * sin(phi);
+        viewDirection.y = sin(theta);
+        viewDirection.z = -cos(theta) * cos(phi);
+    }
 
     // Rotate the ray from view space to world space.
     float3 rayDirection = normalize(mul((float3x3)g_InvViewMatrix, viewDirection));
-    rayDirection = viewDirection;
 
     RayDesc ray;
     ray.Origin = originPos.xyz;
@@ -58,12 +66,17 @@ void MainRayGenShader()
     ray.TMax = 1e10f;
     
     RayPayload payload;        
-	payload.color = g_EnvTex.SampleLevel(sampler_Linear_Repeat, rayDirection, 0);
+	payload.color = SampleEnvironment(rayDirection);
     payload.worldPos = originPos;
 	payload.bounceIndex = 0;
     
     TraceRay(_RaytracingAccelerationStructure, 0, 0xFF, 0, 1, 0, ray, payload);
 
+    // Hits have w = 1, misses w = 0 (the exporter skips those)
+    if (payload.worldPos.w > 0.5)
+        payload.worldPos = float4(mul(g_ExportMatrix, float4(payload.worldPos.xyz, 1.0)).xyz, 1.0);
+
 	worldPosTexture[LaunchIndex] = payload.worldPos;
-    worldColorTexture[LaunchIndex] = payload.color ;
+    // Face textures are sampled as linear; the .ply needs sRGB bytes
+    worldColorTexture[LaunchIndex] = float4(LinearToSrgb(payload.color.rgb), payload.color.a);
 }

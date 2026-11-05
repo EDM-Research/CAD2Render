@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Assets.Scripts.io;
@@ -25,70 +26,37 @@ public class LidarScanExporter : ExportDatasetInterface
         RandomizerInterface.CloneDataset(ref exportSettings);
     }
 
-    private int currentFileId = 0;
     private LidarCustomPass LidarRenderer;
-    NativeArray<Color32> colorData;
-    NativeArray<Color> positionData;
-    
-public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
+
+    public override IEnumerator exportFrame(List<GameObject> instantiated_models, Camera camera, int fileID)
     {
-        yield return new WaitUntil(() => colorData == default && positionData == default);
-        currentFileId = fileID;
-        AsyncGPUReadback.Request(LidarRenderer.color360Texture, 0, TextureFormat.RGBA32, OnColorReadback);
-        AsyncGPUReadback.Request(LidarRenderer.depth360Texture, 0, TextureFormat.RGBAFloat, OnPositionReadback);
+        // Scan in this frame: the colour cameras have built up their samples now, and the scene gets
+        // randomized again next frame. The pass reads the result back right after the scan and calls
+        // writePointCloud when the data has arrived.
+        LidarRenderer.requestScan(fileID);
+        yield break;
     }
 
-    void OnColorReadback(AsyncGPUReadbackRequest request)
+    // Called by the LiDAR pass a few frames after the export scan, with the read-back scan data
+    void writePointCloud(int fileId, Matrix4x4 cameraToWorld, Color32[] colors, Color[] positions)
     {
-        if (request.hasError)
-        {
-            Debug.LogError("Color RT readback failed!");
-            return;
-        }
-        colorData = request.GetData<Color32>();
-
         if (exportSettings.binary)
-            PLYExportBinary();
+            PLYExportBinary(fileId, cameraToWorld, colors, positions);
         else
-            PLYExportASCII();
+            PLYExportASCII(fileId, cameraToWorld, colors, positions);
     }
 
-    void OnPositionReadback(AsyncGPUReadbackRequest request)
+    void PLYExportBinary(int fileId, Matrix4x4 cameraToWorld, Color32[] localColorData, Color[] localVertexData)
     {
-        if (request.hasError)
-        {
-            Debug.LogError("Position RT readback failed!");
-            return;
-        }
-        positionData = request.GetData<Color>();
-
-        if (exportSettings.binary)
-            PLYExportBinary();
-        else
-            PLYExportASCII();
-    }
-
-    void PLYExportBinary()
-    {
-        if (!colorData.IsCreated || !positionData.IsCreated) return;
-        if (colorData == default || positionData == default) return;
-
-        List<Color32> localColorData = new List<Color32>(colorData);
-        List<Color> localVertexData = new List<Color>(positionData);
-        positionData.Dispose();
-        positionData = default;
-        colorData.Dispose();
-        colorData = default;
-
         int vertexStride = 3 * sizeof(float) + 3 * sizeof(byte);
-        byte[] vertexBuffer = new byte[localVertexData.Count * vertexStride];
+        byte[] vertexBuffer = new byte[localVertexData.Length * vertexStride];
 
         int count = 0;
         // Parallel fill
-        Parallel.For(0, localVertexData.Count, i =>
+        Parallel.For(0, localVertexData.Length, i =>
         {
             var v = localVertexData[i];
-            if (v.r == 0 && v.g == 0 && v.b == 0)
+            if (v.a == 0) // ray missed
                 return;
 
             var c = localColorData[i];
@@ -103,7 +71,7 @@ public override IEnumerator exportFrame(List<GameObject> instantiated_models, Ca
             vertexBuffer[offset + 14] = (byte)(c.b );
         });
 
-        string filePath = getFullPath() + "pointCloud_" + currentFileId + ".ply";
+        string filePath = getFullPath() + "pointCloud_" + fileId + ".ply";
 
         using (var fs = new FileStream(filePath, FileMode.Create))
         using (var writer = new BinaryWriter(fs))
@@ -112,6 +80,7 @@ public override IEnumerator exportFrame(List<GameObject> instantiated_models, Ca
             string header =
                 "ply\n" +
                 "format binary_little_endian 1.0\n" +
+                headerComments(cameraToWorld) +
                 $"element vertex {count}\n" +
                 "property float x\n" +
                 "property float y\n" +
@@ -129,29 +98,20 @@ public override IEnumerator exportFrame(List<GameObject> instantiated_models, Ca
         }
     }
 
-    void PLYExportASCII()
+    void PLYExportASCII(int fileId, Matrix4x4 cameraToWorld, Color32[] localColorData, Color[] localVertexData)
     {
-        if (!colorData.IsCreated || !positionData.IsCreated) return;
-        if (colorData == default || positionData == default) return;
-
-        List<Color32> localColorData = new List<Color32>(colorData);
-        List<Color> localVertexData = new List<Color>(positionData);
-        positionData.Dispose();
-        positionData = default;
-        colorData.Dispose();
-        colorData = default;
-
         int count = 0;
-        for(int i = 0; i < localVertexData.Count ; ++i)
-            if (localVertexData[i].r != 0 || localVertexData[i].g != 0 | localVertexData[i].b != 0)
+        for(int i = 0; i < localVertexData.Length ; ++i)
+            if (localVertexData[i].a != 0) // skip rays that missed
                 count++;
 
-        string filePath = getFullPath() + "pointCloud_" + currentFileId + ".ply";
+        string filePath = getFullPath() + "pointCloud_" + fileId + ".ply";
         using (var writer = new StreamWriter(filePath))
         {
             // Write PLY header
             writer.WriteLine("ply");
             writer.WriteLine("format ascii 1.0");
+            writer.Write(headerComments(cameraToWorld));
             writer.WriteLine($"element vertex {count}");
             writer.WriteLine("property float x");
             writer.WriteLine("property float y");
@@ -162,11 +122,11 @@ public override IEnumerator exportFrame(List<GameObject> instantiated_models, Ca
             writer.WriteLine("end_header");
 
             // Write vertices
-            for (int i = 0; i < localVertexData.Count; ++i)
+            for (int i = 0; i < localVertexData.Length; ++i)
             {
                 var v = localVertexData[i];
                 var c = localColorData[i];
-                if (v.r != 0 || v.g != 0 | v.b != 0)
+                if (v.a != 0) // skip rays that missed
                     writer.WriteLine($"{v.r.ToString(CultureInfo.InvariantCulture)} " +
                                     $"{v.g.ToString(CultureInfo.InvariantCulture)} " +
                                     $"{v.b.ToString(CultureInfo.InvariantCulture)} " +
@@ -177,15 +137,37 @@ public override IEnumerator exportFrame(List<GameObject> instantiated_models, Ca
 
 
 
+    // PLY comment lines (ignored by viewers) describing the coordinate frame and the camera pose
+    string headerComments(Matrix4x4 cameraToWorld)
+    {
+        var m = cameraToWorld;
+        string row(int r) => string.Join(" ", new[] { m[r, 0], m[r, 1], m[r, 2], m[r, 3] }
+            .Select(value => value.ToString("R", CultureInfo.InvariantCulture)));
+
+        string frame = exportSettings.coordinateSystem == LidarCoordinateSystem.Camera
+            ? "comment coordinate_system camera (+X right, +Y down, +Z forward), units mm\n"
+            : "comment coordinate_system unity_world, units unity\n";
+        return frame +
+            "comment camera_to_world maps camera coordinates (+X right, +Y down, +Z forward, mm) to unity world coordinates (unity units), row-major 4x4:\n" +
+            $"comment camera_to_world {row(0)}\n" +
+            $"comment camera_to_world {row(1)}\n" +
+            $"comment camera_to_world {row(2)}\n" +
+            $"comment camera_to_world {row(3)}\n";
+    }
+
     protected override void setupExportPath()
     {
         datasetPrefixPath = "lidar/";
         ensureDir(getFullPath());
     }
 
-    public override void onRenderStart(Camera camera, int fileID)
+    // MainExporter switches the main camera on and off in Update (off during the physics frames while recording).
+    // The colour cameras follow it, so they run every frame while not recording (live preview) and restart
+    // their path tracing together with the main camera while recording.
+    private void LateUpdate()
     {
-        LidarRenderer.prepareExecute();
+        if (LidarRenderer != null && LidarRenderer.bakingCamera != null)
+            LidarRenderer.setColorCamerasEnabled(LidarRenderer.bakingCamera.enabled);
     }
 
     protected override void setupCustomPasses(Camera camera)
@@ -193,6 +175,17 @@ public override IEnumerator exportFrame(List<GameObject> instantiated_models, Ca
         LidarRenderer = new LidarCustomPass(exportSettings, camera);
         LidarRenderer.name = "LidarPass";
         LidarRenderer.enabled = true;
+        LidarRenderer.ScanCompleted += writePointCloud;
         customPassVolume.customPasses.Add(LidarRenderer);
+    }
+
+    public override List<(string, RenderTexture)> getTextureOutputs()
+    {
+        var list = new List<(string, RenderTexture)>
+        {
+            (datasetPrefixPath + "Cubemap", LidarRenderer.equirect),
+            (datasetPrefixPath + "Distance", LidarRenderer.distancePreview)
+        };
+        return list;
     }
 }
