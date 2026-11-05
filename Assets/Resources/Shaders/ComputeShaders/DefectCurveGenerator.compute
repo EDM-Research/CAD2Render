@@ -25,6 +25,7 @@ float sharpness2;
 float defectAnnotationModifier;
 
 float2 defectWidth;
+float widthVariation; // 0 = constant width (old behaviour), 1 = width varies between 0x and 2x
 float2 defectLength;
 float2 defectAngle;
 float2 defectControlPointOffset;
@@ -45,14 +46,14 @@ struct curveGenerationSettings
 float easeFunction(float distance, float defectWidth, float sharpness)
 {
     float dif = abs(2 * defectWidth);
-    if (dif < 0.0001)
+    if (dif < 0.000001)
         return 0;
-    float sharpnessBoundAware = sharpness / dif;
+    float sharpnessBoundAware = max(sharpness, 10.0f) / dif;
     float boundCompensation = 0.05f * dif;
     float lower_sigmoid = 1 / (1 + exp(-sharpnessBoundAware * (distance + defectWidth + boundCompensation)));
     float upper_sigmoid = 1 / (1 + exp( sharpnessBoundAware * (distance - defectWidth - boundCompensation)));
 
-    return saturate(sharpness*sharpness) * lower_sigmoid * upper_sigmoid;
+    return saturate(sharpness * sharpness) * lower_sigmoid * upper_sigmoid * min(1.0, abs(sharpness / 10.0f));
 }
 float easeFunctionNormal(float distance, float defectWidth, float sharpness)
 {
@@ -79,6 +80,25 @@ float2 bezier(float2 p0, float2 p1, float2 p2, float2 p3, float t)
            tt * t * p3;
 }
 
+static const int WIDTH_KNOTS = 8; // more knots = faster thickness changes along the curve
+// Smooth 1D noise in [0,1] along the curve. Same seed => same profile for every pixel.
+float widthProfile(float t, inout uint seed)
+{
+    float knots[WIDTH_KNOTS];
+    [unroll]
+    for (int k = 0; k < WIDTH_KNOTS; k++)
+        knots[k] = nextRand(seed);
+    knots[0] = 0.0f;
+    knots[WIDTH_KNOTS - 1] = 0.0f;
+    
+    float x = saturate(t) * (WIDTH_KNOTS - 1);
+    int i0 = min((int) floor(x), WIDTH_KNOTS - 2);
+    float f = x - i0;
+    f = f * f * (3.0 - 2.0 * f); // smoothstep
+    
+    return lerp(knots[i0], knots[i0 + 1], f);
+}
+
 // derivative of cubic bezier: B'(t) = 3[(1-t)^2 (p1-p0) + 2(1-t)t (p2-p1) + t^2 (p3-p2)]
 float2 bezierTangent(float2 p0, float2 p1, float2 p2, float2 p3, float t)
 {
@@ -100,7 +120,7 @@ struct CurveInfo
     float side;
 };
 
-CurveInfo getCurveInfo(float2 uv, curveGenerationSettings settings, uint seed)
+CurveInfo getCurveInfo(float2 uv, curveGenerationSettings settings, inout uint seed)
 {
     //generate points of a curve
     float2 center = float2(nextRand(seed), nextRand(seed));
@@ -180,10 +200,18 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     settings.controlPointOffset = defectControlPointOffset;
     CurveInfo curveInfo = getCurveInfo((float2) id.xy / (float2) resolution, settings, startRandSeed);
     curveInfo.distance = curveInfo.distance * 10; // scale distance to pixel space
-    float defectWidth = lerp(settings.width.x, settings.width.y, nextRand(startRandSeed));
     float sharpness = lerp(sharpness1, sharpness2, curveInfo.side/2 + 0.5f);
-    float defectValue = easeFunction(curveInfo.distance, defectWidth, sharpness);
+    
+    
+    //float defectWidth = lerp(settings.width.x, settings.width.y, nextRand(startRandSeed));
+    float baseWidth = lerp(settings.width.x, settings.width.y, nextRand(startRandSeed));
 
+    // salt the seed so the profile isn't correlated with the other random values
+    float profile = widthProfile(curveInfo.t, startRandSeed);
+    float widthScale = lerp(1.0 - widthVariation, 1.0 + widthVariation, profile);
+    float defectWidth = baseWidth * widthScale;
+    
+    float defectValue = easeFunction(curveInfo.distance, defectWidth, sharpness);
     
     #if changeColor
         float defectColorChange = FractalBrownianMotion(3, 0.1, 1.0, startRandSeed, id.xy, resolution);

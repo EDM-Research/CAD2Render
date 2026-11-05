@@ -82,8 +82,9 @@ public class DefectCurveGenerationHandler : MaterialRandomizerInterface
         defectCurveGenerationShader.SetFloat("sharpness1", dataset.sharpness1);
         defectCurveGenerationShader.SetFloat("sharpness2", dataset.sharpness2);
         defectCurveGenerationShader.SetFloat("defectAnnotationModifier", dataset.defectAnnotationModifier);
+        defectCurveGenerationShader.SetFloat("widthVariation", 0.50f);
 
-        for(int i = 0; i < dataset.nrOfDefects; i++)
+        for (int i = 0; i < dataset.nrOfDefects; i++)
         {
             defectCurveGenerationShader.SetInt("randSeed", rng.IntRange(128, Int32.MaxValue));
             defectCurveGenerationShader.Dispatch(kernelHandle, textures.resolution.x / 8, textures.resolution.y / 8, 1);
