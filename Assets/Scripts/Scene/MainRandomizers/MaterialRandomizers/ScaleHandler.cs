@@ -1,15 +1,11 @@
 using UnityEngine;
 
 
-
 [AddComponentMenu("Cad2Render/MaterialRandomizers/ScaleHandler")]
 public class ScaleHandler : MaterialRandomizerInterface
 {
-    Vector3 previousScale;
-    private void Awake()
-    {
-        previousScale = new Vector3(1, 1, 1);
-    }
+    private const string BASE_SCALE_TAG = "_BaseScale";
+
     public override int getPriority() { return 69; }
 
     public ScaleData dataset;
@@ -20,8 +16,21 @@ public class ScaleHandler : MaterialRandomizerInterface
         RandomizerInterface.CloneDataset(ref dataset);
     }
 
+    private Vector3 GetBaseScale(GameObject instance)
+    {
+        ScaleCache cache = instance.GetComponent<ScaleCache>();
+        if (cache == null)
+        {
+            cache = instance.AddComponent<ScaleCache>();
+            cache.baseScale = instance.transform.localScale;
+        }
+        return cache.baseScale;
+    }
+
     private void RandomizeScale(GameObject instance, ref RandomNumberGenerator rng)
     {
+        Vector3 baseScale = GetBaseScale(instance);
+
         Vector3 nextScale = new Vector3(
             rng.Range(dataset.minScale.x, dataset.maxScale.x),
             rng.Range(dataset.minScale.y, dataset.maxScale.y),
@@ -32,14 +41,11 @@ public class ScaleHandler : MaterialRandomizerInterface
             nextScale.y = nextScale.x;
             nextScale.z = nextScale.x;
         }
-        previousScale.x = 1 / previousScale.x;
-        previousScale.y = 1 / previousScale.y;
-        previousScale.z = 1 / previousScale.z;
-        var currentScale = instance.transform.localScale;
-        currentScale.Scale(previousScale);
-        currentScale.Scale(nextScale);
-        instance.transform.localScale = currentScale;
-        previousScale = nextScale;
+        instance.transform.localScale = new Vector3(
+            baseScale.x * nextScale.x,
+            baseScale.y * nextScale.y,
+            baseScale.z * nextScale.z
+            );
     }
 
     public override void RandomizeSingleInstance(GameObject instance, ref RandomNumberGenerator rng)
